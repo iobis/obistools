@@ -5,4 +5,5 @@
 #' @docType package
 #' @name obistools
 #' @import dplyr
+#' @import ggplot2
 NULL
