@@ -30,7 +30,7 @@ check_fields(data)
 ## Taxon matching
 
 ```R
-names <- c("Abra alva", "Buccinum fusiforme", "Buccinum fusiforme", "Buccinum fusiforme", "ljkf hlqsdkf")
+names <- c("Abra alva", "Buccinum fusiforme", "Buccinum fusiforme", "Buccinum fusiforme", "hlqsdkf")
 match_taxa(names)
 ```
 ```
