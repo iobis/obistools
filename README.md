@@ -64,6 +64,25 @@ plot_map(abra, zoom = TRUE)
 identify_map(abra)
 ```
 
+```
+            id decimalLongitude decimalLatitude    basisOfRecord           eventDate institutionCode
+2078 384334009            29.51           43.97 HumanObservation 2010-05-20 10:00:00       GeoEcoMar
+                                           collectionCode                            catalogNumber         locality
+2078 GeoEcoMar BlackSea R/V Mare Nigrum Cruises 2010-2011 GeoEcoMar_BlackSeaCruises_2003_2011_3723 Constanta_10CT05
+                                                                         datasetName   phylum    order    family
+2078 Macrobenthos data from the Romanian part of the Black Sea between 2003 and 2011 Mollusca Cardiida Semelidae
+     genus scientificName originalScientificName scientificNameAuthorship obisID resourceID yearcollected   species
+2078  Abra      Abra alba              Abra alba          (W. Wood, 1802) 395450       4273          2010 Abra alba
+            qc aphiaID speciesID continent coordinateUncertaintyInMeters       datasetID            modified
+2078 859307135  141433    395450 Black Sea                          <NA> IMIS:dasid:5256 2015-12-27 00:00:00
+                                 occurrenceID recordedBy                          scientificNameID    class
+2078 GeoEcoMar_BlackSeaCruises_2003_2011_3723       <NA> urn:lsid:marinespecies.org:taxname:141433 Bivalvia
+     lifestage  sex individualCount eventID depth minimumDepthInMeters maximumDepthInMeters fieldNumber
+2078      <NA> <NA>              NA    <NA> 60.94                60.94                60.94           I
+     occurrenceRemarks eventTime footprintWKT identifiedBy
+2078              <NA>      <NA>         <NA>     Teaca A.```
+```
+
 ## Check points on land
 
 ```R
