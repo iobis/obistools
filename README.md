@@ -34,6 +34,7 @@ names <- c("Abra alva", "Buccinum fusiforme", "Buccinum fusiforme", "Buccinum fu
 match_taxa(names)
 ```
 ```
+3 names, 1 without matches, 1 with multiple matches
 Proceed to resolve names (y/n/p)? y
   AphiaID     scientificname      authority     status match_type
 1  531014 Buccinum fusiforme   Kiener, 1834 unaccepted      exact
