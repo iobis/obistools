@@ -11,4 +11,5 @@
 #' @import sp
 #' @import rgeos
 #' @import leaflet
+#' @import stringr
 NULL

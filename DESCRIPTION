@@ -15,7 +15,8 @@ Imports:
     grid,
     sp,
     rgeos,
-    leaflet
+    leaflet,
+    stringr
 Remotes: iobis/worms
 Suggests:
     testthat
