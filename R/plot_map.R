@@ -22,7 +22,7 @@ plot_map <- function(data, zoom = FALSE) {
     xrange[2] <- xrange[2] + dx
     yrange[1] <- yrange[1] - dy
     yrange[2] <- yrange[2] + dy
-    m <- m + coord_map(xlim = xrange, ylim = yrange)
+    m <- m + coord_quickmap(xlim = xrange, ylim = yrange)
   }
 
   return(m)
