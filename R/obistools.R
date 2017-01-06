@@ -6,4 +6,5 @@
 #' @name obistools
 #' @import dplyr
 #' @import ggplot2
+#' @import worms
 NULL

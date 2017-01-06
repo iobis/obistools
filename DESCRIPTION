@@ -10,7 +10,9 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     dplyr,
-    ggplot2
+    ggplot2,
+    worms
+Remotes: iobis/worms
 Suggests:
     testthat
 RoxygenNote: 5.0.1
