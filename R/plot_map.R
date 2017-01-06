@@ -28,3 +28,36 @@ plot_map <- function(data, zoom = FALSE) {
   return(m)
 
 }
+
+#' Identify a point on a map.
+#'
+#' @return The nearest record.
+#' @export
+identify_map <- function(data) {
+
+  tree <- as.character(current.vpTree())
+  panel <- str_match(tree, "\\[(panel.*?)\\]")[1, 2]
+  seekViewport(panel)
+  g <- grid.locator("npc")
+  nx <- as.numeric(g$x)
+  ny <- as.numeric(g$y)
+  l <- last_plot()
+  b <- ggplot_build(l)
+  ranges <- b$layout$panel_ranges[[1]]
+  xrange <- ranges$x.range
+  yrange <- ranges$y.range
+  px <- xrange[1] + nx * diff(xrange)
+  py <- yrange[1] + ny * diff(yrange)
+
+  sp <- b$data[[2]] %>% select(x, y)
+  coordinates(sp) <- ~ x + y
+  p <- SpatialPoints(matrix(c(px, py), ncol = 2, byrow = TRUE))
+
+  d <- gDistance(p, sp, byid = TRUE)
+  i <- which.min(d)
+  return(data[i,])
+
+}
+
+
+

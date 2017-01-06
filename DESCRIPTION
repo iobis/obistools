@@ -11,7 +11,10 @@ LazyData: true
 Imports:
     dplyr,
     ggplot2,
-    worms
+    worms,
+    grid,
+    sp,
+    rgeos
 Remotes: iobis/worms
 Suggests:
     testthat

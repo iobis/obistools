@@ -56,3 +56,10 @@ plot_map(abra)
 ```
 
 ![https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png)
+
+### Identify points on a map
+
+```R
+plot_map(abra, zoom = TRUE)
+identify_map(abra)
+```

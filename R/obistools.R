@@ -7,4 +7,7 @@
 #' @import dplyr
 #' @import ggplot2
 #' @import worms
+#' @import grid
+#' @import sp
+#' @import rgeos
 NULL
