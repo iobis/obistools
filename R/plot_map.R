@@ -59,5 +59,14 @@ identify_map <- function(data) {
 
 }
 
-
-
+#' Create a Leaflet map.
+#'
+#' @param data The data frame.
+#' @return HTML widget object.
+#' @export
+plot_map_leaflet <- function(data) {
+  m <- leaflet(data) %>%
+    addProviderTiles("Esri.OceanBasemap") %>%
+    addCircleMarkers(~decimalLongitude, ~decimalLatitude, popup = as.character(seq(1, nrow(data))), radius = 3, weight = 1, fillColor = "#FF368B", color = "#FF368B", opacity = 1, fillOpacity = 0.1)
+  return(m)
+}

@@ -14,7 +14,8 @@ Imports:
     worms,
     grid,
     sp,
-    rgeos
+    rgeos,
+    leaflet
 Remotes: iobis/worms
 Suggests:
     testthat

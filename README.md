@@ -57,6 +57,12 @@ plot_map(abra)
 
 ![https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png)
 
+```R
+plot_map_leaflet(abra)
+```
+
+![https://raw.githubusercontent.com/iobis/obistools/master/images/abra_2.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra_2.png)
+
 ## Identify points on a map
 
 ```R
