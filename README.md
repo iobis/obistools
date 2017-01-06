@@ -63,3 +63,37 @@ plot_map(abra)
 plot_map(abra, zoom = TRUE)
 identify_map(abra)
 ```
+
+## Check points on land
+
+```R
+check_onland(abra)
+```
+
+```
+          id decimalLongitude decimalLatitude basisOfRecord           eventDate
+31 365512845       -0.9092748        54.57467    Occurrence 2011-09-03 10:00:00
+                                      institutionCode collectionCode catalogNumber                      locality
+31 Yorkshire Naturalists' Union Marine and Coastal Se          60051     261729389 Skinningrove. Cattersty Sands
+                                                      datasetName   phylum    order    family genus scientificName
+31 Yorkshire Naturalists Union Marine and Coastal Section Records Mollusca Cardiida Semelidae  Abra      Abra alba
+   originalScientificName scientificNameAuthorship obisID resourceID yearcollected   species         qc aphiaID
+31              Abra alba          (W. Wood, 1802) 395450       3083          2011 Abra alba 1073216639  141433
+   speciesID continent coordinateUncertaintyInMeters       datasetID            modified
+31    395450    Europe                         707.0 IMIS:dasid:3182 2014-04-16 16:16:43
+                                                                     occurrenceID    recordedBy
+31 urn:catalog:Yorkshire Naturalists' Union Marine and Coastal Se:60051:261729389 Adrian Norris
+                            scientificNameID    class lifestage  sex individualCount eventID depth
+31 urn:lsid:marinespecies.org:taxname:141433 Bivalvia      <NA> <NA>              NA    <NA>    NA
+   minimumDepthInMeters maximumDepthInMeters fieldNumber occurrenceRemarks eventTime footprintWKT identifiedBy
+31                   NA                   NA        <NA>              <NA>      <NA>         <NA>         <NA>
+```
+
+```R
+check_onland(abra, report = TRUE)
+```
+
+```
+  field   level row                         message
+1    NA warning  31 Coordinates are located on land
+```
