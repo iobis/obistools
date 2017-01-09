@@ -7,9 +7,14 @@
 #' @import dplyr
 #' @import ggplot2
 #' @import worms
-#' @import grid
+#' @importFrom grid seekViewport
+#' @importFrom grid grid.locator
+#' @importFrom grid current.vpTree
 #' @import sp
-#' @import rgeos
-#' @import leaflet
-#' @import stringr
+#' @importFrom rgeos gDistance
+#' @importFrom leaflet leaflet
+#' @importFrom leaflet addProviderTiles
+#' @importFrom leaflet addCircleMarkers
+#' @importFrom stringr str_match
+#' @import xml2
 NULL

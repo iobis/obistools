@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/style/human.xsl"?>
+<extension xmlns="http://rs.gbif.org/extension/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:dc="http://purl.org/dc/terms/"    
+    xsi:schemaLocation="http://rs.gbif.org/extension/ http://rs.gbif.org/schema/extension.xsd"
+    dc:title="Darwin Core Measurement Or Facts" 
+    name="MeasurementOrFact" namespace="http://rs.tdwg.org/dwc/terms/" rowType="http://rs.tdwg.org/dwc/terms/MeasurementOrFact"
+    dc:issued="2015-02-13"
+    dc:subject=""
+    dc:relation="http://rs.tdwg.org/dwc/terms/index.htm#measureindex"
+    dc:description="Support for generic measurements or facts as defined in Darwin Core.">
+
+    <property name='measurementID' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementID' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementID' dc:description='An identifier for the MeasurementOrFact (information pertaining to measurements, facts, characteristics, or assertions). May be a global unique identifier or an identifier specific to the data set.' examples='' required='false'/>
+    <property name='measurementType' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementType' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementType' dc:description='The nature of the measurement, fact, characteristic, or assertion. Recommended best practice is to use a controlled vocabulary.' examples='"tail length", "temperature", "trap line length", "survey area", "trap type"' required='false'/>
+    <property name='measurementValue' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementValue' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementValue' dc:description='The value of the measurement, fact, characteristic, or assertion.' examples='"45", "20", "1", "14.5", "UV-light"' required='false'/>
+    <property name='measurementAccuracy' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementAccuracy' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementAccuracy' dc:description='The description of the potential error associated with the measurementValue.' examples='"0.01", "normal distribution with variation of 2 m"' required='false'/>
+    <property name='measurementUnit' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementUnit' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementUnit' dc:description='The units associated with the measurementValue. Recommended best practice is to use the International System of Units (SI).' examples='"mm", "C", "km", "ha"' required='false'/>
+    <property name='measurementDeterminedDate' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementDeterminedDate' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementDeterminedDate' dc:description='The date on which the MeasurementOrFact was made. Recommended best practice is to use an encoding scheme, such as ISO 8601:2004(E).' examples='"1963-03-08T14:07-0600", "2009-02-20T08:40Z", "1809-02-12", "1906-06", "1971", "2007-03-01T13:00:00Z/2008-05-11T15:30:00Z", "2007-11-13/15"' required='false'/>
+    <property name='measurementDeterminedBy' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementDeterminedBy' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementDeterminedBy' dc:description='A list (concatenated and separated) of names of people, groups, or organizations who determined the value of the MeasurementOrFact.' examples='"Javier de la Torre", "Julie Woodruff; Eileen Lacey"' required='false'/>
+    <property name='measurementMethod' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementMethod' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementMethod' dc:description='A description of or reference to (publication, URI) the method or protocol used to determine the measurement, fact, characteristic, or assertion.' examples='"minimum convex polygon around burrow entrances" for a home range area, "barometric altimeter" for an elevation' required='false'/>
+    <property name='measurementRemarks' namespace='http://rs.tdwg.org/dwc/terms/' qualName='http://rs.tdwg.org/dwc/terms/measurementRemarks' dc:relation='http://rs.tdwg.org/dwc/terms/index.htm#measurementRemarks' dc:description='Comments or notes accompanying the MeasurementOrFact.' examples='tip of tail missing' required='false'/>
+    
+</extension>

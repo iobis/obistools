@@ -72,12 +72,3 @@ check_fields <- function(data, level = "error") {
     return(errors)
 
 }
-
-missing_fields <- function(data, fields) {
-  missing <- !(fields %in% names(data))
-  return(fields[missing])
-}
-
-missing_values <- function(data) {
-  return(data %in% c(NA, ""))
-}

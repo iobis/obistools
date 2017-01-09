@@ -16,7 +16,8 @@ Imports:
     sp,
     rgeos,
     leaflet,
-    stringr
+    stringr,
+    xml2
 Remotes: iobis/worms
 Suggests:
     testthat
