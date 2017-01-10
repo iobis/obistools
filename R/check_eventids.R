@@ -56,3 +56,24 @@ check_eventids <- function(event) {
 
   return(errors)
 }
+
+#' Check if all eventIDs in an extension have corresponding eventIDs in the core.
+#'
+#' @param event The event records.
+#' @param event The extension records.
+#' @return Any errors.
+#' @export
+check_extension_eventids <- function(event, extension) {
+  rows <- which(!extension$eventID %in% event$eventID)
+  if (length(rows) > 0) {
+    return(data.frame(
+      field = "eventID",
+      level = "error",
+      row = rows,
+      message = paste0("eventID ", extension$eventID[rows], " has no corresponding eventID in the core"),
+      stringsAsFactors = FALSE
+    ))
+  } else {
+    return(data.frame())
+  }
+}

@@ -9,7 +9,7 @@ flatten_event(event, fields = NULL)
 \arguments{
 \item{event}{The event records.}
 
-\item{fields}{Fields to be inherited from higher levels, if NULL all fields will be inherited.}
+\item{fields}{Fields to be inherited from higher levels, if NULL all Event Core fields will be inherited.}
 }
 \value{
 Flattened event records.

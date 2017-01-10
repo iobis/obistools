@@ -142,6 +142,32 @@ check_eventids(data)
 1 parentEventID error   5 parentEventID bb has no corresponding eventID
 ```
 
+## Check eventID in an extension
+
+```R
+event <- data.frame(
+  eventID = c("cruise_1", "station_1", "station_2", "sample_1", "sample_2", "sample_3", "sample_4", "subsample_1", "subsample_2"),
+  parentEventID = c(NA, "cruise_1", "cruise_1", "station_1", "station_1", "station_2", "station_2", "sample_3", "sample_3"),
+  eventDate = c(NA, NA, NA, "2017-01-01", "2017-01-02", "2017-01-03", "2017-01-04", NA, NA),
+  decimalLongitude = c(NA, 2.9, 4.7, NA, NA, NA, NA, NA, NA),
+  decimalLatitude = c(NA, 54.1, 55.8, NA, NA, NA, NA, NA, NA),
+  stringsAsFactors = FALSE
+)
+
+occurrence <- data.frame(
+  eventID = c("sample_1", "sample_1", "sample_2", "sample_28", "sample_3", "sample_4", "subsample_1", "subsample_1"),
+  scientificName = c("Abra alba", "Lanice conchilega", "Pectinaria koreni", "Nephtys hombergii", "Pectinaria koreni", "Amphiura filiformis", "Desmolaimus zeelandicus", "Aponema torosa"),
+  stringsAsFactors = FALSE
+)
+
+check_extension_eventids(event, occurrence)
+```
+
+```
+    field level row                                                    message
+1 eventID error   4 eventID sample_28 has no corresponding eventID in the core
+```
+
 ## Flatten event records
 
 ```R
