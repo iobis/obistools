@@ -150,6 +150,7 @@ event <- data.frame(
   parentEventID = c(NA, "cruise_1", "cruise_1", "station_1", "station_1", "station_2", "station_2", "sample_3", "sample_3"),
   eventDate = c(NA, NA, NA, "2017-01-01", "2017-01-02", "2017-01-03", "2017-01-04", NA, NA),
   decimalLongitude = c(NA, 2.9, 4.7, NA, NA, NA, NA, NA, NA),
+  decimalLatitude = c(NA, 54.1, 55.8, NA, NA, NA, NA, NA, NA),
   stringsAsFactors = FALSE
 )
 
@@ -157,15 +158,47 @@ flatten_event(event)
 ```
 
 ```
-      eventID parentEventID  eventDate decimalLongitude
-1    cruise_1          <NA>       <NA>               NA
-2   station_1      cruise_1       <NA>              2.9
-3   station_2      cruise_1       <NA>              4.7
-4    sample_1     station_1 2017-01-01              2.9
-5    sample_2     station_1 2017-01-02              2.9
-6    sample_3     station_2 2017-01-03              4.7
-7    sample_4     station_2 2017-01-04              4.7
-8 subsample_1      sample_3 2017-01-03              4.7
-9 subsample_2      sample_3 2017-01-03              4.7
+      eventID parentEventID  eventDate decimalLongitude decimalLatitude
+1    cruise_1          <NA>       <NA>               NA              NA
+2   station_1      cruise_1       <NA>              2.9            54.1
+3   station_2      cruise_1       <NA>              4.7            55.8
+4    sample_1     station_1 2017-01-01              2.9            54.1
+5    sample_2     station_1 2017-01-02              2.9            54.1
+6    sample_3     station_2 2017-01-03              4.7            55.8
+7    sample_4     station_2 2017-01-04              4.7            55.8
+8 subsample_1      sample_3 2017-01-03              4.7            55.8
+9 subsample_2      sample_3 2017-01-03              4.7            55.8
 ```
 
+## Flatten occurrence and event records
+
+```R
+event <- data.frame(
+  eventID = c("cruise_1", "station_1", "station_2", "sample_1", "sample_2", "sample_3", "sample_4", "subsample_1", "subsample_2"),
+  parentEventID = c(NA, "cruise_1", "cruise_1", "station_1", "station_1", "station_2", "station_2", "sample_3", "sample_3"),
+  eventDate = c(NA, NA, NA, "2017-01-01", "2017-01-02", "2017-01-03", "2017-01-04", NA, NA),
+  decimalLongitude = c(NA, 2.9, 4.7, NA, NA, NA, NA, NA, NA),
+  decimalLatitude = c(NA, 54.1, 55.8, NA, NA, NA, NA, NA, NA),
+  stringsAsFactors = FALSE
+)
+
+occurrence <- data.frame(
+  eventID = c("sample_1", "sample_1", "sample_2", "sample_2", "sample_3", "sample_4", "subsample_1", "subsample_1"),
+  scientificName = c("Abra alba", "Lanice conchilega", "Pectinaria koreni", "Nephtys hombergii", "Pectinaria koreni", "Amphiura filiformis", "Desmolaimus zeelandicus", "Aponema torosa"),
+  stringsAsFactors = FALSE
+)
+
+flatten_occurrence(event, occurrence)
+```
+
+```
+      eventID          scientificName  eventDate decimalLatitude decimalLongitude
+1    sample_1               Abra alba 2017-01-01            54.1              2.9
+2    sample_1       Lanice conchilega 2017-01-01            54.1              2.9
+3    sample_2       Pectinaria koreni 2017-01-02            54.1              2.9
+4    sample_2       Nephtys hombergii 2017-01-02            54.1              2.9
+5    sample_3       Pectinaria koreni 2017-01-03            55.8              4.7
+6    sample_4     Amphiura filiformis 2017-01-04            55.8              4.7
+7 subsample_1 Desmolaimus zeelandicus 2017-01-03            55.8              4.7
+8 subsample_1          Aponema torosa 2017-01-03            55.8              4.7
+```
