@@ -156,6 +156,8 @@ check_eventids(data)
 
 ## Check eventID in an extension
 
+`check_extension_eventids()` checks if all `eventID`s in an extension have matching `eventID`s in the core table.
+
 ```R
 event <- data.frame(
   eventID = c("cruise_1", "station_1", "station_2", "sample_1", "sample_2", "sample_3", "sample_4", "subsample_1", "subsample_2"),
@@ -181,6 +183,8 @@ check_extension_eventids(event, occurrence)
 ```
 
 ## Flatten event records
+
+`flatten_event()` will recursively add event information form parent events to child events.
 
 ```R
 event <- data.frame(
@@ -209,6 +213,8 @@ flatten_event(event)
 ```
 
 ## Flatten occurrence and event records
+
+`flatten_occurrence()` will add event information to occurrence records.
 
 ```R
 event <- data.frame(
