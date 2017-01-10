@@ -4,6 +4,8 @@ Tools for data enhancement and quality control.
 
 ## Taxon matching
 
+Function `match_taxa()` can be used for interactive taxon matching with the World Register of Marine Species.
+
 ```R
 names <- c("Abra alva", "Buccinum fusiforme", "Buccinum fusiforme", "Buccinum fusiforme", "hlqsdkf")
 match_taxa(names)
@@ -28,6 +30,8 @@ Multiple matches, pick a number or leave empty to skip: 2
 ```
 
 ## Check required fields
+
+`check_fields()` will check if all OBIS required fields are present in an occurrence table and if any values are missing.
 
 ```R
 data <- data.frame(
@@ -54,6 +58,8 @@ check_fields(data)
 
 ## Plot points on a map
 
+`plot_map()` will generate a `ggplot2` map of occurrence records, `plot_map_leaflet()` creates a Leaflet map.
+
 ```R
 plot_map(abra)
 ```
@@ -67,6 +73,8 @@ plot_map_leaflet(abra)
 ![https://raw.githubusercontent.com/iobis/obistools/master/images/abra_2.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra_2.png)
 
 ## Identify points on a map
+
+Use `identify_map()` to identify points on a `ggplot2` map. This function will return the record closest to where the mouse was clicked.
 
 ```R
 plot_map(abra, zoom = TRUE)
@@ -93,6 +101,8 @@ identify_map(abra)
 ```
 
 ## Check points on land
+
+`check_onland()` uses land polygons from OpenStreetMap to check if any points are located on land. Other shapefiles can be used as well.
 
 ```R
 check_onland(abra)
@@ -127,6 +137,8 @@ check_onland(abra, report = TRUE)
 ```
 
 ## Check eventID and parentEventID
+
+`check_eventids()` checks if both `eventID()` and `parentEventID` fields are present in an event table, and if al `parentEventID`s have a corresponding `eventID`.
 
 ```R
 data <- data.frame(
