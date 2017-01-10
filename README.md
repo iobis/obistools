@@ -122,3 +122,30 @@ check_onland(abra, report = TRUE)
   field   level row                         message
 1    NA warning  31 Coordinates are located on land
 ```
+
+### Flattening event records
+
+```R
+event <- data.frame(
+  eventID = c("cruise_1", "station_1", "station_2", "sample_1", "sample_2", "sample_3", "sample_4", "subsample_1", "subsample_2"),
+  parentEventID = c(NA, "cruise_1", "cruise_1", "station_1", "station_1", "station_2", "station_2", "sample_3", "sample_3"),
+  eventDate = c(NA, NA, NA, "2017-01-01", "2017-01-02", "2017-01-03", "2017-01-04", NA, NA),
+  decimalLongitude = c(NA, 2.9, 4.7, NA, NA, NA, NA, NA, NA),
+  stringsAsFactors = FALSE
+)
+
+flatten_event(event)
+```
+
+```
+      eventID parentEventID  eventDate decimalLongitude
+1    cruise_1          <NA>       <NA>               NA
+2   station_1      cruise_1       <NA>              2.9
+3   station_2      cruise_1       <NA>              4.7
+4    sample_1     station_1 2017-01-01              2.9
+5    sample_2     station_1 2017-01-02              2.9
+6    sample_3     station_2 2017-01-03              4.7
+7    sample_4     station_2 2017-01-04              4.7
+8 subsample_1      sample_3 2017-01-03              4.7
+9 subsample_2      sample_3 2017-01-03              4.7
+```
