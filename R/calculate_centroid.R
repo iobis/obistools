@@ -12,7 +12,7 @@ calculate_centroid <- function(wkt) {
     return(data.frame(
       decimalLongitude = centroid$x,
       decimalLatitude = centroid$y,
-      radius = max(distm(as.data.frame(centroid), m))
+      coordinateUncertaintyInMeters = max(distm(as.data.frame(centroid), m))
     ))
   })
   return(bind_rows(results))

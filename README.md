@@ -261,7 +261,7 @@ calculate_centroid(wkt)
 ```
 
 ```
-  decimalLongitude decimalLatitude    radius
-1         2.747292        51.50939 45287.041
-2         3.193570        42.17716  7531.455
+  decimalLongitude decimalLatitude coordinateUncertaintyInMeters
+1         2.747292        51.50939                     45287.041
+2         3.193570        42.17716                      7531.455
 ```
