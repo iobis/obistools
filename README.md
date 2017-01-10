@@ -123,7 +123,7 @@ check_onland(abra, report = TRUE)
 1    NA warning  31 Coordinates are located on land
 ```
 
-### Flattening event records
+## Flatten event records
 
 ```R
 event <- data.frame(
