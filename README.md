@@ -12,10 +12,13 @@ match_taxa(names)
 ```
 3 names, 1 without matches, 1 with multiple matches
 Proceed to resolve names (y/n/p)? y
+
   AphiaID     scientificname      authority     status match_type
 1  531014 Buccinum fusiforme   Kiener, 1834 unaccepted      exact
 2  510389 Buccinum fusiforme Broderip, 1830 unaccepted      exact
+
 Multiple matches, pick a number or leave empty to skip: 2
+
         scientificName                          scientificNameID match_type
 1            Abra alba urn:lsid:marinespecies.org:taxname:141433     near_1
 2   Buccinum fusiforme urn:lsid:marinespecies.org:taxname:510389      exact
