@@ -265,3 +265,41 @@ calculate_centroid(wkt)
 1         2.747292        51.50939                     45287.041
 2         3.193570        42.17716                      7531.455
 ```
+
+## Map column names to Darwin Core terms
+
+`map_fields()` changes column names using a terms map.
+
+```R
+data <- data.frame(
+  id = c("cruise_1", "station_1", "station_2", "sample_1", "sample_2", "sample_3", "sample_4", "subsample_1", "subsample_2"),
+  date = c(NA, NA, NA, "2017-01-01", "2017-01-02", "2017-01-03", "2017-01-04", NA, NA),
+  locality = rep("North Sea", 9),
+  lon = c(NA, 2.9, 4.7, NA, NA, NA, NA, NA, NA),
+  lat = c(NA, 54.1, 55.8, NA, NA, NA, NA, NA, NA),
+  stringsAsFactors = FALSE
+)
+
+mapping <- list(
+  decimalLongitude = "lon",
+  decimalLatitude = "lat",
+  datasetName = "dataset",
+  eventID = "id",
+  eventDate = "date"
+)
+
+map_fields(data, mapping)
+```
+
+```
+      eventID  eventDate  locality decimalLongitude decimalLatitude
+1    cruise_1       <NA> North Sea               NA              NA
+2   station_1       <NA> North Sea              2.9            54.1
+3   station_2       <NA> North Sea              4.7            55.8
+4    sample_1 2017-01-01 North Sea               NA              NA
+5    sample_2 2017-01-02 North Sea               NA              NA
+6    sample_3 2017-01-03 North Sea               NA              NA
+7    sample_4 2017-01-04 North Sea               NA              NA
+8 subsample_1       <NA> North Sea               NA              NA
+9 subsample_2       <NA> North Sea               NA              NA
+```
