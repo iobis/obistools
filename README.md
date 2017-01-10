@@ -123,6 +123,22 @@ check_onland(abra, report = TRUE)
 1    NA warning  31 Coordinates are located on land
 ```
 
+## Check eventID and parentEventID
+
+```R
+data <- data.frame(
+  eventID = c("a", "b", "c", "d", "e", "f"),
+  parentEventID = c("", "", "a", "a", "bb", "b"),
+  stringsAsFactors = FALSE
+)
+check_eventids(data)
+```
+
+```
+          field level row                                       message
+1 parentEventID error   5 parentEventID bb has no corresponding eventID
+```
+
 ## Flatten event records
 
 ```R
@@ -149,3 +165,4 @@ flatten_event(event)
 8 subsample_1      sample_3 2017-01-03              4.7
 9 subsample_2      sample_3 2017-01-03              4.7
 ```
+
