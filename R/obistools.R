@@ -16,5 +16,6 @@
 #' @importFrom leaflet addProviderTiles
 #' @importFrom leaflet addCircleMarkers
 #' @importFrom stringr str_match
+#' @importFrom geosphere distm
 #' @import xml2
 NULL

@@ -246,3 +246,22 @@ flatten_occurrence(event, occurrence)
 7 subsample_1 Desmolaimus zeelandicus 2017-01-03            55.8              4.7
 8 subsample_1          Aponema torosa 2017-01-03            55.8              4.7
 ```
+
+## Calculate centroid and radius for WKT geometries
+
+`calculate_centroid()` calculates a centroid and radius for WKT strings. This is useful for populating `decimalLongitiude`, `decimalLatitude` and `coordinateUncertaintyInMeters`.
+
+```R
+wkt <- c(
+  "POLYGON ((2.53784 51.12421, 2.99377 51.32031, 3.34534 51.39578, 2.82349 51.85614, 2.27417 51.69980, 2.53784 51.12421))",
+  "POLYGON ((3.15582 42.23564, 3.13248 42.14202, 3.22037 42.11249, 3.26019 42.21530, 3.15582 42.23564))"
+)
+
+calculate_centroid(wkt)
+```
+
+```
+  decimalLongitude decimalLatitude    radius
+1         2.747292        51.50939 45287.041
+2         3.193570        42.17716  7531.455
+```

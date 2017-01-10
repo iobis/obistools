@@ -13,7 +13,7 @@ check_onland <- function(data, polygons = NULL, report = FALSE) {
 
   sp <- data %>% select(decimalLongitude, decimalLatitude)
   coordinates(sp) <- ~ decimalLongitude + decimalLatitude
-  proj4string(sp) <- CRS("+proj=longlat")
+  proj4string(sp) <- CRS("+init=epsg:4326")
   sp <- spTransform(sp, proj4string(polygons))
   i <- which(!is.na(over(sp, polygons)))
 
