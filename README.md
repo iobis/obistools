@@ -61,7 +61,7 @@ check_fields(data)
 `plot_map()` will generate a `ggplot2` map of occurrence records, `plot_map_leaflet()` creates a Leaflet map.
 
 ```R
-plot_map(abra)
+plot_map(abra, zoom = TRUE)
 ```
 
 ![https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png)
