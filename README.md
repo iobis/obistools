@@ -4,7 +4,7 @@ Tools for data enhancement and quality control.
 
 ## Taxon matching
 
-Function `match_taxa()` can be used for interactive taxon matching with the World Register of Marine Species.
+`match_taxa()` performs interactive taxon matching with the World Register of Marine Species.
 
 ```R
 names <- c("Abra alva", "Buccinum fusiforme", "Buccinum fusiforme", "Buccinum fusiforme", "hlqsdkf")
