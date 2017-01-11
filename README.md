@@ -303,3 +303,37 @@ map_fields(data, mapping)
 8 subsample_1       <NA> North Sea               NA              NA
 9 subsample_2       <NA> North Sea               NA              NA
 ```
+
+## Check eventDate
+
+```R
+data <- data.frame(eventDate = c(
+  "2016",
+  "2016-01",
+  "2016-01-02",
+  "2016-01-02 12",
+  "2016-01-02 12:34",
+  "2016-01-02 12:34:48",
+  "2016-01-02T13:00:00+01:00",
+  "2016-01-02T13:00:00+0100",
+  "2016-01-02T13:00:00+01",
+  "2016-01-02T13:00:00Z",
+  "2016-01-02 13:00:00/2016-01-02 14:00:00",
+  "2016-01-02 13:00:00/14:00:00",
+  "2016-01-02/05",
+  "2016-01-01 13u40",
+  "2016/01/03",
+  "",
+  NA
+), stringsAsFactors = FALSE)
+
+check_eventdate(data)
+```
+
+```
+  level row     field                                                     message
+1 error  14 eventDate eventDate 2016-01-01 13u40 does not seem to be a valid date
+2 error  15 eventDate       eventDate 2016/01/03 does not seem to be a valid date
+3 error  16 eventDate                 eventDate  does not seem to be a valid date
+4 error  17 eventDate               eventDate NA does not seem to be a valid date
+```
