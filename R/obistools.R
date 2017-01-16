@@ -18,5 +18,7 @@
 #' @importFrom stringr str_match
 #' @importFrom stringr str_split
 #' @importFrom geosphere distm
+#' @import rmarkdown
+#' @import knitr
 #' @import xml2
 NULL

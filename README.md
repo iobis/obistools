@@ -337,3 +337,13 @@ check_eventdate(data)
 3 error  16 eventDate                 eventDate  does not seem to be a valid date
 4 error  17 eventDate               eventDate NA does not seem to be a valid date
 ```
+
+## Data quality report
+
+`report()` generates a basic data quality report.
+
+```R
+report(abra)
+```
+
+![https://raw.githubusercontent.com/iobis/obistools/master/images/report.png](https://raw.githubusercontent.com/iobis/obistools/master/images/report.png)

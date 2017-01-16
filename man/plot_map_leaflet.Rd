@@ -4,10 +4,12 @@
 \alias{plot_map_leaflet}
 \title{Create a Leaflet map.}
 \usage{
-plot_map_leaflet(data)
+plot_map_leaflet(data, provider = "Esri.OceanBasemap")
 }
 \arguments{
 \item{data}{The data frame.}
+
+\item{provider}{Tile provider, see https://leaflet-extras.github.io/leaflet-providers/preview/.}
 }
 \value{
 HTML widget object.

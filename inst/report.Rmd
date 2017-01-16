@@ -1,0 +1,19 @@
+---
+title: "Data quality report"
+output: html_document
+params:
+  data: ""
+  qc: ""
+---
+
+## Map
+
+```{r echo = FALSE}
+plot_map(params$data)
+```
+
+## Issues
+
+```{r echo = FALSE, results='asis'}
+kable(params$qc)
+```

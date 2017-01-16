@@ -18,7 +18,9 @@ Imports:
     leaflet,
     stringr,
     xml2,
-    geosphere
+    geosphere,
+    rmarkdown,
+    knitr
 Remotes: iobis/worms
 Suggests:
     testthat
