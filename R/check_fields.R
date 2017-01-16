@@ -9,32 +9,36 @@
 #' @export
 check_fields <- function(data, level = "error") {
 
-    errors <- NULL
+    errors <- data.frame()
     required <- c("eventDate", "decimalLongitude", "decimalLatitude", "scientificName", "scientificNameID", "occurrenceStatus", "basisOfRecord")
     recommended <- c("minimumDepthInMeters", "maximumDepthInMeters")
 
     # find missing required fields
 
     fields <- missing_fields(data, required)
-    errors <- bind_rows(errors, data.frame(
-      field = fields,
-      level = "error",
-      message = paste0("Required field ", fields, " is missing"),
-      stringsAsFactors = FALSE
-    ))
+    if (length(fields) > 0) {
+      errors <- bind_rows(errors, data.frame(
+        field = fields,
+        level = "error",
+        message = paste0("Required field ", fields, " is missing"),
+        stringsAsFactors = FALSE
+      ))
+    }
 
     # find empty values for required fields
 
     for (field in required) {
       if (field %in% names(data)) {
         rows <- missing_values(data[,field])
-        errors <- bind_rows(errors, data.frame(
-          level = "error",
-          field = field,
-          row = which(rows),
-          message = paste0("Empty value for required field ", field),
-          stringsAsFactors = FALSE
-        ))
+        if (length(which(rows)) > 0) {
+          errors <- bind_rows(errors, data.frame(
+            level = "error",
+            field = field,
+            row = which(rows),
+            message = paste0("Empty value for required field ", field),
+            stringsAsFactors = FALSE
+          ))
+        }
       }
     }
 
@@ -45,25 +49,29 @@ check_fields <- function(data, level = "error") {
       # find missing recommended fields
 
       fields <- missing_fields(data, recommended)
-      errors <- bind_rows(errors, data.frame(
-        field = fields,
-        level = "warning",
-        message = paste0("Recommended field ", fields, " is missing"),
-        stringsAsFactors = FALSE
-      ))
+      if (length(fields) > 0) {
+        errors <- bind_rows(errors, data.frame(
+          field = fields,
+          level = "warning",
+          message = paste0("Recommended field ", fields, " is missing"),
+          stringsAsFactors = FALSE
+        ))
+      }
 
       # find empty values for recommended fields
 
       for (field in recommended) {
         if (field %in% names(data)) {
           rows <- missing_values(data[,field])
-          errors <- bind_rows(errors, data.frame(
-            level = "warning",
-            field = field,
-            row = which(rows),
-            message = paste0("Empty value for recommended field ", field),
-            stringsAsFactors = FALSE
-          ))
+          if (length(rows) > 0) {
+            errors <- bind_rows(errors, data.frame(
+              level = "warning",
+              field = field,
+              row = which(rows),
+              message = paste0("Empty value for recommended field ", field),
+              stringsAsFactors = FALSE
+            ))
+          }
         }
       }
 
