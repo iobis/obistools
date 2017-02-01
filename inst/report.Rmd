@@ -8,12 +8,12 @@ params:
 
 ## Map
 
-```{r echo = FALSE}
+```{r echo = FALSE, message = FALSE}
 plot_map(params$data)
 ```
 
 ## Issues
 
-```{r echo = FALSE, results='asis'}
+```{r echo = FALSE, results='asis', message = FALSE}
 kable(params$qc)
 ```
