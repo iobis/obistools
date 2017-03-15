@@ -18,13 +18,17 @@ check_onland <- function(data, polygons = NULL, report = FALSE) {
   i <- which(!is.na(over(sp, polygons)))
 
   if (report) {
-    return(data.frame(
-      field = NA,
-      level = "warning",
-      row = i,
-      message = paste0("Coordinates are located on land"),
-      stringsAsFactors = FALSE
-    ))
+    if (length(i) > 0) {
+      return(data.frame(
+        field = NA,
+        level = "warning",
+        row = i,
+        message = paste0("Coordinates are located on land"),
+        stringsAsFactors = FALSE
+      ))
+    } else {
+      return(data.frame())
+    }
   } else {
     return(data[i,])
   }
