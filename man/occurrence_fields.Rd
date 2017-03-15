@@ -12,4 +12,3 @@ Occurrence Core fields.
 \description{
 Occurrence Core fields.
 }
-

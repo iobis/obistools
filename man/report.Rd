@@ -16,4 +16,3 @@ report(data, qc = NULL, file = "report.html")
 \description{
 Creates a basic data quality report.
 }
-

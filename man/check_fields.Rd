@@ -18,4 +18,3 @@ Any warnings or errors.
 Missing or empty required fields are reported as errors,
 missing or empty recommended fields are reported as warnings.
 }
-

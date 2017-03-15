@@ -12,4 +12,3 @@ Event Core fields.
 \description{
 Event Core fields.
 }
-

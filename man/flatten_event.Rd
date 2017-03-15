@@ -17,4 +17,3 @@ Flattened event records.
 \description{
 Flatten event records.
 }
-

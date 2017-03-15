@@ -12,4 +12,3 @@ The nearest record.
 \description{
 Identify a point on a map.
 }
-

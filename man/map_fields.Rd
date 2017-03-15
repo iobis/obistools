@@ -17,4 +17,3 @@ The data frame with mapped column names.
 \description{
 Map column names.
 }
-

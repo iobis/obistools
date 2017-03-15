@@ -19,4 +19,3 @@ Flattened occurrence records.
 \description{
 Flatten event and occurrence records.
 }
-

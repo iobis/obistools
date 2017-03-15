@@ -1,6 +1,6 @@
 Package: obistools
 Title: Tools for data enhancement and quality control
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: person("Pieter", "Provoost", email = "pieterprovoost@gmail.com", role = c("aut", "cre"))
 Description: Tools for data enhancement and quality control.
 Depends:
@@ -24,4 +24,4 @@ Imports:
 Remotes: iobis/worms
 Suggests:
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

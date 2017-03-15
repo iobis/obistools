@@ -12,4 +12,3 @@ plot_map(data, zoom = FALSE)
 \description{
 Plot occurrences on a map.
 }
-

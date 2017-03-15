@@ -17,4 +17,3 @@ Any errors.
 \description{
 Check if all eventIDs in an extension have corresponding eventIDs in the core.
 }
-

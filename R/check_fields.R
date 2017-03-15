@@ -63,7 +63,7 @@ check_fields <- function(data, level = "error") {
       for (field in recommended) {
         if (field %in% names(data)) {
           rows <- missing_values(data[,field])
-          if (length(rows) > 0) {
+          if (length(which(rows)) > 0) {
             errors <- bind_rows(errors, data.frame(
               level = "warning",
               field = field,

@@ -15,4 +15,3 @@ Any errors.
 \description{
 Check eventDate format.
 }
-

@@ -17,4 +17,3 @@ Data frame with scientific name, scientific name ID and match type.
 \description{
 Taxpn matching using WoRMS.
 }
-

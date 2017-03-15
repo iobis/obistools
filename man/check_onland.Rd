@@ -19,4 +19,3 @@ Errors or records.
 \description{
 Check which points are located on land.
 }
-

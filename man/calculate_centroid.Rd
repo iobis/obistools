@@ -15,4 +15,3 @@ Table with centroid coordinates and radius in meter.
 \description{
 Calculates the centroid and radius of a WKT geometry.
 }
-

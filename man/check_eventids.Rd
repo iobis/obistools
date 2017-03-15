@@ -15,4 +15,3 @@ Any errors.
 \description{
 Check if eventID and parentEventID are present, and parentEventIDs have corresponding eventIDs.
 }
-

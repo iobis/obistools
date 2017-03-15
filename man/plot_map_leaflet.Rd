@@ -17,4 +17,3 @@ HTML widget object.
 \description{
 Create a Leaflet map.
 }
-
