@@ -53,6 +53,8 @@ data <- data.frame(
 check_fields(data)
 ```
 
+This function returns a dataframe of errors (if any):
+
 ```
              field level                                       message row
 1        eventDate error           Required field eventDate is missing  NA
