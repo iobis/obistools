@@ -26,7 +26,7 @@ check_eventdate <- function(data) {
 
         return(!is.na(str_match(parts[1], pattern)[1]))
 
-      # check is date is interval
+      # check if date is interval
       } else if (length(parts) == 2) {
 
         start <- parts[1]
