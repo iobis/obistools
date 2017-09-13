@@ -2,6 +2,15 @@
 
 Tools for data enhancement and quality control.
 
+## Installation
+
+Installing `obistools` requires the `devtools` package:
+
+```R
+install.packages("devtools")
+devtools::install_github("iobis/obistools")
+```
+
 ## Taxon matching
 
 `match_taxa()` performs interactive taxon matching with the World Register of Marine Species.
