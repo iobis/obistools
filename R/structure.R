@@ -5,64 +5,92 @@
 #' @param identifier
 #' @return
 #' @export
-treeStructure <- function(event, measurement, identifier = "measurementType") {
+treeStructure <- function(event, measurement, identifier) {
 
-  # create event tree
+  require(tidyr)
+  require(data.tree)
+  require(dplyr)
+  
+  # events
 
-  register <- new.env()
-  tree <- list(children = new.env())
-
-  for (i in 1:nrow(event)) {
-    e <- list(
-      row = i,
-      parentEventID = event$parentEventID[i],
-      children = new.env(),
-      measurements = new.env()
-    )
-    if ("type" %in% names(event)) {
-      e$type <- event$type[i]
-    }
-    register[[event$eventID[i]]] <- e
+  if ("occurrenceID" %in% names(measurement)) {
+    measurement <- measurement %>% filter(is.na(occurrenceID))
+  }
+  measurement <- measurement %>% group_by(eventID) %>% summarize(types = paste0(sort(unique(measurementType)), collapse = ", "))
+  if ("type" %in% names(event)) {
+    event <- event %>% select(eventID, parentEventID, type)
+  } else {
+    event <- event %>% select(eventID, parentEventID)
   }
 
-  for (e in ls(register)) {
-    parentEventID <- register[[e]]$parentEventID
-    if (is.na(parentEventID)) {
-      tree$children[[e]] <- register[[e]]
+  event <- left_join(event,  measurement, by = "eventID")
+  if ("type" %in% names(event)) {
+    event <- unite(event, types, types, type, sep = ", ")
+  }
+  event$parentEventID[is.na(event$parentEventID)] <- "dummy_tree"
+  event$types[is.na(event$types)] <- " "
+  
+  # clean up events
+  
+  parentids <- unique(event$parentEventID)
+  event$leaf <- !event$eventID %in% parentids
+  
+  leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types) %>% summarize(eventID = first(eventID), records = n())
+  stems <- event %>% filter(!leaf) %>% mutate(records = 1)
+  cleanevents <- bind_rows(stems, leafs) %>% select(-leaf) %>% arrange(eventID)
+
+  # construct event tree
+
+  eventtree <- FromDataFrameNetwork(cleanevents, check = "no-check")
+  eventtree$types <- " "
+  eventtree$records <- 0
+
+  # construct summary tree
+
+  paths <- eventtree$Get(function(node) { return(c(node$level, node$types, node$records)) }, simplify = FALSE)
+  tree <- NULL
+  history <- list()
+
+  for (i in 1:length(paths)) {
+
+    message(i)
+
+    level <- as.integer(paths[i][[1]][1])
+    types <- paths[i][[1]][2]
+    records <- as.integer(paths[i][[1]][3])
+
+    if (level <= length(history)) {
+      for (j in level:length(history)) {
+        history[[j]] <- NULL
+      }
+    }
+
+    history[[level]] <- types
+
+    if (level == 1) {
+      tree <- Node$new(types)
     } else {
-      parent <- register[[parentEventID]]
-      parent$children[[e]] <- register[[e]]
+
+      # check if current path exists
+      path <- unlist(history)[2:length(history)]
+      result <- tree$Climb(name = path)
+
+      if (is.null(result)) {
+        # path does not exist, so go back one level
+        if (length(path) > 1) {
+          parent <- tree$Climb(name = head(path, -1))
+        } else {
+          parent <- tree
+        }
+        child <- parent$AddChild(types)
+        child$records <- records
+      } else {
+        # exists, increase
+        result$records <- result$records + records
+      }
     }
   }
-
-  # add measurements
-
-  for (m in 1:nrow(measurement)) {
-    eventID <- measurement$eventID[m]
-    type <- measurement[m, identifier]
-    register[[eventID]]$measurements[[type]] <- TRUE
-  }
-
-  # hash all nodes
-
-  for (e in ls(register)) {
-
-    # add measurement types to identifiers
-    identifiers <- ls(register[[e]]$measurements)
-
-    # add type to identifiers
-    if ("type" %in% names(register[[e]])) {
-      identifiers <- c(identifiers, register[[e]]$type)
-    }
-  }
-
-  if (length(identifiers) > 0) {
-    identifiers <- sort(identifiers)
-  }
-
-  register[[e]]$hash <- md5(paste0(identifiers, collapse=";"))
-
-  # ...
-
-
-  }
+  
+  return(tree)
+  
+}
