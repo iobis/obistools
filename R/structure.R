@@ -2,16 +2,11 @@
 #'
 #' @param event
 #' @param measurement
-#' @param identifier
 #' @return
 #' @export
-treeStructure <- function(event, measurement, identifier) {
+treeStructure <- function(event, measurement) {
 
-  require(tidyr)
-  require(data.tree)
-  require(dplyr)
-  
-  # events
+  # events table
 
   if ("occurrenceID" %in% names(measurement)) {
     measurement <- measurement %>% filter(is.na(occurrenceID))
@@ -24,39 +19,60 @@ treeStructure <- function(event, measurement, identifier) {
   }
 
   event <- left_join(event,  measurement, by = "eventID")
-  if ("type" %in% names(event)) {
-    event <- unite(event, types, types, type, sep = ", ")
-  }
-  event$parentEventID[is.na(event$parentEventID)] <- "dummy_tree"
+  event$parentEventID[is.na(event$parentEventID)] <- "dummy"
   event$types[is.na(event$types)] <- " "
-  
+
   # clean up events
-  
+
   parentids <- unique(event$parentEventID)
   event$leaf <- !event$eventID %in% parentids
-  
-  leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types) %>% summarize(eventID = first(eventID), records = n())
+
+  if ("type" %in% names(event)) {
+    leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types, type) %>% summarize(eventID = first(eventID), records = n())
+  } else {
+    leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types) %>% summarize(eventID = first(eventID), records = n())
+  }
   stems <- event %>% filter(!leaf) %>% mutate(records = 1)
   cleanevents <- bind_rows(stems, leafs) %>% select(-leaf) %>% arrange(eventID)
+
+  # hash events
+
+  cleanevents$hash <- NA
+
+  dict <- new.env()
+  for (i in 1:nrow(cleanevents)) {
+    entry <- list()
+    types <- cleanevents$types[i]
+    entry$types <- types
+    if ("type" %in% names(cleanevents)) {
+      types <- paste0(types, cleanevents$type[i], collapse = ";")
+      entry$type <- cleanevents$type[i]
+    } else {
+      entry$type <- ""
+    }
+    hash <- digest(types, algo = "sha1")
+    dict[[hash]] <- entry
+    cleanevents$hash[i] <- hash
+  }
+
+  cleanevents <- cleanevents %>% select(c("eventID", "parentEventID", "records", "hash"))
 
   # construct event tree
 
   eventtree <- FromDataFrameNetwork(cleanevents, check = "no-check")
-  eventtree$types <- " "
+  eventtree$hash <- " "
   eventtree$records <- 0
 
   # construct summary tree
 
-  paths <- eventtree$Get(function(node) { return(c(node$level, node$types, node$records)) }, simplify = FALSE)
+  paths <- eventtree$Get(function(node) { return(c(node$level, node$hash, node$records)) }, simplify = FALSE)
   tree <- NULL
   history <- list()
 
   for (i in 1:length(paths)) {
 
-    message(i)
-
     level <- as.integer(paths[i][[1]][1])
-    types <- paths[i][[1]][2]
+    hash <- paths[i][[1]][2]
     records <- as.integer(paths[i][[1]][3])
 
     if (level <= length(history)) {
@@ -65,10 +81,10 @@ treeStructure <- function(event, measurement, identifier) {
       }
     }
 
-    history[[level]] <- types
+    history[[level]] <- hash
 
     if (level == 1) {
-      tree <- Node$new(types)
+      tree <- Node$new(hash)
     } else {
 
       # check if current path exists
@@ -82,7 +98,7 @@ treeStructure <- function(event, measurement, identifier) {
         } else {
           parent <- tree
         }
-        child <- parent$AddChild(types)
+        child <- parent$AddChild(hash)
         child$records <- records
       } else {
         # exists, increase
@@ -90,7 +106,44 @@ treeStructure <- function(event, measurement, identifier) {
       }
     }
   }
-  
-  return(tree)
-  
+
+  return(list(tree = tree, dict = dict))
+
 }
+
+printTree <- function(tree, dict) {
+
+  nodes <- tree$Get(function(node) {
+    hash <- node$name
+    level <- node$level
+    records <- node$records
+    prop <- dict[[hash]]
+    return(list(level = level, hash = hash, records = records, type = prop$type, types = prop$types))
+  }, simplify = FALSE)
+
+  for (n in nodes) {
+    indent <- paste0(rep(" ", (n$level - 1) * 2), collapse = "")
+    sindent <- paste0(rep(" ", (n$level - 1) * 2), collapse = "")
+    out <- paste0(
+      indent,
+      " ### Level ",
+      n$level,
+      " ###\n    ",
+      sindent,
+      " event type: ",
+      n$type,
+      "\n    ",
+      sindent,
+      " measurement types: ",
+      n$types,
+      "\n    ",
+      sindent,
+      " records: ",
+      n$records,
+      collapse = ""
+    )
+    message(out)
+  }
+
+}
+

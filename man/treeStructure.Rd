@@ -4,7 +4,7 @@
 \alias{treeStructure}
 \title{Generate a tree summarizing the dataset structure, based on measurement types and event remarks.}
 \usage{
-treeStructure(event, measurement, identifier = "measurementType")
+treeStructure(event, measurement)
 }
 \description{
 Generate a tree summarizing the dataset structure, based on measurement types and event remarks.

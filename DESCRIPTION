@@ -20,7 +20,10 @@ Imports:
     xml2,
     geosphere,
     rmarkdown,
-    knitr
+    knitr,
+    tidyr,
+    data.tree,
+    digest
 Remotes: iobis/worms
 Suggests:
     testthat

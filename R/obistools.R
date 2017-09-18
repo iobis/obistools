@@ -21,4 +21,7 @@
 #' @import rmarkdown
 #' @import knitr
 #' @import xml2
+#' @import tidyr
+#' @import data.tree
+#' @import digest
 NULL
