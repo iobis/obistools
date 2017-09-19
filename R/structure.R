@@ -4,14 +4,26 @@
 #' @param measurement
 #' @return
 #' @export
-treeStructure <- function(event, measurement) {
+treeStructure <- function(event, occurrence, measurement) {
 
-  # events table
+  # measurements
 
-  if ("occurrenceID" %in% names(measurement)) {
-    measurement <- measurement %>% filter(is.na(occurrenceID))
+  if (!"occurrenceID" %in% names(measurement)) {
+    measurement$occurrenceID <- NA
   }
+  omeasurement <- measurement %>% filter(!is.na(occurrenceID))
+  measurement <- measurement %>% filter(is.na(occurrenceID))
+
+  # event measurements
+
   measurement <- measurement %>% group_by(eventID) %>% summarize(types = paste0(sort(unique(measurementType)), collapse = ", "))
+
+  # occurrence measurements
+
+  omeasurement <- omeasurement %>% group_by(occurrenceID) %>% summarize(types = paste0(sort(unique(measurementType)), collapse = ", ")) %>% select(eventID = occurrenceID, types = types)
+
+  # events
+
   if ("type" %in% names(event)) {
     event <- event %>% select(eventID, parentEventID, type)
   } else {
@@ -21,6 +33,16 @@ treeStructure <- function(event, measurement) {
   event <- left_join(event,  measurement, by = "eventID")
   event$parentEventID[is.na(event$parentEventID)] <- "dummy"
   event$types[is.na(event$types)] <- " "
+
+  # occurrence dummy events
+
+  oevent <- occurrence %>% select(eventID = occurrenceID, parentEventID = eventID)
+  oevent <- left_join(oevent, omeasurement, by = "eventID")
+  oevent$types[is.na(oevent$types)] <- " "
+
+  # merge
+
+  event <- bind_rows(event, oevent)
 
   # clean up events
 
@@ -60,7 +82,7 @@ treeStructure <- function(event, measurement) {
 
   # construct event tree
 
-  eventtree <- FromDataFrameNetwork(cleanevents, check = "no-check")
+  eventtree <- FromDataFrameNetwork(cleanevents, check = "check")
   eventtree$hash <- " "
   eventtree$records <- 0
 
