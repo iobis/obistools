@@ -29,6 +29,7 @@ treeStructure <- function(event, occurrence, measurement) {
     event <- event %>% select(eventID, parentEventID, type)
   } else {
     event <- event %>% select(eventID, parentEventID)
+    event$type <- ""
   }
 
   event <- left_join(event, measurement, by = "eventID")
@@ -150,7 +151,7 @@ treeStructure <- function(event, occurrence, measurement) {
 #' @param filename
 #' @export
 exportTree <- function(tree, filename) {
-  text <- "<!doctype html>\n<html>\n<head>\n<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">\n<style>\nul {\n  list-style-type: none;\n}\n.btn-occurrence {\n  background-color: #ffcc00;\n}\n.btn {\n  margin: 2px 0px;\n}\n.btn-event {\n  background-color: #eeeeee;\n}\n.container {\n  padding-top: 20px;\n}\n.details {\n  padding-left: 30px;\n  font-size: 0.7em;\n}\n</style>\n</head>\n<body>\n<div class=\"container\">\n<div class=\"row\">\n<ul>\nplaceholder\n</ul>\n</div>\n</div>\n</body>\n</html>\n"
+  text <- "<!doctype html>\n<html>\n<head>\n<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">\n<style>\nul {\n  list-style-type: none;\n}\n.btn-occurrence {\n  background-color: #EAEFD3;\n}\n.btn {\n  cursor: default;\n}\n.btn {\n  margin: 2px 0px;\n}\n.btn-event {\n  background-color: #FCECC9;\n}\n.container {\n  padding-top: 20px;\n}\n.details {\n  padding-left: 30px;\n  font-size: 0.7em;\n}\n</style>\n</head>\n<body>\n<div class=\"container\">\n<div class=\"row\">\n<ul>\nplaceholder\n</ul>\n</div>\n</div>\n</body>\n</html>\n"
   fragments <- NULL
 
   append <- function(fragment) {
@@ -166,13 +167,20 @@ exportTree <- function(tree, filename) {
     }
     append(sub("^occurrence#", "", node$example))
     append("</span>")
+    append(paste0("<span class=\"btn btn-xs btn-records\">", node$records, "</span>", sep = ""))
     append("<div class=\"details\">")
-    append(paste0("records: ", node$records, sep = ""))
+
+    extras <- NULL
     if (!is.na(node$type) & node$type != "") {
-      append(paste0("<br/>event type: ", node$type, sep = ""))
+      extras <- c(extras, paste0("event type: ", node$type, sep = ""))
     }
     if (!is.na(node$types) & node$types != "") {
-      append(paste0("<br/>measurement types: ", node$types, sep = ""))
+      extras <- c(extras, paste0("measurement types: ", node$types, sep = ""))
+    }
+    if (length(extras) > 0) {
+      for (i in 1:length(extras)) {
+        append(extras[i])
+      }
     }
     append("</div>")
     append("<ul>")
