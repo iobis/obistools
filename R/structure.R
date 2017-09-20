@@ -178,9 +178,7 @@ exportTree <- function(tree, filename) {
       extras <- c(extras, paste0("measurement types: ", node$types, sep = ""))
     }
     if (length(extras) > 0) {
-      for (i in 1:length(extras)) {
-        append(extras[i])
-      }
+      append(paste0(extras, collapse = "<br/>"))
     }
     append("</div>")
     append("<ul>")
