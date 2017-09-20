@@ -34,6 +34,7 @@ treeStructure <- function(event, occurrence, measurement) {
   event <- left_join(event, measurement, by = "eventID")
   event$parentEventID[is.na(event$parentEventID)] <- "dummy"
   event$types[is.na(event$types)] <- " "
+  event$occurrence <- FALSE
 
   # occurrence dummy events
 
@@ -41,6 +42,7 @@ treeStructure <- function(event, occurrence, measurement) {
   oevent$eventID <- paste0("occurrence#", oevent$eventID)
   oevent <- left_join(oevent, omeasurement, by = "eventID")
   oevent$types[is.na(oevent$types)] <- " "
+  oevent$occurrence <- TRUE
 
   # merge
 
@@ -52,9 +54,9 @@ treeStructure <- function(event, occurrence, measurement) {
   event$leaf <- !event$eventID %in% parentids
 
   if ("type" %in% names(event)) {
-    leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types, type) %>% summarize(eventID = first(eventID), records = n())
+    leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types, occurrence, type) %>% summarize(eventID = first(eventID), records = n())
   } else {
-    leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types) %>% summarize(eventID = first(eventID), records = n())
+    leafs <- event %>% filter(leaf) %>% group_by(parentEventID, types, occurrence) %>% summarize(eventID = first(eventID), records = n())
   }
   stems <- event %>% filter(!leaf) %>% mutate(records = 1)
   cleanevents <- bind_rows(stems, leafs) %>% select(-leaf) %>% arrange(eventID)
@@ -80,7 +82,7 @@ treeStructure <- function(event, occurrence, measurement) {
     cleanevents$hash[i] <- hash
   }
 
-  cleanevents <- cleanevents %>% select(c("eventID", "parentEventID", "records", "hash"))
+  cleanevents <- cleanevents %>% select(c("eventID", "parentEventID", "records", "hash", "occurrence"))
 
   # construct event tree
 
@@ -90,7 +92,7 @@ treeStructure <- function(event, occurrence, measurement) {
 
   # construct summary tree
 
-  paths <- eventtree$Get(function(node) { return(c(node$level, node$hash, node$records)) }, simplify = FALSE)
+  paths <- eventtree$Get(function(node) { return(c(node$level, node$hash, node$records, node$occurrence)) }, simplify = FALSE)
   tree <- NULL
   history <- list()
 
@@ -99,6 +101,7 @@ treeStructure <- function(event, occurrence, measurement) {
     level <- as.integer(paths[i][[1]][1])
     hash <- paths[i][[1]][2]
     records <- as.integer(paths[i][[1]][3])
+    isoccurrence <- as.logical(paths[i][[1]][4])
     example <- names(paths[i])
 
     # reconstruct complete path
@@ -127,6 +130,7 @@ treeStructure <- function(event, occurrence, measurement) {
         child <- parent$AddChild(hash)
         child$records <- records
         child$example <- example
+        child$occurrence <- isoccurrence
       } else {
         # exists, increase
         result$records <- result$records + records
