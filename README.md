@@ -15,6 +15,7 @@ Tools for data enhancement and quality control.
 [Calculate centroid and radius for WKT geometries](#calculate-centroid-and-radius-for-wkt-geometries)  
 [Map column names to Darwin Core terms](#map-column-names-to-darwin-core-terms)  
 [Check eventDate](#check-eventdate)  
+[Dataset structure](#dataset-structure)    
 [Data quality report](#data-quality-report)  
 
 ## Installation
@@ -363,6 +364,22 @@ check_eventdate(data)
 3 error  16 eventDate                 eventDate  does not seem to be a valid date
 4 error  17 eventDate               eventDate NA does not seem to be a valid date
 ```
+
+## Dataset structure
+
+`treeStucture()` generates a simplified event/occurrence tree showing the relationships between the different types (based on `type` and `measurementType`) of events and occurrences. Each node in the simplified tree is given a name based on the `eventID` or `occurrenceID` of one of the events of occurrences of that node type. 
+
+```R
+archive <- finch::dwca_read("http://ipt.iobis.org/obis-env/archive.do?r=nsbs&v=1.6", read = TRUE)
+event <- archive$data$event.txt
+occurrence <- archive$data$occurrence.txt
+emof <- archive$data$extendedmeasurementorfact.txt
+emof$eventID <- emof$id
+
+tree <- treeStructure(event, occurrence, emof)
+exportTree(tree, "tree.html")
+```
+
 
 ## Data quality report
 
