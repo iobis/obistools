@@ -382,6 +382,7 @@ tree <- treeStructure(event, occurrence, emof)
 exportTree(tree, "tree.html")
 ```
 
+![https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png](https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png)
 
 ## Data quality report
 
