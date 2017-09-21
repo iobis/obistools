@@ -2,6 +2,8 @@
 
 Tools for data enhancement and quality control.
 
+[Installation](#installation)
+
 ## Installation
 
 Installing `obistools` requires the `devtools` package:
