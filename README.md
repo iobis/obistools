@@ -2,7 +2,8 @@
 
 Tools for data enhancement and quality control.
 
-[Installation](#installation)
+[Installation](#installation)  
+[Taxon matching](#taxonmatching)
 
 ## Installation
 
