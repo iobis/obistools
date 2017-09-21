@@ -3,7 +3,19 @@
 Tools for data enhancement and quality control.
 
 [Installation](#installation)  
-[Taxon matching](#taxonmatching)
+[Taxon matching](#taxon-matching)  
+[Check required fields](#check-required-fields)  
+[Plot points on a map](#plot-points-on-a-map)  
+[Identify points on a map](#identify-points-on-a-map)  
+[Check points on land](#check-points-on-land)  
+[Check eventID and parentEventID](#check-eventid-and-parenteventid)  
+[Check eventID in an extension](#check-eventid-in-an-extension)  
+[Flatten event records](#flatten-event-records)  
+[Flatten occurrence and event records](#flatten-occurrence)  
+[Calculate centroid and radius for WKT geometries](#calculate-centroid-and-radius-for-wkt)  
+[Map column names to Darwin Core terms](#map-column-names-to-darwin-core-terms)  
+[Check eventDate](#check-eventdate)  
+[Data quality report](#data-quality-report)  
 
 ## Installation
 
