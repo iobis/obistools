@@ -369,6 +369,8 @@ check_eventdate(data)
 
 `treeStucture()` generates a simplified event/occurrence tree showing the relationships between the different types (based on `type` and `measurementType`) of events and occurrences. Each node in the simplified tree is given a name based on the `eventID` or `occurrenceID` of one of the events of occurrences of that node type. 
 
+Note that an `eventID` column is required in the measurements table.
+
 ```R
 archive <- finch::dwca_read("http://ipt.iobis.org/obis-env/archive.do?r=nsbs&v=1.6", read = TRUE)
 event <- archive$data$event.txt
