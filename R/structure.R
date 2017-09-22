@@ -4,24 +4,43 @@
 #' @param measurement
 #' @return
 #' @export
-treeStructure <- function(event, occurrence, measurement) {
+treeStructure <- function(event, occurrence, measurement = NULL) {
+
+  # add columns and change IDs to character
+
+  event$eventID <- as.character(event$eventID)
+  if (!"parentEventID" %in% names(event)) {
+    event$parentEventID <- NA
+  }
+  event$parentEventID <- as.character(event$parentEventID)
+  occurrence$eventID <- as.character(occurrence$eventID)
+  if (!is.null(measurement)) {
+    measurement$eventID <- as.character(measurement$eventID)
+  } else {
+    measurement <- data.frame(eventID = character(), types = character(), stringsAsFactors = FALSE)
+    omeasurement <- data.frame(occurrenceID = character(), eventID = character(), types = character(), stringsAsFactors = FALSE)
+  }
 
   # measurements
 
-  if (!"occurrenceID" %in% names(measurement)) {
-    measurement$occurrenceID <- NA
+  if (!is.null(measurement) & nrow(measurement) > 0) {
+
+    if (!"occurrenceID" %in% names(measurement)) {
+      measurement$occurrenceID <- NA
+    }
+    omeasurement <- measurement %>% filter(!is.na(occurrenceID))
+    measurement <- measurement %>% filter(is.na(occurrenceID))
+
+    # event measurements
+
+    measurement <- measurement %>% group_by(eventID) %>% summarize(types = paste0(sort(unique(measurementType)), collapse = ", "))
+
+    # occurrence measurements
+
+    omeasurement <- omeasurement %>% group_by(occurrenceID) %>% summarize(types = paste0(sort(unique(measurementType)), collapse = ", ")) %>% select(eventID = occurrenceID, types = types)
+    omeasurement$eventID <- paste0("occurrence#", omeasurement$eventID)
+
   }
-  omeasurement <- measurement %>% filter(!is.na(occurrenceID))
-  measurement <- measurement %>% filter(is.na(occurrenceID))
-
-  # event measurements
-
-  measurement <- measurement %>% group_by(eventID) %>% summarize(types = paste0(sort(unique(measurementType)), collapse = ", "))
-
-  # occurrence measurements
-
-  omeasurement <- omeasurement %>% group_by(occurrenceID) %>% summarize(types = paste0(sort(unique(measurementType)), collapse = ", ")) %>% select(eventID = occurrenceID, types = types)
-  omeasurement$eventID <- paste0("occurrence#", omeasurement$eventID)
 
   # events
 
