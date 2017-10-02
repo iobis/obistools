@@ -23,7 +23,9 @@ Imports:
     knitr,
     tidyr,
     data.tree,
-    digest
+    digest,
+    httr,
+    msgpackR
 Remotes: iobis/worms
 Suggests:
     testthat
