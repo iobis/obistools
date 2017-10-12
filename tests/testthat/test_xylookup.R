@@ -14,7 +14,7 @@ test_that("lookup_xy returns correct data", {
   results <- lookup_xy(test_data(), asdataframe = FALSE)
   expect_equal(length(results), 3)
   r1 <- results[[1]]
-  expect_equal(names(r1), c("shoredistance", "grids"))
+  expect_equal(sort(names(r1)), c("grids", "shoredistance"))
   expect_true("bathymetry" %in% names(r1$grids))
 })
 
@@ -65,8 +65,8 @@ test_that("lookup_xy mix of valid and invalid coordinates works", {
   data <- test_data(x=c(90,NA,-181,2,181,0),y=c(-91,0,4,91,4,0))
   results <- lookup_xy(data, asdataframe = FALSE)
   expect_equal(length(results), 6)
-  expect_equal(results[[1]],NULL)
-  expect_equal(names(results[[6]]),c("shoredistance", "grids"))
+  expect_equal(results[[1]], NULL)
+  expect_equal(sort(names(results[[6]])), c("grids", "shoredistance"))
 
   results <- lookup_xy(data, asdataframe = TRUE)
   expect_equal(nrow(results), 6)
