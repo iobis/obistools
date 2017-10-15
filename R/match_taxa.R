@@ -34,13 +34,13 @@ match_taxa <- function(names, ask = TRUE) {
   if (ask) {
     proceed <- NA
     while (is.na(proceed)) {
-      r <- readline(prompt = "Proceed to resolve names (y/n/p)? ")
+      r <- readline(prompt = "Proceed to resolve names (y/n/info)? ")
       if (r == "y") {
         proceed <- TRUE
       } else if (r == "n") {
         proceed <- TRUE
         ask <- FALSE
-      } else if (r == "p") {
+      } else if (substr(r, 1, 1) == "i") {
         print(multiple)
       }
     }
@@ -68,6 +68,7 @@ match_taxa <- function(names, ask = TRUE) {
         # multiple matches
 
         print(match %>% select(AphiaID, scientificname, authority, status, match_type))
+        message(unames[i])
         n <- readline(prompt = "Multiple matches, pick a number or leave empty to skip: ")
         s <- as.integer(n)
         if (!is.na(n) & n > 0 & n <= nrow(match)) {
