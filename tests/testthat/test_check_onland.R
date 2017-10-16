@@ -3,7 +3,7 @@ context("check_onland")
 
 check_skip <- function() {
   skip_on_cran()
-  options(obistools_xylookup_url="http://localhost:8000/lookup")
+  options(obistools_xylookup_url="http://obisqc/lookup")
 }
 
 test_data <- function(x=c(1,2,3), y=c(51,52,53)) {

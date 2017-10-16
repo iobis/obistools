@@ -21,21 +21,19 @@ test_that("lookup_xy returns correct data", {
 test_that("lookup_xy results filtering works", {
   results <- lookup_xy(test_data(), areas = TRUE)
   expect_equal(nrow(results), 3)
-  expect_true(all(c("shoredistance", "bathymetry", "areas") %in% colnames(results)))
-  expect_true(is.list(results$areas[1]))
+  expect_true(all(c("shoredistance", "bathymetry", "final_grid5") %in% colnames(results)))
   results <- lookup_xy(test_data(), areas = FALSE, grids = FALSE, shoredistance = TRUE)
   expect_equal(results[1,,drop=F]$shoredistance, 1612)
-  expect_false(any(c("bathymetry", "areas") %in% colnames(results)))
+  expect_false(any(c("bathymetry", "final_grid5") %in% colnames(results)))
   results <- lookup_xy(test_data(), areas = FALSE, grids = TRUE, shoredistance = FALSE)
-  expect_false(any(c("shoredistance", "areas") %in% colnames(results)))
+  expect_false(any(c("shoredistance", "final_grid5") %in% colnames(results)))
   expect_equal(results[1,,drop=F]$bathymetry, 2)
 })
 
 test_that("lookup_xy empty areas works", {
   results <- lookup_xy(test_data(x=90,y=60), areas = TRUE, shoredistance = FALSE, grids = FALSE)
   expect_equal(nrow(results), 1)
-  expect_equal(colnames(results), c("areas"))
-  expect_equal(nrow(results[1,1][[1]]), 0)
+  expect_equal(ncol(results), 0)
 })
 
 test_that("lookup_xy duplicate coordinates works", {
@@ -74,14 +72,14 @@ test_that("lookup_xy mix of valid and invalid coordinates works", {
   expect_false(is.na(results$shoredistance[6]))
 })
 
-test_that("lookup_xy long list of coordinates works", {
-  skip_on_travis()
-  set.seed(42)
-  data <- test_data(x=runif(10000, -180, 180),y=runif(10000, -90, 90))
-  data <- data[rep(1:10000, 50),]
-  results <- lookup_xy(data, asdataframe = FALSE)
-  expect_equal(length(results), 500000)
-
-  system.time({results <- lookup_xy(data, asdataframe = TRUE)})
-  expect_equal(nrow(results), 500000)
-})
+# test_that("lookup_xy long list of coordinates works", {
+#   skip_on_travis()
+#   set.seed(42)
+#   data <- test_data(x=runif(10000, -180, 180),y=runif(10000, -90, 90))
+#   data <- data[rep(1:10000, 50),]
+#   results <- lookup_xy(data, asdataframe = FALSE)
+#   expect_equal(length(results), 500000)
+#
+#   system.time({results <- lookup_xy(data, asdataframe = TRUE)})
+#   expect_equal(nrow(results), 500000)
+# })

@@ -22,7 +22,7 @@
 #'
 #' @seealso \code{\link{check_onland}}
 #' @export
-lookup_xy <- function(data, shoredistance=TRUE, grids= TRUE, areas=FALSE, asdataframe=TRUE) {
+lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataframe=TRUE) {
   sp <- data %>% select(decimalLongitude, decimalLatitude)
 
   # Only lookup values for valid coordinates
@@ -51,38 +51,22 @@ lookup_xy <- function(data, shoredistance=TRUE, grids= TRUE, areas=FALSE, asdata
 
   # Prepare message
   splists <- unname(split(as.matrix(uniquesp), seq(nrow(uniquesp))))
-  msg <- RcppMsgPack::msgpackPack(list(points=splists, shoredistance=shoredistance, grids=grids, areas=areas))
+  msg <- jsonlite::toJSON(list(points=splists, shoredistance=shoredistance, grids=grids, areas=areas), auto_unbox=T)
 
   # Call service
-  url <- getOption("obistools_xylookup_url", "http://api.iobis.org/lookup/")
-  response <- httr::POST(url, httr::content_type("application/msgpack"),
+  url <- getOption("obistools_xylookup_url", "http://api.iobis.org/xylookup/")
+  response <- httr::POST(url, httr::content_type("application/json"),
                          httr::user_agent("obistools - https://github.com/iobis/obistools"), body=msg)
 
   # Parse result
-  raw_content <- httr::content(response)
+  raw_content <- httr::content(response, as="raw")
   if(response$status_code != 200) {
     if(is.list(raw_content) && all(c("title", "description") %in% names(raw_content))) {
       stop(paste0(raw_content$title, ": ", raw_content$description))
     }
     stop(raw_content)
   }
-  content <- RcppMsgPack::msgpackUnpack(raw_content, simplify = TRUE)
-
-  # Merge area results
-  if(areas && length(content) > 0) {
-    for(i in 1:length(content)) {
-      careas <- content[[i]]$areas
-      if(length(careas) > 0) {
-        for (layer in names(careas)) {
-          content[[i]]$areas[[layer]] <- bind_rows(lapply(careas[[layer]], as.list))
-        }
-      }
-    }
-  }
-  # Ensure consistent shoredistance results
-  if (!areas && !grids && length(content) > 0) {
-    content <- lapply(content, function(x) list(shoredistance=unname(x)))
-  }
+  content <- jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = asdataframe)
 
   if(asdataframe) {
     # Convert to dataframe while ensuring that:
@@ -90,15 +74,16 @@ lookup_xy <- function(data, shoredistance=TRUE, grids= TRUE, areas=FALSE, asdata
     # 2. grids and shoredistance results are columns
     # 3. NA values are written for coordinates that were not OK (!isclean)
     # 4. results for the non-unique coordinates are duplicated
-    df <- data.frame(row.names = 1:length(content))
-    if(areas) {
-      df <- data_frame(areas=lapply(content, function(x) as.data.frame(x$areas)))
+    content <- as.data.frame(content)
+    df <- data.frame(row.names = 1:NROW(content))
+    if (shoredistance) {
+      df <- cbind(df, shoredistance=content[,"shoredistance", drop=TRUE])
     }
-    if(grids) {
-      df <- bind_cols(bind_rows(lapply(content, function(x) as.list(x$grids))), df)
+    if (grids) {
+      df <- merge(df, content[,"grids", drop=TRUE], by=0, sort = FALSE)[,-1]
     }
-    if(shoredistance) {
-      df <- bind_cols(data.frame(shoredistance=sapply(content, function(x) x$shoredistance)), df)
+    if (areas) {
+      df <- merge(df, content[,"areas", drop=TRUE], by=0, sort = FALSE)[,-1]
     }
     output <- setNames(data.frame(matrix(ncol=NCOL(df), nrow=NROW(sp))), colnames(df))
     output[isclean,] <- df[duplicated_lookup,]
