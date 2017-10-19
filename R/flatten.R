@@ -76,7 +76,7 @@ flatten_event <- function(event, fields = NULL) {
 #' @param fields Fields to be inherited from the events, if NULL all Event Core fields will be inherited.
 #' @return Flattened occurrence records.
 #' @export
-flatten_occurrence <- function(event, occurrence, fields = NULL) {
+flatten_occurrence <- function(event, occurrence, field = "eventID", fields = NULL) {
 
   # check occurrence eventIDs
   errors <- check_extension_eventids(event, occurrence)
@@ -103,21 +103,21 @@ flatten_occurrence <- function(event, occurrence, fields = NULL) {
   fields <- fields[!fields %in% c("eventID", "parentEventID")]
 
   # create columns
-  for (field in fields) {
-    if (!field %in% names(occurrence)) {
-      occurrence[[field]] <- NA
+  for (f in fields) {
+    if (!f %in% names(occurrence)) {
+      occurrence[[f]] <- NA
     }
   }
 
   # populate occurrences
   for (i in 1:nrow(occurrence)) {
-    eventid <- occurrence$eventID[i]
+    eventid <- occurrence[[field]][i]
     if (!is.na(eventid) & eventid != "") {
       occurrence_events <- event[event$eventID == eventid,]
       if (nrow(occurrence_events) == 1) {
-        for (field in fields) {
-          if (is.na(occurrence[[field]][i]) || occurrence[[field]][i] == "") {
-            occurrence[[field]][i] <- occurrence_events[[field]][1]
+        for (f in fields) {
+          if (is.na(occurrence[[f]][i]) || occurrence[[f]][i] == "") {
+            occurrence[[f]][i] <- occurrence_events[[f]][1]
           }
         }
       }

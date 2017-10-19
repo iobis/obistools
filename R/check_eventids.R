@@ -63,14 +63,14 @@ check_eventids <- function(event) {
 #' @param event The extension records.
 #' @return Any errors.
 #' @export
-check_extension_eventids <- function(event, extension) {
-  rows <- which(!extension$eventID %in% event$eventID)
+check_extension_eventids <- function(event, extension, field = "eventID") {
+  rows <- which(!extension[[field]] %in% event$eventID)
   if (length(rows) > 0) {
     return(data.frame(
-      field = "eventID",
+      field = field,
       level = "error",
       row = rows,
-      message = paste0("eventID ", extension$eventID[rows], " has no corresponding eventID in the core"),
+      message = paste0(field, " ", extension[[field]][rows], " has no corresponding eventID in the core"),
       stringsAsFactors = FALSE
     ))
   } else {
