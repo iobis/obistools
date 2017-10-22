@@ -4,14 +4,22 @@
 \alias{check_onland}
 \title{Check which points are located on land.}
 \usage{
-check_onland(data, polygons = NULL, report = FALSE)
+check_onland(data, polygons = NULL, report = FALSE, buffer = 0,
+  offline = FALSE)
 }
 \arguments{
 \item{data}{The data frame.}
 
-\item{polygons}{SpatialPolygonsDataFrame. If not provided the simplified land polygons from OSM are used.}
+\item{polygons}{SpatialPolygonsDataFrame. If not provided the simplified land
+polygons from OSM are used. This parameter is ignored when, \code{offline =
+FALSE}.}
 
-\item{report}{If TRUE, errors are returned instead of records}
+\item{report}{If TRUE, errors are returned instead of records.}
+
+\item{buffer}{Set how far inland points are still to be deemed valid (in meters).}
+
+\item{offline}{If TRUE, a local simplified shoreline is used, otherwise an
+OBIS webservice is used. The default value is \code{FALSE}.}
 }
 \value{
 Errors or records.

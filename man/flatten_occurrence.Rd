@@ -4,7 +4,7 @@
 \alias{flatten_occurrence}
 \title{Flatten event and occurrence records.}
 \usage{
-flatten_occurrence(event, occurrence, fields = NULL)
+flatten_occurrence(event, occurrence, field = "eventID", fields = NULL)
 }
 \arguments{
 \item{event}{The event records.}

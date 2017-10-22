@@ -4,7 +4,7 @@
 \alias{check_extension_eventids}
 \title{Check if all eventIDs in an extension have corresponding eventIDs in the core.}
 \usage{
-check_extension_eventids(event, extension)
+check_extension_eventids(event, extension, field = "eventID")
 }
 \arguments{
 \item{event}{The event records.}
