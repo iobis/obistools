@@ -10,7 +10,8 @@ check_eventdate <- function(data) {
   if (!"eventDate" %in% names(data)) {
     return(data.frame(
       level = "error",
-      message = "Column eventDate missing"
+      message = "Column eventDate missing",
+      stringsAsFactors = FALSE
     ))
   }
 
@@ -59,7 +60,8 @@ check_eventdate <- function(data) {
       level = "error",
       row = rows,
       field = "eventDate",
-      message = paste0("eventDate ", data$eventDate[rows], " does not seem to be a valid date")
+      message = paste0("eventDate ", data$eventDate[rows], " does not seem to be a valid date"),
+      stringsAsFactors = FALSE
     ))
   }
 

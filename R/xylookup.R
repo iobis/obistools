@@ -20,7 +20,7 @@
 #'   with for each list item the requested values. For invalid coordinates
 #'   \code{NULL} is returned.
 #'
-#' @seealso \code{\link{check_onland}}
+#' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataframe=TRUE) {
   sp <- data %>% select(decimalLongitude, decimalLatitude)

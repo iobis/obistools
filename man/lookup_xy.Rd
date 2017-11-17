@@ -35,5 +35,5 @@ Data is returned in the same order as the requested data as a list,
   \code{NULL} is returned.
 }
 \seealso{
-\code{\link{check_onland}}
+\code{\link{check_onland}} \code{\link{check_depth}}
 }
