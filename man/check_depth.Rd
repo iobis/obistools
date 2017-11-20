@@ -4,7 +4,7 @@
 \alias{check_depth}
 \title{Check which points are located on land.}
 \usage{
-check_depth(data, report = FALSE)
+check_depth(data, depthmargin = 0, shoremargin = NA, report = FALSE)
 }
 \arguments{
 \item{data}{The data frame.}
@@ -22,4 +22,20 @@ Errors or records.
 }
 \description{
 Check which points are located on land.
+}
+\details{
+Multiple checks are performed in this function:
+\enumerate{
+  \item missing depth column (warning)
+  \item empty depth column (warning)
+  \item depth values that can't be converted to numbers (error).
+  \item depth values that are larger than the depth value in the bathymetry
+  layer, after applying the provided \code{depthmargin}
+  \item depth values that are negative for off shore points, after applying
+  the provided \code{shoremargin}
+  \item minimum depth greater than maximum depth
+}
+}
+\seealso{
+\code{\link{check_onland}} \code{\link{check_depth}}
 }

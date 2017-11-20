@@ -9,26 +9,22 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
   if (column %in% colnames(data)) {
     depths <- as.numeric(as.character(data[,column]))
     if(all(data[,column] == '')) {
-      result <- rbind(result, list(level = 'warning',
-                                   message = paste('Column',column,'empty')))
+      result <- rbind(result, data.frame(field=column, level = 'warning', row = NA,
+                                         message = paste('Column',column,'empty'), stringsAsFactors = FALSE))
     }
     invalid <- which(is.na(depths) & data[,column] != '')
     result <- add_depth_error(result, column, invalid, 'Depth value is not numeric and not empty')
 
-    gridwrong <- which(!is.na(depths) & depths > (lookupvalues$bathymetry + rep(depthmargin, nrow(lookupvalues))))
+    gridwrong <- which(!is.na(depths) & depths > 0 & depths > (lookupvalues$bathymetry + rep(depthmargin, nrow(lookupvalues))))
     result <- add_depth_error(result, column, gridwrong, paste0('Depth value is greater than the value found in the bathymetry raster (depth margin=',depthmargin,')'))
 
     if(!is.na(shoremargin)) {
       negativewrong <- which(!is.na(depths) & depths < 0 & ((lookupvalues$shoredistance - rep(shoremargin, nrow(lookupvalues))) > 0))
       result <- add_depth_error(result, column, negativewrong, paste0('Depth value is negative for offshore points (shoredistance margin=', shoremargin,')'))
-
-      positivewrong <- which(!is.na(depths) & depths > 0 & ((lookupvalues$shoredistance + rep(shoremargin, nrow(lookupvalues))) < 0))
-      result <- add_depth_error(result, column, positivewrong, paste0('Depth value is positive for on land points (shoredistance margin=', shoremargin,')'))
     }
   } else {
-    result <- rbind(result, list(level = 'warning',
-                                 field = column,
-                                 message = paste('Column',column,'missing')))
+    result <- rbind(result, data.frame(field = column, level = 'warning', row = NA,
+                                       message = paste('Column',column,'missing')))
   }
   return(result)
 }
@@ -36,7 +32,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 
 #' Check which points are located on land.
 #'
-#' @usage check_depth(data, report = FALSE)
+#' @usage check_depth(data, depthmargin = 0, shoremargin = NA, report = FALSE)
 #'
 #' @param data The data frame.
 #' @param depthmargin How much can the given depth deviate from the bathymetry
@@ -45,7 +41,19 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #'   larger then 0. If \code{NA} (default) then this test is ignored
 #' @param report If TRUE, errors are returned instead of records.
 #'
+#' @details Multiple checks are performed in this function:
+#' \enumerate{
+#'   \item missing depth column (warning)
+#'   \item empty depth column (warning)
+#'   \item depth values that can't be converted to numbers (error)
+#'   \item depth values that are larger than the depth value in the bathymetry
+#'   layer, after applying the provided \code{depthmargin} (error)
+#'   \item depth values that are negative for off shore points, after applying
+#'   the provided \code{shoremargin} (error)
+#'   \item minimum depth greater than maximum depth (error)
+#' }
 #' @return Errors or records.
+#' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 check_depth <- function(data, depthmargin = 0, shoremargin = NA, report = FALSE) {
   lookupvalues <- lookup_xy(data, shoredistance = !is.na(shoremargin), grids = TRUE, areas = FALSE)
@@ -71,7 +79,7 @@ check_depth <- function(data, depthmargin = 0, shoremargin = NA, report = FALSE)
 
   if (report) {
     return(result)
-  } else {
+  } else if(nrow(result) > 0 && length(na.omit(result$row)) > 0) {
     return(data[sort(unique(na.omit(result$row))),])
   }
 }
