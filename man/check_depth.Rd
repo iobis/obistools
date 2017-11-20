@@ -13,7 +13,7 @@ check_depth(data, report = FALSE)
 in the rasters (in meters).}
 
 \item{shoremargin}{How far offshore should a record be to have a bathymetry
-larger then 0.}
+larger then 0. If \code{NA} (default) then this test is ignored}
 
 \item{report}{If TRUE, errors are returned instead of records.}
 }
