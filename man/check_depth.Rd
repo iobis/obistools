@@ -28,12 +28,12 @@ Multiple checks are performed in this function:
 \enumerate{
   \item missing depth column (warning)
   \item empty depth column (warning)
-  \item depth values that can't be converted to numbers (error).
+  \item depth values that can't be converted to numbers (error)
   \item depth values that are larger than the depth value in the bathymetry
-  layer, after applying the provided \code{depthmargin}
+  layer, after applying the provided \code{depthmargin} (error)
   \item depth values that are negative for off shore points, after applying
-  the provided \code{shoremargin}
-  \item minimum depth greater than maximum depth
+  the provided \code{shoremargin} (error)
+  \item minimum depth greater than maximum depth (error)
 }
 }
 \seealso{
