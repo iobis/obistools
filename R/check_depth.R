@@ -79,7 +79,7 @@ check_depth <- function(data, depthmargin = 0, shoremargin = NA, report = FALSE)
 
   if (report) {
     return(result)
-  } else if(nrow(result) > 0 && length(na.omit(result$row)) > 0) {
+  } else {
     return(data[sort(unique(na.omit(result$row))),])
   }
 }
