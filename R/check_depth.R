@@ -1,6 +1,6 @@
 add_depth_error <- function(result, column, i, message) {
   if (length(i) > 0) {
-    result <- rbind(result, data.frame(field = column, level = 'error', row = i, message = message, stringsAsFactors = FALSE))
+    result <- rbind(result, data.frame(field = rep(column, length(i)), level = 'error', row = i, message = message, stringsAsFactors = FALSE))
   }
   return(result)
 }

@@ -63,3 +63,13 @@ test_that("check_depth detects invalid or impossible depth values", {
     expect_equal(1, sum(grepl("not numeric", r$message)))
   }, "NAs")
 })
+
+
+test_that("Issue 42", {
+  skip_if_not_installed("robis")
+  library(robis)
+  library(obistools)
+
+  pol <- occurrence("Polychaeta", geometry = "POLYGON ((6.50391 54.59753, 6.45996 53.14677, 8.26172 53.17312, 8.08594 54.54658, 6.50391 54.59753))")
+  problems <- check_depth(pol)
+})
