@@ -4,21 +4,26 @@
 \alias{check_depth}
 \title{Check which points are located on land.}
 \usage{
-check_depth(data, depthmargin = 0, shoremargin = NA, report = FALSE)
+check_depth(data, bathymetry, depthmargin = 0, shoremargin = NA,
+  report = FALSE)
 }
 \arguments{
 \item{data}{The data frame.}
+
+\item{bathymetry}{Raster* object that you want to use to check the depth
+against. If \code{NULL} (default) then the bathymetry from the xylookup
+service is used.}
 
 \item{depthmargin}{How much can the given depth deviate from the bathymetry
 in the rasters (in meters).}
 
 \item{shoremargin}{How far offshore should a record be to have a bathymetry
-larger then 0. If \code{NA} (default) then this test is ignored}
+larger then 0. If \code{NA} (default) then this test is ignored.}
 
 \item{report}{If TRUE, errors are returned instead of records.}
 }
 \value{
-Errors or records.
+Records or an errors report.
 }
 \description{
 Check which points are located on land.

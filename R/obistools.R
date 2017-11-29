@@ -12,6 +12,7 @@
 #' @importFrom grid current.vpTree
 #' @import sp
 #' @importFrom rgeos gDistance
+#' @importFrom rgeos readWKT
 #' @importFrom leaflet leaflet
 #' @importFrom leaflet addProviderTiles
 #' @importFrom leaflet addCircleMarkers

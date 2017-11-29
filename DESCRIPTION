@@ -25,7 +25,8 @@ Imports:
     data.tree,
     digest,
     httr,
-    jsonlite
+    jsonlite,
+    raster
 Remotes: 
     iobis/worms
 Suggests:

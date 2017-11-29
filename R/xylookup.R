@@ -23,34 +23,10 @@
 #' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataframe=TRUE) {
-  sp <- data %>% select(decimalLongitude, decimalLatitude)
-
-  # Only lookup values for valid coordinates
-  isclean <- complete.cases(sp) &
-    sapply(sp$decimalLongitude, function(x) is.numeric(x)) &
-    sapply(sp$decimalLatitude, function(x) is.numeric(x)) &
-    !is.na(sp$decimalLongitude) & !is.na(sp$decimalLatitude) &
-    sp$decimalLongitude >= -180.0 & sp$decimalLongitude <= 180.0 &
-    sp$decimalLatitude >= -90.0 & sp$decimalLatitude <= 90.0
-  cleansp <- sp[isclean,,drop=FALSE]
-  if(NROW(cleansp) == 0) {
-    output <- data.frame(row.names=1:NROW(sp))
-    if(!asdataframe) {
-      # Create a list with only NULL
-      output <- list()
-      output[[NROW(sp)+1]] <- NA
-      output[[NROW(sp)+1]] <- NULL
-    }
-    return(output)
-  }
-  # Only lookup values for unique coordinates
-  uniquesp <- unique(cleansp)
-  mapping_unique <- merge(cbind(cleansp, clean_id=1:nrow(cleansp)),
-                          cbind(uniquesp, unique_id=1:nrow(uniquesp)))
-  duplicated_lookup <- mapping_unique[order(mapping_unique$clean_id),"unique_id"]
+  xy <- get_xy_clean_duplicates(data)
 
   # Prepare message
-  splists <- unname(split(as.matrix(uniquesp), seq(nrow(uniquesp))))
+  splists <- unname(split(as.matrix(xy$uniquesp), seq(nrow(xy$uniquesp))))
   msg <- jsonlite::toJSON(list(points=splists, shoredistance=shoredistance, grids=grids, areas=areas), auto_unbox=T)
 
   # Call service
@@ -85,12 +61,12 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
     if (areas) {
       df <- merge(df, content[,"areas", drop=TRUE], by=0, sort = FALSE)[,-1]
     }
-    output <- setNames(data.frame(matrix(ncol=NCOL(df), nrow=NROW(sp))), colnames(df))
-    output[isclean,] <- df[duplicated_lookup,]
+    output <- setNames(data.frame(matrix(ncol=NCOL(df), nrow=NROW(data))), colnames(df))
+    output[xy$isclean,] <- df[xy$duplicated_lookup,]
   } else {
     # Convert to list, keep into account invalid coordinates and duplicate coordinates
     output <- list()
-    output[isclean] <- content[duplicated_lookup]
+    output[xy$isclean] <- content[xy$duplicated_lookup]
   }
   return(output)
 }
