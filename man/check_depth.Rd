@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_depth.R
 \name{check_depth}
 \alias{check_depth}
-\title{Check which points are located on land.}
+\title{Check which points have potentially invalid depths.}
 \usage{
 check_depth(data, bathymetry, depthmargin = 0, shoremargin = NA,
   report = FALSE)
@@ -26,7 +26,7 @@ larger then 0. If \code{NA} (default) then this test is ignored.}
 Records or an errors report.
 }
 \description{
-Check which points are located on land.
+Check which points have potentially invalid depths.
 }
 \details{
 Multiple checks are performed in this function:

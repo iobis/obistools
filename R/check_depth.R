@@ -38,7 +38,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 }
 
 
-#' Check which points are located on land.
+#' Check which points have potentially invalid depths.
 #'
 #' @usage check_depth(data, bathymetry, depthmargin = 0, shoremargin = NA,
 #'   report = FALSE)
