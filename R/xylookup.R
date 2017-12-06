@@ -40,7 +40,7 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
     if(is.list(raw_content) && all(c("title", "description") %in% names(raw_content))) {
       stop(paste0(raw_content$title, ": ", raw_content$description))
     }
-    stop(raw_content)
+    stop(rawToChar(raw_content))
   }
   content <- jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = asdataframe)
 

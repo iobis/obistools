@@ -113,3 +113,9 @@ test_that("invalid x/y coordinates works", {
   fail("TODO finish this test")
   fail("TODO write the code to handle the case where no bathymetry was found => issue a warning")
 })
+
+test_that("document lookup_xy, check_depth, check_onland", {
+  fail("readme lookup_xy")
+  fail("readme check_depth")
+  fail("readme check_onland")
+})

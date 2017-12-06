@@ -21,7 +21,7 @@ test_that("lookup_xy returns correct data", {
 test_that("lookup_xy results filtering works", {
   results <- lookup_xy(test_data(), areas = TRUE)
   expect_equal(nrow(results), 3)
-  expect_true(all(c("shoredistance", "bathymetry", "final_grid5") %in% colnames(results)))
+  expect_true(all(c("shoredistance", "bathymetry", "sssalinity", "sstemperature", "final_grid5") %in% colnames(results)))
   results <- lookup_xy(test_data(), areas = FALSE, grids = FALSE, shoredistance = TRUE)
   expect_equal(results[1,,drop=F]$shoredistance, 1604)
   expect_false(any(c("bathymetry", "final_grid5") %in% colnames(results)))
@@ -70,6 +70,18 @@ test_that("lookup_xy mix of valid and invalid coordinates works", {
   expect_equal(nrow(results), 6)
   expect_equal(sum(is.na(results$shoredistance)), 5)
   expect_false(is.na(results$shoredistance[6]))
+})
+
+test_that("lookup_xy works for Calanus: issue 48", {
+  skip_if_not("robis")
+  library(robis)
+
+  calfin <- occurrence("Calanus finmarchicus", fields = c("decimalLongitude", "decimalLatitude"))
+  data <- lookup_xy(calfin, shoredistance = FALSE, grids = TRUE, areas = FALSE)
+  expect_gt(nrow(data), 200000)
+
+  #write.csv("~/a/tmp/large.csv", data.frame(x=runif(100000000),y=runif(100000000)))
+
 })
 
 # test_that("lookup_xy long list of coordinates works", {
