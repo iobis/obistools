@@ -8,6 +8,7 @@ Tools for data enhancement and quality control.
 [Plot points on a map](#plot-points-on-a-map)  
 [Identify points on a map](#identify-points-on-a-map)  
 [Check points on land](#check-points-on-land)  
+[Check depth](#check-depth)  
 [Check eventID and parentEventID](#check-eventid-and-parenteventid)  
 [Check eventID in an extension](#check-eventid-in-an-extension)  
 [Flatten event records](#flatten-event-records)  
@@ -16,7 +17,8 @@ Tools for data enhancement and quality control.
 [Map column names to Darwin Core terms](#map-column-names-to-darwin-core-terms)  
 [Check eventDate](#check-eventdate)  
 [Dataset structure](#dataset-structure)    
-[Data quality report](#data-quality-report)  
+[Data quality report](#data-quality-report)
+[Lookup XY](#lookup-xy)
 
 ## Installation
 
@@ -125,11 +127,10 @@ identify_map(abra)
 2078      <NA> <NA>              NA    <NA> 60.94                60.94                60.94           I
      occurrenceRemarks eventTime footprintWKT identifiedBy
 2078              <NA>      <NA>         <NA>     Teaca A.```
-```
 
 ## Check points on land
 
-`check_onland()` uses land polygons from OpenStreetMap to check if any points are located on land. Other shapefiles can be used as well.
+`check_onland()` uses the xylookup web service which internally uses land polygons from OpenStreetMap to check if any points are located on land. Other shapefiles can be used as well.
 
 ```R
 check_onland(abra)
@@ -161,6 +162,38 @@ check_onland(abra, report = TRUE)
 ```
   field   level row                         message
 1    NA warning  31 Coordinates are located on land
+```
+
+## Check depth
+
+`check_depth` uses the xylookup web service to identify which records have potentially invalid depths. Multiple checks are performed in this function:
+
+- missing depth column (warning)
+- empty depth column (warning)
+- depth values that can't be converted to numbers (error)
+- values that are larger than the depth value in the bathymetry layer, after applying the provided depthmargin (error)
+- depth values that are negative for off shore points, after applying the provided shoremargin (error)
+- minimum depth greater than maximum depth (error)
+
+```R
+plot_map(check_depth(abra, depthmargin = 50), zoom = TRUE)
+```
+
+![https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra_check_depth_50.png)
+
+```R
+report <- check_depth(abra, report=T, depthmargin = 50)
+head(report)
+```
+
+```
+field level  row                                                                                              message
+1 minimumDepthInMeters error 1209 Depth value (52.9) is greater than the value found in the bathymetry raster (depth=-27.0, margin=50)
+2 minimumDepthInMeters error 1226   Depth value (62.3) is greater than the value found in the bathymetry raster (depth=4.4, margin=50)
+3 minimumDepthInMeters error 1232   Depth value (64.9) is greater than the value found in the bathymetry raster (depth=5.8, margin=50)
+4 minimumDepthInMeters error 1235   Depth value (61.2) is greater than the value found in the bathymetry raster (depth=4.0, margin=50)
+5 minimumDepthInMeters error 1249   Depth value (68.3) is greater than the value found in the bathymetry raster (depth=8.0, margin=50)
+6 minimumDepthInMeters error 1250   Depth value (72.9) is greater than the value found in the bathymetry raster (depth=5.0, margin=50)
 ```
 
 ## Check eventID and parentEventID
@@ -393,3 +426,29 @@ report(abra)
 ```
 
 ![https://raw.githubusercontent.com/iobis/obistools/master/images/report.png](https://raw.githubusercontent.com/iobis/obistools/master/images/report.png)
+
+## Lookup XY
+
+`lookup_xy` returns basic spatial information for a given set of points. Currently three main things are returned: information from vector data (areas), information from rasters (grids) and the shoredistance.
+
+```R
+xydata <- lookup_xy(abra, shoredistance = TRUE, grids = TRUE, areas = TRUE)
+head(xydata)
+```
+
+```
+shoredistance sstemperature sssalinity bathymetry                                                                                                   final_grid5
+1            30      10.28631   34.76271       -4.0 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
+2          1080      10.33242   34.90622       61.4 United Kingdom, United Kingdom, T, F, eez, eez, United Kingdom, United Kingdom: all, 221, United Kingdom: all
+3          1184      10.72199   34.88896      122.2 United Kingdom, United Kingdom, T, F, eez, eez, United Kingdom, United Kingdom: all, 221, United Kingdom: all
+4           290      10.79197   34.29342       20.6 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
+5           259      10.72199   34.88896       51.0 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
+6           506      10.77101   34.30700       32.4 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
+```
+
+```R
+ggplot(xydata, aes(sssalinity, sstemperature, color=bathymetry)) +
+    geom_point(alpha=0.5)
+```
+
+![https://raw.githubusercontent.com/iobis/obistools/master/images/abra_sss_sst.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra_sss_sst.png)
