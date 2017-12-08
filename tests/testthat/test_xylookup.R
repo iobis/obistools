@@ -73,25 +73,11 @@ test_that("lookup_xy mix of valid and invalid coordinates works", {
 })
 
 test_that("lookup_xy works for Calanus: issue 48", {
-  skip_if_not("robis")
+  skip_if_not_installed("robis")
   library(robis)
 
   calfin <- occurrence("Calanus finmarchicus", fields = c("decimalLongitude", "decimalLatitude"))
   data <- lookup_xy(calfin, shoredistance = FALSE, grids = TRUE, areas = FALSE)
   expect_gt(nrow(data), 200000)
-
-  #write.csv("~/a/tmp/large.csv", data.frame(x=runif(100000000),y=runif(100000000)))
-
 })
 
-# test_that("lookup_xy long list of coordinates works", {
-#   skip_on_travis()
-#   set.seed(42)
-#   data <- test_data(x=runif(10000, -180, 180),y=runif(10000, -90, 90))
-#   data <- data[rep(1:10000, 50),]
-#   results <- lookup_xy(data, asdataframe = FALSE)
-#   expect_equal(length(results), 500000)
-#
-#   system.time({results <- lookup_xy(data, asdataframe = TRUE)})
-#   expect_equal(nrow(results), 500000)
-# })

@@ -77,45 +77,37 @@ test_that("Issue 42", {
   testthat::expect_lt(nrow(problems_margin10), nrow(problems))
 })
 
-test_that("External rasters are used", {
+test_that("External bathymetry raster is used", {
   x <- raster::raster(nrow=10, ncol=10,
-                      xmn=-5, xmx=5, ymn=-5, ymx=5,
+                      xmn=-4.5, xmx=5.5, ymn=-4.5, ymx=5.5,
                       crs="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
                       resolution=1)
   set.seed(42)
   raster::values(x) <- runif(100, min = 0, max = 1000)
+  x[55] <- 7
+  x[10] <- NA
 
-  t1 <- data.frame(decimalLongitude=0, decimalLatitude=0,
-                   minimumDepthInMeters = c("4936", "4938", "4935", "-20"),
-                   maximumDepthInMeters = c("4936", "4937", "5000", "-10"))
-  d1 <- check_depth(t1, depthmargin = 0, shoremargin = NA, report = FALSE)
+  t1 <- data.frame(decimalLongitude=c(0,0,5,30), decimalLatitude=c(0,0,5,30),
+                   minimumDepthInMeters = c("5", "10", "20", "25"),
+                   maximumDepthInMeters = c("5", "10", "20", "25"))
 
-  d1 <- check_depth(t1, bathymetry=x, depthmargin = 0, shoremargin = NA, report = FALSE)
+  d1 <- check_depth(t1, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry = x)
+  r1 <- check_depth(t1, report = TRUE, depthmargin = 0, shoremargin = NA, bathymetry = x)
 
-  fail("TODO FINISH TEST")
-  fail("TODO Invalid / no raster provided")
-  fail("TODO Coordinates outside raster: issue warning")
+  expect_true(!1 %in% unique(r1$row))
+  expect_true(all(2:4 %in% unique(r1$row)))
+  expect_true(all(c("decimalLongitude", "decimalLatitude", "minimumDepthInMeters", "maximumDepthInMeters") %in% unique(r1$field)))
+  expect_true(all(c("error", "warning") %in% unique(r1$level)))
 })
 
 test_that("support for tibble", {
   skip_if_not_installed("dplyr")
-  t1 <- data.frame(decimalLongitude=0, decimalLatitude=0,
-                   minimumDepthInMeters = c("4936", "4938", "4935", "-20"),
-                   maximumDepthInMeters = c("4936", "4937", "5000", "-10"))
-  r1 <- check_depth(t1, depthmargin = 0, shoremargin = NA, report = TRUE)
+    t1 <- data.frame(decimalLongitude=0, decimalLatitude=0,
+                     minimumDepthInMeters = c("4936", "4938", "4935", "-20"),
+                     maximumDepthInMeters = c("4936", "4937", "5000", "-10"))
+    r1 <- check_depth(t1, depthmargin = 0, shoremargin = NA, report = TRUE)
   t2 <- dplyr::as_tibble(t1)
   r2 <- check_depth(t2, depthmargin = 0, shoremargin = NA, report = TRUE)
   expect_equal(r2, r1)
   expect_equal(nrow(r2), 5)
-})
-
-test_that("invalid x/y coordinates works", {
-  fail("TODO finish this test")
-  fail("TODO write the code to handle the case where no bathymetry was found => issue a warning")
-})
-
-test_that("document lookup_xy, check_depth, check_onland", {
-  fail("readme lookup_xy")
-  fail("readme check_depth")
-  fail("readme check_onland")
 })
