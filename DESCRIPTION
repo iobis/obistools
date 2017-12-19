@@ -1,7 +1,14 @@
 Package: obistools
 Title: Tools for data enhancement and quality control
-Version: 0.0.4
-Authors@R: person("Pieter", "Provoost", email = "pieterprovoost@gmail.com", role = c("aut", "cre"))
+Description: Tools for data enhancement and quality control for marine species observations.
+Version: 0.0.4-9001
+Date: 2017-12-19
+Authors@R: c(
+    person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = "aut"),
+    person("Samuel", "Bosch", , "mail@samuelbosch.com", role = "aut"),
+    person("Ward", "Appeltans", role = "ctb"),
+    person(, "OBIS", , "support@obis.org", role = "cre")
+    )
 Description: Tools for data enhancement and quality control.
 Depends:
     R (>= 3.2.2)
