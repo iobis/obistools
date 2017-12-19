@@ -7,7 +7,7 @@ Authors@R: c(
     person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = "aut"),
     person("Samuel", "Bosch", , "mail@samuelbosch.com", role = "aut"),
     person("Ward", "Appeltans", role = "ctb"),
-    person(, "OBIS", , "support@obis.org", role = "cre")
+    person(, "OBIS", , "support@iobis.org", role = "cre")
     )
 Description: Tools for data enhancement and quality control.
 Depends:
