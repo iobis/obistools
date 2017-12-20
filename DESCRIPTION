@@ -9,7 +9,6 @@ Authors@R: c(
     person("Ward", "Appeltans", role = "ctb"),
     person(, "OBIS", , "support@iobis.org", role = "cre")
     )
-Description: Tools for data enhancement and quality control.
 Depends:
     R (>= 3.2.2)
 License: MIT

@@ -6,6 +6,16 @@
 \usage{
 treeStructure(event, occurrence, measurement = NULL)
 }
+\arguments{
+\item{event}{Dataframe with events}
+
+\item{occurrence}{Dataframe with occurrences}
+
+\item{measurement}{Optional dataframe with measurements}
+}
+\value{
+a tree
+}
 \description{
 Generate a tree summarizing the dataset structure, based on measurement types and event remarks.
 }
