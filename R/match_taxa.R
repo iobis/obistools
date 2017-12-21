@@ -10,7 +10,10 @@ match_taxa <- function(names, ask = TRUE) {
   indices <- as.numeric(f)
   unames <- levels(f)
 
-  matches <- matchAphiaRecordsByNames(unames)
+  pages <- split(unames, as.integer((seq_along(unames) - 1) / 50))
+  matches <- unlist(lapply(pages, worrms::wm_records_taxamatch), recursive = FALSE)
+  # matches <- worms::matchAphiaRecordsByNames(unames)
+
   results <- data.frame(scientificName = character(), scientificNameID = character(), match_type = character(), stringsAsFactors = FALSE)
 
   # count no matches and multiple matches
@@ -48,7 +51,7 @@ match_taxa <- function(names, ask = TRUE) {
 
   # populate data frame
 
-  for (i in 1:length(matches)) {
+  for (i in seq_along(matches)) {
 
     row <- list(scientificName = NA, scientificNameID = NA, match_type = NA)
 

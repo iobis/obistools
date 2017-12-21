@@ -6,7 +6,6 @@
 #' @name obistools
 #' @import dplyr
 #' @import ggplot2
-#' @importFrom worms matchAphiaRecordsByNames
 #' @importFrom grid seekViewport
 #' @importFrom grid grid.locator
 #' @importFrom grid current.vpTree
