@@ -1,6 +1,7 @@
-# obistools
+# obistools: Tools for data enhancement and quality control.
 
-Tools for data enhancement and quality control.
+[![Travis-CI Build Status](https://travis-ci.org/iobis/obistools.svg?branch=master)](https://travis-ci.org/iobis/obistools)
+[![Coverage Status](https://coveralls.io/repos/iobis/obistools/badge.svg?branch=master&service=github)](https://coveralls.io/github/iobis/obistools?branch=master)
 
 [Installation](#installation)  
 [Taxon matching](#taxon-matching)  

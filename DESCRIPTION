@@ -1,8 +1,8 @@
 Package: obistools
-Title: Tools for data enhancement and quality control
-Description: Tools for data enhancement and quality control for marine species observations.
-Version: 0.0.4-9002
-Date: 2017-12-19
+Title: Tools for Data Enhancement and Quality Control
+Description: Tools for data enhancement and quality control for marine species observations. Commonly used to prepare data sets for submission to the Ocean Biogeographical Information System (<http://iobis.org>).
+Version: 0.0.5
+Date: 2017-12-21
 Authors@R: c(
     person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = "aut"),
     person("Samuel", "Bosch", , "mail@samuelbosch.com", role = "aut"),
@@ -11,29 +11,27 @@ Authors@R: c(
     )
 Depends:
     R (>= 3.2.2)
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    dplyr,
-    ggplot2,
-    worrms,
-    grid,
-    sp,
-    rgeos,
-    leaflet,
-    stringr,
-    xml2,
-    geosphere,
-    rmarkdown,
-    knitr,
-    tidyr,
     data.tree,
     digest,
+    dplyr,
+    geosphere,
+    ggplot2,
     httr,
-    jsonlite,
-    raster,
-    sf
+    knitr,
+    leaflet,
+    rgeos,
+    rmarkdown,
+    sf,
+    sp,
+    stringr,
+    tidyr,
+    worrms,
+    grid,
+    xml2
 Suggests:
     testthat
 RoxygenNote: 6.0.1
