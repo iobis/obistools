@@ -9,9 +9,11 @@ flatten_occurrence(event, occurrence, field = "eventID", fields = NULL)
 \arguments{
 \item{event}{The event records.}
 
-\item{fields}{Fields to be inherited from the events, if NULL all Event Core fields will be inherited.}
+\item{occurrence}{The occurrence records.}
 
-\item{event}{The occurrence records.}
+\item{field}{The eventID field name in the extension records.}
+
+\item{fields}{Fields to be inherited from the events, if NULL all Event Core fields will be inherited.}
 }
 \value{
 Flattened occurrence records.

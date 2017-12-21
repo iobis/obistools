@@ -125,7 +125,7 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
   result <- add_depth_message(result, data, c("decimalLongitude","decimalLatitude"), is.na(lookupvalues$bathymetry), "No bathymetry value found for coordinate [%s]", level="warning")
 
   if (!report) {
-    result <- original_data[sort(unique(na.omit(result$row))),]
+    result <- original_data[sort(unique(stats::na.omit(result$row))),]
   }
   return(result)
 }

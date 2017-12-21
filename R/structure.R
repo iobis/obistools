@@ -144,7 +144,7 @@ treeStructure <- function(event, occurrence, measurement = NULL) {
       if (is.null(result)) {
         # path does not exist, so go back one level
         if (length(path) > 1) {
-          parent <- tree$Climb(name = head(path, -1))
+          parent <- tree$Climb(name = utils::head(path, -1))
         } else {
           parent <- tree
         }

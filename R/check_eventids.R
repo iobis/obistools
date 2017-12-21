@@ -60,7 +60,8 @@ check_eventids <- function(event) {
 #' Check if all eventIDs in an extension have corresponding eventIDs in the core.
 #'
 #' @param event The event records.
-#' @param event The extension records.
+#' @param extension The extension records.
+#' @param field The eventID field name in the extension records.
 #' @return Any errors.
 #' @export
 check_extension_eventids <- function(event, extension, field = "eventID") {

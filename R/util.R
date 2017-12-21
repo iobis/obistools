@@ -29,7 +29,7 @@ get_xy_clean_duplicates <- function(data, asdataframe=TRUE) {
   stopifnot(NROW(data) > 0 & !is.null("No data provided"))
   sp <- data %>% select(decimalLongitude, decimalLatitude)
   # Only lookup values for valid coordinates
-  isclean <- complete.cases(sp) &
+  isclean <- stats::complete.cases(sp) &
     sapply(sp$decimalLongitude, is.numeric) &
     sapply(sp$decimalLatitude, is.numeric) &
     !is.na(sp$decimalLongitude) & !is.na(sp$decimalLatitude) &

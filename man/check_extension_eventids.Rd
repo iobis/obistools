@@ -9,7 +9,9 @@ check_extension_eventids(event, extension, field = "eventID")
 \arguments{
 \item{event}{The event records.}
 
-\item{event}{The extension records.}
+\item{extension}{The extension records.}
+
+\item{field}{The eventID field name in the extension records.}
 }
 \value{
 Any errors.

@@ -5,7 +5,7 @@
 \title{Lookup spatial data for a set of points.}
 \usage{
 lookup_xy(data, shoredistance=TRUE, grids=TRUE, areas=FALSE,
-  verbose=FALSE)
+  asdataframe=TRUE)
 }
 \arguments{
 \item{data}{The data frame with columns decimalLongitude and decimalLatitude.}

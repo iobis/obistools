@@ -1,7 +1,7 @@
 #' Lookup spatial data for a set of points.
 #'
 #' @usage lookup_xy(data, shoredistance=TRUE, grids=TRUE, areas=FALSE,
-#'   verbose=FALSE)
+#'   asdataframe=TRUE)
 #'
 #' @param data The data frame with columns decimalLongitude and decimalLatitude.
 #' @param shoredistance Indicate whether the shoredistance should be returned
@@ -70,7 +70,7 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
       if (areas) {
         df <- merge(df, content[,"areas", drop=TRUE], by=0, sort = FALSE)[,-1]
       }
-      output <- setNames(data.frame(matrix(ncol=NCOL(df), nrow=NROW(data))), colnames(df))
+      output <- stats::setNames(data.frame(matrix(ncol=NCOL(df), nrow=NROW(data))), colnames(df))
       output[xy$isclean,] <- df[xy$duplicated_lookup,]
     } else {
       # Convert to list, keep into account invalid coordinates and duplicate coordinates

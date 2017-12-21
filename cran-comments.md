@@ -7,13 +7,15 @@
 
 There were no ERRORs and WARNINGs.
 
-There is 1 NOTE as it is the first submission. API and Biogeographic are not mis-spelled. 
+There is 1 NOTE as it is the first submission. Biogeographic is not mis-spelled. 
 
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'OBIS <support@iobis.org>'
 
 New submission
 
+Possibly mis-spelled words in DESCRIPTION:
+  Biogeographical (3:157)
 ## Downstream dependencies
 
 No downstream dependencies

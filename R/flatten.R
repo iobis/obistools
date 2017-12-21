@@ -72,7 +72,8 @@ flatten_event <- function(event, fields = NULL) {
 #' Flatten event and occurrence records.
 #'
 #' @param event The event records.
-#' @param event The occurrence records.
+#' @param occurrence The occurrence records.
+#' @param field The eventID field name in the extension records.
 #' @param fields Fields to be inherited from the events, if NULL all Event Core fields will be inherited.
 #' @return Flattened occurrence records.
 #' @export

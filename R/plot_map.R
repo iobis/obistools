@@ -1,6 +1,7 @@
 #' Plot occurrences on a map.
 #'
 #' @param data The data frame.
+#' @param zoom Zoom to the occurrences (default: \code{FALSE}).
 #' @export
 plot_map <- function(data, zoom = FALSE) {
 
@@ -31,6 +32,7 @@ plot_map <- function(data, zoom = FALSE) {
 
 #' Identify a point on a map.
 #'
+#' @data Original data that was plotted on the map.
 #' @return The nearest record.
 #' @export
 identify_map <- function(data) {

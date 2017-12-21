@@ -8,6 +8,8 @@ plot_map(data, zoom = FALSE)
 }
 \arguments{
 \item{data}{The data frame.}
+
+\item{zoom}{Zoom to the occurrences (default: \code{FALSE}).}
 }
 \description{
 Plot occurrences on a map.

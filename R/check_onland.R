@@ -14,7 +14,7 @@
 check_onland <- function(data, polygons = NULL, report = FALSE, buffer=0, offline = FALSE) {
 
   if (is.null(polygons)) {
-    polygons <- land
+    polygons <- obistools::land
   } else if(!offline) {
     warning("The polygons parameters is not supported when offline = FALSE")
   }

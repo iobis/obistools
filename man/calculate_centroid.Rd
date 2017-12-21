@@ -7,7 +7,7 @@
 calculate_centroid(wkt)
 }
 \arguments{
-\item{WKT}{character vector One or more WKT strings with longitude/latitude
+\item{wkt}{character vector One or more WKT strings with longitude/latitude
 coordinates (epsg=4326)}
 }
 \value{
