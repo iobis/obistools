@@ -7,10 +7,11 @@
 calculate_centroid(wkt)
 }
 \arguments{
-\item{WKT}{strings.}
+\item{WKT}{character vector One or more WKT strings with longitude/latitude
+coordinates (epsg=4326)}
 }
 \value{
-Table with centroid coordinates and radius in meter.
+Data frame with centroid coordinates and radius in meter.
 }
 \description{
 Calculates the centroid and radius of a WKT geometry.

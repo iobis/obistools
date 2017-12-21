@@ -74,6 +74,7 @@ test_that("lookup_xy mix of valid and invalid coordinates works", {
 
 test_that("lookup_xy works for Calanus: issue 48", {
   skip_if_not_installed("robis")
+  skip("Very SLOOOOW test, only run on major releases")
   library(robis)
 
   calfin <- occurrence("Calanus finmarchicus", fields = c("decimalLongitude", "decimalLatitude"))

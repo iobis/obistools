@@ -1,7 +1,7 @@
 Package: obistools
 Title: Tools for data enhancement and quality control
 Description: Tools for data enhancement and quality control for marine species observations.
-Version: 0.0.4-9001
+Version: 0.0.4-9002
 Date: 2017-12-19
 Authors@R: c(
     person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = "aut"),
@@ -32,7 +32,8 @@ Imports:
     digest,
     httr,
     jsonlite,
-    raster
+    raster,
+    sf
 Remotes: 
     iobis/worms
 Suggests:
