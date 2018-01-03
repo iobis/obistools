@@ -25,6 +25,3 @@
 #' @import data.tree
 #' @import digest
 NULL
-
-# suppress warning for "no visible binding for global variable" in R CMD check
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))

@@ -3,6 +3,13 @@
 #' @param wkt character vector One or more WKT strings with longitude/latitude
 #'   coordinates (epsg=4326)
 #' @return Data frame with centroid coordinates and radius in meter.
+#' @examples
+#' calculate_centroid("POLYGON ((-1 -1, -1 1, 1 1, 1 -1, -1 -1))")
+#' calculate_centroid("MULTIPOLYGON (((-1 -1, -1 1, 1 1, 1 -1, -1 -1)))")
+#' calculate_centroid("LINESTRING (-1 -1, 0 -1, 0 1, 1 1)")
+#' calculate_centroid("MULTILINESTRING ((-1 -1, 0 -1, 0 1, 1 1), (-3 -3, 3 3))")
+#' calculate_centroid("POINT (0 0)")
+#' calculate_centroid("MULTIPOINT ((0 1), (0 -1))")
 #' @export
 calculate_centroid <- function(wkt) {
   results <- lapply(wkt, function(wkt) {
@@ -10,17 +17,16 @@ calculate_centroid <- function(wkt) {
     p <- sf::st_cast(s, "POINT")
     mp <- sf::st_combine(p)
     h <- sf::st_convex_hull(mp)
-    if(length(sf::st_geometry_type(h)) > 1) {
-      print(wkt)
-      print(sf::st_geometry_type(h))
-    }
+    stopifnot(length(sf::st_geometry_type(h)) == 1 || is.null("calculate_centroid: hull should be a single geometry type"))
     hxy <- sf::st_coordinates(h)[,c('X', 'Y')]
     if (sf::st_geometry_type(h) == "POINT"){
-        centroid <- hxy
+      centroid <- hxy
     } else if (sf::st_geometry_type(h) == "LINESTRING" && nrow(hxy) == 2) {
-        centroid <- geosphere::midPoint(hxy[1,], hxy[2,])
+      centroid <- geosphere::midPoint(hxy[1,], hxy[2,])
     } else if (sf::st_geometry_type(h) == "POLYGON"){
       centroid <- geosphere::centroid(hxy)
+    } else {
+      stop("calculate_centroid: hull should be a point, line or polygon")
     }
     return(data.frame(
       decimalLongitude = centroid[1],
@@ -28,17 +34,5 @@ calculate_centroid <- function(wkt) {
       coordinateUncertaintyInMeters = max(geosphere::distm(centroid, hxy))
     ))
   })
-  ## previous implementation
-  # results <- lapply(wkt, function(wkt) {
-  #   s <- readWKT(wkt, p4s = CRS("+init=epsg:4326"))
-  #   centroid <- gCentroid(s)
-  #   h <- gConvexHull(s)
-  #   m <- h[1]@polygons[[1]]@Polygons[[1]]@coords
-  #   return(data.frame(
-  #     decimalLongitude = centroid$x,
-  #     decimalLatitude = centroid$y,
-  #     coordinateUncertaintyInMeters = max(distm(as.data.frame(centroid), m))
-  #   ))
-  # })
   return(bind_rows(results))
 }

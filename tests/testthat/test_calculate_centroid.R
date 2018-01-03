@@ -27,6 +27,24 @@ test_that("calculate_centroid missing wkt works", {
   expect_equal(NROW(calculate_centroid(NULL)), 0)
 })
 
+test_that("calculate_centroid simple wkt point works", {
+  centr <- calculate_centroid("POINT (0 0)")
+  expect_equal(centr[1,1], 0)
+  expect_equal(centr[1,2], 0)
+})
+
+test_that("calculate_centroid simple wkt linestring works", {
+  centr <- calculate_centroid("LINESTRING (0 -1, 0 0, 0 1)")
+  expect_equal(centr[1,1], 0)
+  expect_equal(centr[1,2], 0)
+})
+
+test_that("calculate_centroid simple wkt linestring works", {
+  centr <- calculate_centroid("LINESTRING (-1 -1, 0 -1, 0 1, 1 1)")
+  expect_equal(centr[1,1], 0)
+  expect_equal(centr[1,2], 0)
+})
+
 test_that("calculate_centroid simple wkt polygon works", {
   centr <- calculate_centroid("POLYGON ((-1 -1, -1 1, 1 1, 1 -1, -1 -1))")
   expect_equal(centr[1,1], 0)

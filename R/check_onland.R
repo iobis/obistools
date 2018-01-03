@@ -10,8 +10,19 @@
 #'   OBIS webservice is used. The default value is \code{FALSE}.
 #'
 #' @return Errors or records.
+#' @examples
+#' report <- check_onland(abra, report = TRUE, buffer = 100)
+#' print(report)
+#' # records on land with 100 meter buffer
+#' abra[report$row,]
+#' # records not on land
+#' abra[-1 * report$row,]
+#' check_onland(abra, report = FALSE, buffer = 100)
 #' @export
 check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = FALSE) {
+
+  if(!is.null(land) && !offline) warning("The land parameter is not supported when offline = FALSE")
+  if (buffer !=0 && offline) warning("The buffer parameter is not supported when offline = TRUE")
 
   if (offline && is.null(land)) {
     cache_dir <- rappdirs::user_cache_dir("obistools")
@@ -21,11 +32,6 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = 
       utils::download.file("http://iobis.org/downloads/obistools/land.RData", landpath)
     }
     load(landpath)
-  } else if(!offline) {
-    warning("The polygons parameters is not supported when offline = FALSE")
-  }
-  if (buffer !=0 && offline) {
-    warning("The buffer parameter is not supported when offline = TRUE")
   }
 
   if(offline) {

@@ -10,3 +10,5 @@ test_that("match_taxa works as expected", {
   expect_true(sum(!is.na(results$scientificNameID)) == 1)
 
 })
+
+# For later maybe, test user interaction: see https://stackoverflow.com/questions/41372146/test-interaction-with-users-in-r-package for how to do this
