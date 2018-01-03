@@ -1,7 +1,7 @@
 #' Check which points are located on land.
 #'
 #' @param data The data frame.
-#' @param polygons SpatialPolygonsDataFrame. If not provided the simplified land
+#' @param land SpatialPolygonsDataFrame. If not provided the simplified land
 #'   polygons from OSM are used. This parameter is ignored when, \code{offline =
 #'   FALSE}.
 #' @param report If TRUE, errors are returned instead of records.
@@ -11,10 +11,16 @@
 #'
 #' @return Errors or records.
 #' @export
-check_onland <- function(data, polygons = NULL, report = FALSE, buffer=0, offline = FALSE) {
+check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = FALSE) {
 
-  if (is.null(polygons)) {
-    polygons <- obistools::land
+  if (offline && is.null(land)) {
+    cache_dir <- rappdirs::user_cache_dir("obistools")
+    landpath <- file.path(cache_dir, 'land.RData')
+    if(!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
+    if (!file.exists(landpath)) {
+      utils::download.file("http://iobis.org/downloads/obistools/land.RData", landpath)
+    }
+    load(landpath)
   } else if(!offline) {
     warning("The polygons parameters is not supported when offline = FALSE")
   }
@@ -26,8 +32,8 @@ check_onland <- function(data, polygons = NULL, report = FALSE, buffer=0, offlin
     sp <- data %>% select(decimalLongitude, decimalLatitude)
     coordinates(sp) <- ~ decimalLongitude + decimalLatitude
     proj4string(sp) <- CRS("+init=epsg:4326")
-    sp <- spTransform(sp, proj4string(polygons))
-    i <- which(!is.na(over(sp, polygons)))
+    sp <- spTransform(sp, proj4string(land))
+    i <- which(!is.na(over(sp, land)))
   } else {
     shoredistances <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE, asdataframe = TRUE)
     i <- which(as.vector(shoredistances) < (-1*buffer))

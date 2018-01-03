@@ -1,6 +1,6 @@
 #' obistools: Tools for data enhancement and quality control
 #'
-#' Work in progress
+#' Tools for data enhancement and quality control for marine species observations. Commonly used to prepare data sets for submission to the Ocean Biogeographical Information System (<http://iobis.org>).
 #'
 #' @docType package
 #' @name obistools
@@ -26,6 +26,5 @@
 #' @import digest
 NULL
 
-
-## quiets concerns of R CMD check re: the .'s that appear in pipelines
+# suppress warning for "no visible binding for global variable" in R CMD check
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))

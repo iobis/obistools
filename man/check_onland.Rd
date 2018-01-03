@@ -4,13 +4,13 @@
 \alias{check_onland}
 \title{Check which points are located on land.}
 \usage{
-check_onland(data, polygons = NULL, report = FALSE, buffer = 0,
+check_onland(data, land = NULL, report = FALSE, buffer = 0,
   offline = FALSE)
 }
 \arguments{
 \item{data}{The data frame.}
 
-\item{polygons}{SpatialPolygonsDataFrame. If not provided the simplified land
+\item{land}{SpatialPolygonsDataFrame. If not provided the simplified land
 polygons from OSM are used. This parameter is ignored when, \code{offline =
 FALSE}.}
 

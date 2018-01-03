@@ -6,6 +6,9 @@
 \usage{
 identify_map(data)
 }
+\arguments{
+\item{data}{Original data that was plotted on the map.}
+}
 \value{
 The nearest record.
 }

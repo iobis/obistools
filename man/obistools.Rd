@@ -6,5 +6,5 @@
 \alias{obistools-package}
 \title{obistools: Tools for data enhancement and quality control}
 \description{
-Work in progress
+Tools for data enhancement and quality control for marine species observations. Commonly used to prepare data sets for submission to the Ocean Biogeographical Information System (<http://iobis.org>).
 }

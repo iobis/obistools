@@ -32,7 +32,7 @@ plot_map <- function(data, zoom = FALSE) {
 
 #' Identify a point on a map.
 #'
-#' @data Original data that was plotted on the map.
+#' @param data Original data that was plotted on the map.
 #' @return The nearest record.
 #' @export
 identify_map <- function(data) {

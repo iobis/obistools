@@ -25,6 +25,7 @@ Imports:
     knitr,
     leaflet,
     raster,
+    rgdal,
     rgeos,
     rmarkdown,
     sf,
@@ -33,7 +34,8 @@ Imports:
     tidyr,
     worrms,
     grid,
-    xml2
+    xml2,
+    rappdirs
 Suggests:
     testthat
 RoxygenNote: 6.0.1
