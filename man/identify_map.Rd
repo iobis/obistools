@@ -15,3 +15,7 @@ The nearest record.
 \description{
 Identify a point on a map.
 }
+\examples{
+plot_map(abra, zoom = TRUE)
+identify_map(abra)
+}

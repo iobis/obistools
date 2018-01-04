@@ -4,16 +4,24 @@
 \alias{plot_map_leaflet}
 \title{Create a Leaflet map.}
 \usage{
-plot_map_leaflet(data, provider = "Esri.OceanBasemap")
+plot_map_leaflet(data, provider = "Esri.OceanBasemap", popup = NULL)
 }
 \arguments{
 \item{data}{The data frame.}
 
-\item{provider}{Tile provider, see https://leaflet-extras.github.io/leaflet-providers/preview/.}
+\item{provider}{Tile provider, see
+https://leaflet-extras.github.io/leaflet-providers/preview/.}
+
+\item{popup}{The field to display as a popup or a character vector with as
+many elements as there are rows, by default the row names are shown.}
 }
 \value{
 HTML widget object.
 }
 \description{
 Create a Leaflet map.
+}
+\examples{
+plot_map_leaflet(abra)
+plot_map_leaflet(abra, popup = "datasetID")
 }

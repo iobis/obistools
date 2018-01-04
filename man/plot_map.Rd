@@ -14,3 +14,7 @@ plot_map(data, zoom = FALSE)
 \description{
 Plot occurrences on a map.
 }
+\examples{
+plot_map(abra)
+plot_map(abra, zoom = TRUE)
+}

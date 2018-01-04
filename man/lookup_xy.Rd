@@ -30,9 +30,13 @@ Data frame or list with the values for the different requested
 Lookup spatial data for a set of points.
 }
 \details{
-Data is returned in the same order as the requested data as a list,
-  with for each list item the requested values. For invalid coordinates
-  \code{NULL} is returned.
+When \code{asdataframe} is \code{FALSE} then data is returned in the
+  same order as the requested data as a list, with for each list item the
+  requested values. For invalid coordinates \code{NULL} is returned.
+}
+\examples{
+lookup_xy(abra, shoredistance = TRUE, grids = TRUE, areas = FALSE)
+
 }
 \seealso{
 \code{\link{check_onland}} \code{\link{check_depth}}

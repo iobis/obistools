@@ -50,24 +50,27 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #' @param report If TRUE, errors are returned instead of records.
 #' @param depthmargin How much can the given depth deviate from the bathymetry
 #'   in the rasters (in meters).
-#' @param shoremargin How far offshore should a record be to have a bathymetry
-#'   larger then 0. If \code{NA} (default) then this test is ignored.
+#' @param shoremargin How far offshore (in meters) should a record be to have a
+#'   bathymetry greater than 0. If \code{NA} (default) then this test is
+#'   ignored.
 #' @param bathymetry Raster* object that you want to use to check the depth
 #'   against. If \code{NULL} (default) then the bathymetry from the xylookup
 #'   service is used.
 #'
-#' @details Multiple checks are performed in this function:
-#' \enumerate{
-#'   \item missing depth column (warning)
-#'   \item empty depth column (warning)
-#'   \item depth values that can't be converted to numbers (error)
-#'   \item depth values that are larger than the depth value in the bathymetry
-#'   layer, after applying the provided \code{depthmargin} (error)
-#'   \item depth values that are negative for off shore points, after applying
-#'   the provided \code{shoremargin} (error)
-#'   \item minimum depth greater than maximum depth (error)
-#' }
+#' @details Multiple checks are performed in this function: \enumerate{ \item
+#'   missing depth column (warning) \item empty depth column (warning) \item
+#'   depth values that can't be converted to numbers (error) \item depth values
+#'   that are larger than the depth value in the bathymetry layer, after
+#'   applying the provided \code{depthmargin} (error) \item depth values that
+#'   are negative for off shore points, after applying the provided
+#'   \code{shoremargin} (error) \item minimum depth greater than maximum depth
+#'   (error) }
 #' @return Records or an errors report.
+#' @examples
+#' check_depth(abra, report = FALSE)
+#' r <- check_depth(abra, report = TRUE, depthmargin = 100, shoremargin = 100)
+#' print(r)
+#' plot_map_leaflet(abra[r$row,], popup = "id")
 #' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry=NULL) {

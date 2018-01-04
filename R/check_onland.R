@@ -13,9 +13,9 @@
 #' @examples
 #' report <- check_onland(abra, report = TRUE, buffer = 100)
 #' print(report)
-#' # records on land with 100 meter buffer
-#' abra[report$row,]
-#' # records not on land
+#' # plot records on land with 100 meter buffer
+#' plot_map_leaflet(abra[report$row,], popup = "id")
+#' # filter records not on land
 #' abra[-1 * report$row,]
 #' check_onland(abra, report = FALSE, buffer = 100)
 #' @export

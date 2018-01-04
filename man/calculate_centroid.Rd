@@ -16,3 +16,11 @@ Data frame with centroid coordinates and radius in meter.
 \description{
 Calculates the centroid and radius of a WKT geometry.
 }
+\examples{
+calculate_centroid("POLYGON ((-1 -1, -1 1, 1 1, 1 -1, -1 -1))")
+calculate_centroid("MULTIPOLYGON (((-1 -1, -1 1, 1 1, 1 -1, -1 -1)))")
+calculate_centroid("LINESTRING (-1 -1, 0 -1, 0 1, 1 1)")
+calculate_centroid("MULTILINESTRING ((-1 -1, 0 -1, 0 1, 1 1), (-3 -3, 3 3))")
+calculate_centroid("POINT (0 0)")
+calculate_centroid("MULTIPOINT ((0 1), (0 -1))")
+}
