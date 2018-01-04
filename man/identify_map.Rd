@@ -16,6 +16,8 @@ The nearest record.
 Identify a point on a map.
 }
 \examples{
+\dontrun{
 plot_map(abra, zoom = TRUE)
 identify_map(abra)
+}
 }

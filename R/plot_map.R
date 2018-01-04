@@ -38,6 +38,11 @@ plot_map <- function(data, zoom = FALSE) {
 #'
 #' @param data Original data that was plotted on the map.
 #' @return The nearest record.
+#' @examples
+#' \dontrun{
+#' plot_map(abra, zoom = TRUE)
+#' identify_map(abra)
+#' }
 #' @export
 identify_map <- function(data) {
   if(nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
@@ -81,7 +86,7 @@ identify_map <- function(data) {
 #' plot_map_leaflet(abra, popup = "datasetID")
 #' @export
 plot_map_leaflet <- function(data, provider = "Esri.OceanBasemap", popup = NULL) {
-  if (popup %in% names(data)) {
+  if (!is.null(popup) && popup %in% names(data)) {
     popupdata <- as.character(data[,popup])
   } else if (length(popup) == NROW(data)) {
     popupdata <- as.character(popup)
