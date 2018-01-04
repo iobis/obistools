@@ -127,7 +127,8 @@ identify_map(abra)
      lifestage  sex individualCount eventID depth minimumDepthInMeters maximumDepthInMeters fieldNumber
 2078      <NA> <NA>              NA    <NA> 60.94                60.94                60.94           I
      occurrenceRemarks eventTime footprintWKT identifiedBy
-2078              <NA>      <NA>         <NA>     Teaca A.```
+2078              <NA>      <NA>         <NA>     Teaca A.
+```
 
 ## Check points on land
 
@@ -163,6 +164,32 @@ check_onland(abra, report = TRUE)
 ```
   field   level row                         message
 1    NA warning  31 Coordinates are located on land
+```
+
+## Check points on land
+
+`check_onland` uses the xylookup web service to identify which records are on land. An additional margin can be used by setting the buffer parameter.
+
+```R
+report <- check_onland(abra, report = TRUE, buffer = 100)
+print(report)
+```
+```
+  field   level row                         message
+1    NA warning  31 Coordinates are located on land`
+```
+
+Plot records on land with 100 meter buffer
+
+```R
+plot_map_leaflet(abra[report$row,], popup = "id")
+```
+
+Filter records not on land using the report or by calling `check_onland`.
+
+```R
+abra[-1 * report$row,])
+check_onland(abra, report = FALSE, buffer = 100)
 ```
 
 ## Check depth
