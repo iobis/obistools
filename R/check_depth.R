@@ -67,7 +67,8 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #'   (error) }
 #' @return Records or an errors report.
 #' @examples
-#' check_depth(abra, report = FALSE)
+#' ok <- check_depth(abra, report = FALSE)
+#' print(nrow(ok))
 #' r <- check_depth(abra, report = TRUE, depthmargin = 100, shoremargin = 100)
 #' print(r)
 #' plot_map_leaflet(abra[r$row,], popup = "id")

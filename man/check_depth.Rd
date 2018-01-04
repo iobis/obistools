@@ -40,7 +40,8 @@ Multiple checks are performed in this function: \enumerate{ \item
   (error) }
 }
 \examples{
-check_depth(abra, report = FALSE)
+ok <- check_depth(abra, report = FALSE)
+print(nrow(ok))
 r <- check_depth(abra, report = TRUE, depthmargin = 100, shoremargin = 100)
 print(r)
 plot_map_leaflet(abra[r$row,], popup = "id")

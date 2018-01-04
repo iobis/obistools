@@ -16,8 +16,9 @@
 #' # plot records on land with 100 meter buffer
 #' plot_map_leaflet(abra[report$row,], popup = "id")
 #' # filter records not on land
-#' abra[-1 * report$row,]
-#' check_onland(abra, report = FALSE, buffer = 100)
+#' ok <- abra[-1 * report$row,]
+#' ok <- check_onland(abra, report = FALSE, buffer = 100)
+#' print(nrox(ok))
 #' @export
 check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = FALSE) {
 
