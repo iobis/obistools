@@ -35,5 +35,5 @@ plot_map_leaflet(abra[report$row,], popup = "id")
 # filter records not on land
 ok <- abra[-1 * report$row,]
 ok <- check_onland(abra, report = FALSE, buffer = 100)
-print(nrox(ok))
+print(nrow(ok))
 }

@@ -18,7 +18,7 @@
 #' # filter records not on land
 #' ok <- abra[-1 * report$row,]
 #' ok <- check_onland(abra, report = FALSE, buffer = 100)
-#' print(nrox(ok))
+#' print(nrow(ok))
 #' @export
 check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = FALSE) {
 
