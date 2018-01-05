@@ -4,15 +4,27 @@
 \alias{report}
 \title{Creates a basic data quality report.}
 \usage{
-report(data, qc = NULL, file = "report.html")
+report(data, qc = NULL, file = "report.html", dir = NULL, open = TRUE)
 }
 \arguments{
 \item{data}{The data frame.}
 
-\item{qc}{QC errors, if not provided some tests are done on the provided data.}
+\item{qc}{QC errors, if not provided some tests are done on the provided
+data.}
 
-\item{file}{Output file.}
+\item{file}{Output file (default is "report.html").}
+
+\item{dir}{Directory where to store the file (default is
+\code{rappdirs::user_cache_dir("obistools")}).}
+
+\item{open}{Logical, open the report in a browser after creation (default
+\code{TRUE}).}
 }
 \description{
 Creates a basic data quality report.
+}
+\examples{
+\dontrun{
+report(abra)
+}
 }

@@ -24,6 +24,7 @@
 #' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataframe=TRUE) {
+  check_lonlat(data, FALSE)
   xy <- get_xy_clean_duplicates(data)
   if(NROW(xy$uniquesp) == 0) {
     output <- data.frame(row.names=seq_len(NROW(data)))

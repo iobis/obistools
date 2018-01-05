@@ -21,7 +21,10 @@
 #' print(nrow(ok))
 #' @export
 check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = FALSE) {
-
+  errors <- check_lonlat(data, report)
+  if (NROW(errors) > 0 && report) {
+    return(errors)
+  }
   if(!is.null(land) && !offline) warning("The land parameter is not supported when offline = FALSE")
   if (buffer !=0 && offline) warning("The buffer parameter is not supported when offline = TRUE")
 
@@ -60,5 +63,4 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = 
   } else {
     return(data[i,])
   }
-
 }

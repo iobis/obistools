@@ -7,7 +7,7 @@
 #' plot_map(abra, zoom = TRUE)
 #' @export
 plot_map <- function(data, zoom = FALSE) {
-
+  check_lonlat(data, FALSE)
   world <- borders("world", colour="gray80", fill="gray80")
   m <- ggplot() +
     world +
@@ -86,6 +86,7 @@ identify_map <- function(data) {
 #' plot_map_leaflet(abra, popup = "datasetID")
 #' @export
 plot_map_leaflet <- function(data, provider = "Esri.OceanBasemap", popup = NULL) {
+  check_lonlat(data, FALSE)
   if (!is.null(popup) && popup %in% names(data)) {
     popupdata <- as.character(data[,popup])
   } else if (length(popup) == NROW(data)) {

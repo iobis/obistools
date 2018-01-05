@@ -1,10 +1,44 @@
+#' Creates a summary of a data quality report.
+#'
+#' @param report QC errors report as created by merging results from
+#'   \code{\link{check_fields}}, \code{\link{check_eventdate}},
+#'   \code{\link{check_onland}}, \code{\link{check_depth}}, ...
+#' @param maxrows Number of rows to return for each field.
+#' @return A list with for each field that has errors or warnings the first
+#'   \code{maxrows} number of records.
+#' @export
+report_summary <- function(qcreport, maxrows) {
+  summary <- list()
+  fields <- unique(qcreport$field)
+  for(field in na.omit(fields)) {
+    fieldqc <- qcreport[!is.na(qcreport$field) & qcreport$field == field, , drop = FALSE]
+    summary[[field]] <- fieldqc[1:min(nrow(fieldqc), maxrows), , drop = FALSE]
+  }
+  if(any(is.na(fields))) {
+    fieldqc <- qcreport[is.na(qcreport$field), , drop = FALSE]
+    summary[["Other errors and warnings"]] <- fieldqc[1:min(nrow(fieldqc), maxrows), , drop = FALSE]
+  }
+  return(summary)
+}
+
+
 #' Creates a basic data quality report.
 #'
 #' @param data The data frame.
-#' @param qc QC errors, if not provided some tests are done on the provided data.
-#' @param file Output file.
+#' @param qc QC errors, if not provided some tests are done on the provided
+#'   data.
+#' @param file Output file (default is "report.html").
+#' @param dir Directory where to store the file (default is
+#'   \code{rappdirs::user_cache_dir("obistools")}).
+#' @param open Logical, open the report in a browser after creation (default
+#'   \code{TRUE}).
+#'
+#' @examples
+#' \dontrun{
+#' report(abra)
+#' }
 #' @export
-report <- function(data, qc = NULL, file = "report.html") {
+report <- function(data, qc = NULL, file = "report.html", dir = NULL, open = TRUE) {
 
   reportfile <- system.file("", "report.Rmd", package = "obistools")
 
@@ -12,10 +46,17 @@ report <- function(data, qc = NULL, file = "report.html") {
     qc <- bind_rows(
       check_fields(data),
       check_eventdate(data),
-      check_onland(data, report = TRUE)
+      check_onland(data, report = TRUE),
+      check_depth(data, report = TRUE)
     )
+    qc <- qc[!duplicated(qc), ]
   }
-
-  render(reportfile, output_file = file, output_dir = getwd(), params = list(data = data, qc = qc))
-
+  if(is.null(dir) || is.na(dir)) dir <- rappdirs::user_cache_dir("obistools")
+  if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+  outputfile <- rmarkdown::render(reportfile, output_file = file, output_dir = dir, params = list(data = data, qc = qc))
+  if(open) {
+    browseURL(outputfile)
+  }
+  return(outputfile)
 }
+

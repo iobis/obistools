@@ -6,14 +6,31 @@ params:
   qc: ""
 ---
 
-## Map
+# Map
 
 ```{r echo = FALSE, message = FALSE}
-plot_map(params$data)
+tryCatch(obistools::plot_map(params$data, zoom = TRUE),
+         error = function(e) e)
 ```
 
-## Issues
+# Issues
 
 ```{r echo = FALSE, results='asis', message = FALSE}
-kable(params$qc)
+maxrows <- 50
+qc <- obistools::report_summary(qc, maxrows = maxrows)
+for (field in names(qc)) {
+  cat("\n\n###", field, "\n\n")
+  errors <- qc[[field]]
+  if(nrow(errors) == maxrows) {
+    cat(paste("\n\nMore than", maxrows, "errors and warnings related to this field were found, the first", maxrows, "are printed below and shown on a map whenever possible.\n"))
+  }
+  print(knitr::kable(errors, row.names = FALSE))
+  
+  mapdata <- data[na.omit(errors$row),, drop=FALSE]
+  if(NROW(mapdata) > 0) {
+    cat("\n\n")
+    try(print(obistools::plot_map(mapdata, zoom = TRUE)))
+    cat("\n\n")
+  }
+}
 ```

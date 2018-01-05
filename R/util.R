@@ -25,6 +25,20 @@ occurrence_fields <- function() {
   return(xml_attr(xml_children(xml), "name"))
 }
 
+check_lonlat <- function(data, report) {
+  errors <- data.frame()
+  if (!"decimalLongitude" %in% names(data)) {
+    errors <- rbind(errors, data.frame(level = "error",  message = "Column decimalLongitude missing", stringsAsFactors = FALSE))
+  }
+  if (!"decimalLatitude" %in% names(data)) {
+    errors <- rbind(errors, data.frame(level = "error",  message = "Column decimalLatitude missing", stringsAsFactors = FALSE))
+  }
+  if(NROW(errors) > 0 && !report) {
+    stop(paste(errors$message, collapse = ", "))
+  }
+  return(errors)
+}
+
 get_xy_clean_duplicates <- function(data, asdataframe=TRUE) {
   stopifnot(NROW(data) > 0 & !is.null("No data provided"))
   sp <- data %>% select(decimalLongitude, decimalLatitude)

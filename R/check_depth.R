@@ -1,4 +1,4 @@
-add_depth_message <- function(result, data, columns, i, message, extra_data=NULL, level='error') {
+add_depth_message <- function(result, data, columns, i, message, extra_data=NULL, level='warning') {
   if(is.logical(i)) {
     i <- which(i)
   }
@@ -75,6 +75,10 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry=NULL) {
+  errors <- check_lonlat(data, report)
+  if (NROW(errors) > 0 && report) {
+    return(errors)
+  }
   result <- data.frame(
     level = character(),
     row = integer(),
