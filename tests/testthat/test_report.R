@@ -7,7 +7,7 @@ test_that("abra report works", {
 })
 
 test_that("Testing several issues related to reporting and QC in general for large files", {
-  testthat::skip()
+  testthat::skip("Skip very slow test related to very large files reporting")
 
   library(readr)
   library(digest)

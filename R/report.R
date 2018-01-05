@@ -1,6 +1,6 @@
 #' Creates a summary of a data quality report.
 #'
-#' @param report QC errors report as created by merging results from
+#' @param qcreport QC errors report as created by merging results from
 #'   \code{\link{check_fields}}, \code{\link{check_eventdate}},
 #'   \code{\link{check_onland}}, \code{\link{check_depth}}, ...
 #' @param maxrows Number of rows to return for each field.
@@ -54,7 +54,7 @@ report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRU
   if(is.null(dir) || is.na(dir)) dir <- rappdirs::user_cache_dir("obistools")
   if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
   outputfile <- rmarkdown::render(reportfile, output_file = file, output_dir = dir, params = list(data = data, qc = qc))
-  if(open) {
+  if(view) {
     utils::browseURL(outputfile)
   }
   return(outputfile)

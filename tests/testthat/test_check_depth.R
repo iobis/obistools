@@ -97,7 +97,7 @@ test_that("External bathymetry raster is used", {
   expect_true(!1 %in% unique(r1$row))
   expect_true(all(2:4 %in% unique(r1$row)))
   expect_true(all(c("decimalLongitude", "decimalLatitude", "minimumDepthInMeters", "maximumDepthInMeters") %in% unique(r1$field)))
-  expect_true(all(c("error", "warning") %in% unique(r1$level)))
+  expect_true(any(c("error", "warning") %in% unique(r1$level)))
 })
 
 test_that("support for tibble", {
