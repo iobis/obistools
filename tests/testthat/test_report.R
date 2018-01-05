@@ -1,6 +1,12 @@
+library(testthat)
 
+test_that("abra report works", {
+  f <- report(abra, view = FALSE)
+  expect_true(file.exists(f))
+  expect_gt(file.size(f), 10000)
+})
 
-test_that("Testing several issues related to reporting", {
+test_that("Testing several issues related to reporting and QC in general for large files", {
   testthat::skip()
 
   library(readr)
@@ -14,8 +20,11 @@ test_that("Testing several issues related to reporting", {
 
   # Make a few changes to the class of data and values for occurrenceStatus, remove occurrences where individualCount = NA
   # FED_Rockfish_Event_0ce4_4095_ea03$eventDate <- FED_Rockfish_Event_0ce4_4095_ea03$time
+  FED_Rockfish_Event_0ce4_4095_ea03$decimalLatitude <- FED_Rockfish_Event_0ce4_4095_ea03$latitude
+  FED_Rockfish_Event_0ce4_4095_ea03$decimalLongitude <- FED_Rockfish_Event_0ce4_4095_ea03$longitude
   # FED_Rockfish_Event_0ce4_4095_ea03$decimalLatitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$latitude)
   # FED_Rockfish_Event_0ce4_4095_ea03$decimalLongitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$longitude)
+
   # FED_Rockfish_Occurrence_f448_b903_e664$occurrenceStatus <- ifelse(FED_Rockfish_Occurrence_f448_b903_e664$individualCount > 0, "present", "absent")
   # FED_Rockfish_Occurrence_f448_b903_e664 <- FED_Rockfish_Occurrence_f448_b903_e664[which(!is.na(FED_Rockfish_Occurrence_f448_b903_e664$individualCount)),]
 
@@ -24,6 +33,9 @@ test_that("Testing several issues related to reporting", {
   # check_eventdate(FED_Rockfish_Event_0ce4_4095_ea03)
   check_fields(fullRockfish)
   report(fullRockfish)
+  # **********************************************************************************
+  # TODO CHECK BELOW CODE WHEN decimalLongitude and/or decimalLatitude are not numeric
+  # **********************************************************************************
   check_onland(FED_Rockfish_Event_0ce4_4095_ea03)
   check_depth(fullRockfish)
 

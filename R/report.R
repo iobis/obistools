@@ -10,7 +10,7 @@
 report_summary <- function(qcreport, maxrows) {
   summary <- list()
   fields <- unique(qcreport$field)
-  for(field in na.omit(fields)) {
+  for(field in stats::na.omit(fields)) {
     fieldqc <- qcreport[!is.na(qcreport$field) & qcreport$field == field, , drop = FALSE]
     summary[[field]] <- fieldqc[1:min(nrow(fieldqc), maxrows), , drop = FALSE]
   }
@@ -30,7 +30,7 @@ report_summary <- function(qcreport, maxrows) {
 #' @param file Output file (default is "report.html").
 #' @param dir Directory where to store the file (default is
 #'   \code{rappdirs::user_cache_dir("obistools")}).
-#' @param open Logical, open the report in a browser after creation (default
+#' @param view Logical, show the report in a browser after creation (default
 #'   \code{TRUE}).
 #'
 #' @examples
@@ -38,7 +38,7 @@ report_summary <- function(qcreport, maxrows) {
 #' report(abra)
 #' }
 #' @export
-report <- function(data, qc = NULL, file = "report.html", dir = NULL, open = TRUE) {
+report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRUE) {
 
   reportfile <- system.file("", "report.Rmd", package = "obistools")
 
@@ -55,7 +55,7 @@ report <- function(data, qc = NULL, file = "report.html", dir = NULL, open = TRU
   if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
   outputfile <- rmarkdown::render(reportfile, output_file = file, output_dir = dir, params = list(data = data, qc = qc))
   if(open) {
-    browseURL(outputfile)
+    utils::browseURL(outputfile)
   }
   return(outputfile)
 }

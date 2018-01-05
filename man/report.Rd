@@ -4,7 +4,7 @@
 \alias{report}
 \title{Creates a basic data quality report.}
 \usage{
-report(data, qc = NULL, file = "report.html", dir = NULL, open = TRUE)
+report(data, qc = NULL, file = "report.html", dir = NULL, view = TRUE)
 }
 \arguments{
 \item{data}{The data frame.}
@@ -17,7 +17,7 @@ data.}
 \item{dir}{Directory where to store the file (default is
 \code{rappdirs::user_cache_dir("obistools")}).}
 
-\item{open}{Logical, open the report in a browser after creation (default
+\item{view}{Logical, show the report in a browser after creation (default
 \code{TRUE}).}
 }
 \description{
