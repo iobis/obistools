@@ -50,15 +50,8 @@ test_that("lookup_xy duplicate coordinates works", {
 
 test_that("lookup_xy mix of valid and invalid coordinates works", {
   data <- test_data(x=c(90,"90",NA,-181,2,181,0),y=c(-91,60,0,4,91,4,0))
-  f <- function(asdataframe) {
-    lookup_xy(data, asdataframe = asdataframe)
-  }
-  expect_warning({results <- f(F)})
-  expect_equal(length(results), 7)
-  expect_true(all(sapply(results, is.null)))
-
-  expect_warning({results <- f(T)})
-  expect_equal(nrow(results), 7)
+  expect_error(lookup_xy(data, asdataframe = FALSE))
+  expect_error(lookup_xy(data, asdataframe = TRUE))
 
   data <- test_data(x=c(90,NA,-181,2,181,0),y=c(-91,0,4,91,4,0))
   results <- lookup_xy(data, asdataframe = FALSE)

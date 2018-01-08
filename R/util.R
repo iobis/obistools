@@ -29,12 +29,12 @@ check_lonlat <- function(data, report) {
   errors <- c()
   if (!"decimalLongitude" %in% names(data)) {
     errors <- c(errors, "Column decimalLongitude missing")
-  } else if (!is.numeric(data[,"decimalLongitude"])) {
+  } else if (!is.numeric(data$decimalLongitude)) {
     errors <- c(errors, "Column decimalLongitude is not numeric")
   }
   if (!"decimalLatitude" %in% names(data)) {
     errors <- c(errors, "Column decimalLatitude missing")
-  } else if (!is.numeric(data[,"decimalLatitude"])) {
+  } else if (!is.numeric(data$decimalLatitude)) {
     errors <- c(errors, "Column decimalLatitude is not numeric")
   }
   if(length(errors) > 0) {

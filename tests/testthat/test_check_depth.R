@@ -102,10 +102,10 @@ test_that("External bathymetry raster is used", {
 
 test_that("support for tibble", {
   skip_if_not_installed("dplyr")
-    t1 <- data.frame(decimalLongitude=0, decimalLatitude=0,
-                     minimumDepthInMeters = c("4936", "4938", "4935", "-20"),
-                     maximumDepthInMeters = c("4936", "4937", "5000", "-10"))
-    r1 <- check_depth(t1, depthmargin = 0, shoremargin = NA, report = TRUE)
+  t1 <- data.frame(decimalLongitude=0, decimalLatitude=0,
+                   minimumDepthInMeters = c("4936", "4938", "4935", "-20"),
+                   maximumDepthInMeters = c("4936", "4937", "5000", "-10"))
+  r1 <- check_depth(t1, depthmargin = 0, shoremargin = NA, report = TRUE)
   t2 <- dplyr::as_tibble(t1)
   r2 <- check_depth(t2, depthmargin = 0, shoremargin = NA, report = TRUE)
   expect_equal(r2, r1)
