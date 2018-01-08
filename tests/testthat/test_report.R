@@ -20,8 +20,10 @@ test_that("Testing several issues related to reporting and QC in general for lar
 
   # Make a few changes to the class of data and values for occurrenceStatus, remove occurrences where individualCount = NA
   # FED_Rockfish_Event_0ce4_4095_ea03$eventDate <- FED_Rockfish_Event_0ce4_4095_ea03$time
+  check_onland(FED_Rockfish_Event_0ce4_4095_ea03)
   FED_Rockfish_Event_0ce4_4095_ea03$decimalLatitude <- FED_Rockfish_Event_0ce4_4095_ea03$latitude
   FED_Rockfish_Event_0ce4_4095_ea03$decimalLongitude <- FED_Rockfish_Event_0ce4_4095_ea03$longitude
+  check_onland(FED_Rockfish_Event_0ce4_4095_ea03)
   # FED_Rockfish_Event_0ce4_4095_ea03$decimalLatitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$latitude)
   # FED_Rockfish_Event_0ce4_4095_ea03$decimalLongitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$longitude)
 
@@ -33,9 +35,7 @@ test_that("Testing several issues related to reporting and QC in general for lar
   # check_eventdate(FED_Rockfish_Event_0ce4_4095_ea03)
   check_fields(fullRockfish)
   report(fullRockfish)
-  # **********************************************************************************
-  # TODO CHECK BELOW CODE WHEN decimalLongitude and/or decimalLatitude are not numeric
-  # **********************************************************************************
+
   check_onland(FED_Rockfish_Event_0ce4_4095_ea03)
   check_depth(fullRockfish)
 

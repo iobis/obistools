@@ -26,17 +26,25 @@ occurrence_fields <- function() {
 }
 
 check_lonlat <- function(data, report) {
-  errors <- data.frame()
+  errors <- c()
   if (!"decimalLongitude" %in% names(data)) {
-    errors <- rbind(errors, data.frame(level = "error",  message = "Column decimalLongitude missing", stringsAsFactors = FALSE))
+    errors <- c(errors, "Column decimalLongitude missing")
+  } else if (!is.numeric(data[,"decimalLongitude"])) {
+    errors <- c(errors, "Column decimalLongitude is not numeric")
   }
   if (!"decimalLatitude" %in% names(data)) {
-    errors <- rbind(errors, data.frame(level = "error",  message = "Column decimalLatitude missing", stringsAsFactors = FALSE))
+    errors <- c(errors, "Column decimalLatitude missing")
+  } else if (!is.numeric(data[,"decimalLatitude"])) {
+    errors <- c(errors, "Column decimalLatitude is not numeric")
   }
-  if(NROW(errors) > 0 && !report) {
-    stop(paste(errors$message, collapse = ", "))
+  if(length(errors) > 0) {
+    if(report) {
+      return(data.frame(level = "error",  message = errors, stringsAsFactors = FALSE))
+    } else {
+      stop(paste(errors, collapse = ", "))
+    }
   }
-  return(errors)
+  return(NULL)
 }
 
 get_xy_clean_duplicates <- function(data, asdataframe=TRUE) {
