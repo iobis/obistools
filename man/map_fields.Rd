@@ -17,3 +17,7 @@ The data frame with mapped column names.
 \description{
 Map column names.
 }
+\examples{
+map_fields(data.frame(x=1:3, y=4:6),
+           list(decimalLongitude="x", decimalLatitude="y"))
+}

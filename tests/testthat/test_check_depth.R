@@ -3,6 +3,9 @@ context("check depth")
 
 
 test_that("check_depth detects invalid or impossible depth values", {
+  if(Sys.getenv("TZ") == "") {
+    Sys.setenv(TZ="Europe/Brussels") # handle warning
+  }
   # Overview of all test cases:
   # empty dataframe
   # Min D > Max D

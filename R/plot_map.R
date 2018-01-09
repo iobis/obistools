@@ -48,7 +48,6 @@ identify_map <- function(data) {
   if(nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
     warning("This function returns incorrect results in some versions of RStudio")
   }
-
   tree <- as.character(current.vpTree())
   panel <- str_match(tree, "\\[(panel.*?)\\]")[1, 2]
   seekViewport(panel)

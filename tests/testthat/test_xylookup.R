@@ -65,6 +65,22 @@ test_that("lookup_xy mix of valid and invalid coordinates works", {
   expect_false(is.na(results$shoredistance[6]))
 })
 
+test_that("lookup_xy no data works", {
+  data <- test_data(x=numeric(0),y=numeric(0))
+  expect_equal(length(lookup_xy(data, asdataframe = FALSE)), 0)
+  expect_equal(nrow(lookup_xy(data, asdataframe = TRUE)), 0)
+  data <- test_data(x=as.numeric(c(NA, NA)),y=as.numeric(c(NA, NA)))
+  expect_equal(length(lookup_xy(data, asdataframe = FALSE)), 2)
+  expect_equal(nrow(lookup_xy(data, asdataframe = TRUE)), 2)
+})
+
+test_that("wrong url fails", {
+  on.exit(options(obistools_xylookup_url = NULL))
+  data <- test_data(x=0,y=0)
+  options(obistools_xylookup_url = "http://api.iobis.org/thisdoesnotexist")
+  expect_error(lookup_xy(data))
+})
+
 test_that("lookup_xy works for Calanus: issue 48", {
   skip_if_not_installed("robis")
   skip("Very SLOOOOW test, only run on major releases")
