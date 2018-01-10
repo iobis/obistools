@@ -9,8 +9,7 @@ flatten_event <- function(event, fields = NULL) {
   # check eventIDs
   errors <- check_eventids(event)
   if (nrow(errors) > 0) {
-    warning("Problem flattening records, use check_eventids().")
-    return(NULL)
+    stop("Problem flattening records, use check_eventids().")
   }
 
   # determine which fields to inherit
@@ -82,8 +81,7 @@ flatten_occurrence <- function(event, occurrence, field = "eventID", fields = NU
   # check occurrence eventIDs
   errors <- check_extension_eventids(event, occurrence)
   if (nrow(errors) > 0) {
-    warning("Problem flattening records, use check_extension_eventids().")
-    return(NULL)
+    stop("Problem flattening records, use check_extension_eventids().")
   }
 
   # flatten events

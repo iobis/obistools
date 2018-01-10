@@ -246,7 +246,7 @@ check_extension_eventids(event, occurrence)
 
 ## Flatten event records
 
-`flatten_event()` will recursively add event information form parent events to child events.
+`flatten_event()` will recursively add event information from parent events to child events.
 
 ```R
 event <- data.frame(
