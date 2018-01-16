@@ -37,22 +37,17 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
   } else {
     # Prepare message
     splists <- unname(split(as.matrix(xy$uniquesp), seq(nrow(xy$uniquesp))))
-    msg <- jsonlite::toJSON(list(points=splists, shoredistance=shoredistance, grids=grids, areas=areas), auto_unbox=T)
+    # Divide in chunks of 25000 coordinates
+    chunks <- split(splists, ceiling(seq_along(splists)/25000))
 
-    # Call service
-    url <- getOption("obistools_xylookup_url", "http://api.iobis.org/xylookup/")
-    response <- httr::POST(url, httr::content_type("application/json"),
-                           httr::user_agent("obistools - https://github.com/iobis/obistools"), body=msg)
 
-    # Parse result
-    raw_content <- httr::content(response, as="raw")
-    if(response$status_code != 200) {
-      if(is.list(raw_content) && all(c("title", "description") %in% names(raw_content))) {
-        stop(paste0(raw_content$title, ": ", raw_content$description))
-      }
-      stop(rawToChar(raw_content))
-    }
-    content <- jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = asdataframe)
+    content <- lapply(chunks, function(chunk) {
+      msg <- jsonlite::toJSON(list(points=chunk, shoredistance=shoredistance, grids=grids, areas=areas), auto_unbox=T)
+      raw_content <- lookup_xy_chunk(msg)
+      # jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = asdataframe)
+      jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = FALSE)
+    })
+    content <- unlist(content, recursive = FALSE, use.names = FALSE)
 
     if(asdataframe) {
       # Convert to dataframe while ensuring that:
@@ -60,6 +55,7 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
       # 2. grids and shoredistance results are columns
       # 3. NA values are written for coordinates that were not OK (!isclean)
       # 4. results for the non-unique coordinates are duplicated
+      content <- jsonlite:::simplify(content) # warning this is using undocumented code
       content <- as.data.frame(content)
       df <- data.frame(row.names = seq_len(NROW(content)))
       if (shoredistance) {
@@ -80,4 +76,21 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
     }
     return(output)
   }
+}
+
+lookup_xy_chunk <- function(msg) {
+  # Call service
+  url <- getOption("obistools_xylookup_url", "http://api.iobis.org/xylookup/")
+  response <- httr::POST(url, httr::content_type("application/json"),
+                         httr::user_agent("obistools - https://github.com/iobis/obistools"), body=msg)
+
+  # Parse result
+  raw_content <- httr::content(response, as="raw")
+  if(response$status_code != 200) {
+    if(is.list(raw_content) && all(c("title", "description") %in% names(raw_content))) {
+      stop(paste0(raw_content$title, ": ", raw_content$description))
+    }
+    stop(rawToChar(raw_content))
+  }
+  raw_content
 }
