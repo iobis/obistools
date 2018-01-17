@@ -35,8 +35,9 @@ When \code{asdataframe} is \code{FALSE} then data is returned in the
   requested values. For invalid coordinates \code{NULL} is returned.
 }
 \examples{
+\dontrun{
 lookup_xy(abra, shoredistance = TRUE, grids = TRUE, areas = FALSE)
-
+}
 }
 \seealso{
 \code{\link{check_onland}} \code{\link{check_depth}}

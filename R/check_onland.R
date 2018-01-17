@@ -11,6 +11,7 @@
 #'
 #' @return Errors or records.
 #' @examples
+#' \dontrun{
 #' report <- check_onland(abra, report = TRUE, buffer = 100)
 #' print(report)
 #' # plot records on land with 100 meter buffer
@@ -19,6 +20,7 @@
 #' ok <- abra[-1 * report$row,]
 #' ok <- check_onland(abra, report = FALSE, buffer = 100)
 #' print(nrow(ok))
+#' }
 #' @export
 check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = FALSE) {
   errors <- check_lonlat(data, report)

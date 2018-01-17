@@ -67,11 +67,13 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #'   (error) }
 #' @return Records or an errors report.
 #' @examples
+#' \dontrun{
 #' ok <- check_depth(abra, report = FALSE)
 #' print(nrow(ok))
 #' r <- check_depth(abra, report = TRUE, depthmargin = 100, shoremargin = 100)
 #' print(r)
 #' plot_map_leaflet(abra[r$row,], popup = "id")
+#' }
 #' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry=NULL) {

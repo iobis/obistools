@@ -28,6 +28,7 @@ Errors or records.
 Check which points are located on land.
 }
 \examples{
+\dontrun{
 report <- check_onland(abra, report = TRUE, buffer = 100)
 print(report)
 # plot records on land with 100 meter buffer
@@ -36,4 +37,5 @@ plot_map_leaflet(abra[report$row,], popup = "id")
 ok <- abra[-1 * report$row,]
 ok <- check_onland(abra, report = FALSE, buffer = 100)
 print(nrow(ok))
+}
 }

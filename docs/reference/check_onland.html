@@ -122,14 +122,16 @@ OBIS webservice is used. The default value is <code>FALSE</code>.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>report</span> <span class='kw'>&lt;-</span> <span class='fu'>check_onland</span>(<span class='no'>abra</span>, <span class='kw'>report</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>buffer</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-<span class='fu'>print</span>(<span class='no'>report</span>)</div><div class='output co'>#&gt;   field   level row                         message
-#&gt; 1    NA warning  31 Coordinates are located on land</div><div class='input'><span class='co'># plot records on land with 100 meter buffer</span>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>report</span> <span class='kw'>&lt;-</span> <span class='fu'>check_onland</span>(<span class='no'>abra</span>, <span class='kw'>report</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>buffer</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='fu'>print</span>(<span class='no'>report</span>)
+<span class='co'># plot records on land with 100 meter buffer</span>
 <span class='fu'><a href='plot_map_leaflet.html'>plot_map_leaflet</a></span>(<span class='no'>abra</span>[<span class='no'>report</span>$<span class='no'>row</span>,], <span class='kw'>popup</span> <span class='kw'>=</span> <span class='st'>"id"</span>)
 <span class='co'># filter records not on land</span>
 <span class='no'>ok</span> <span class='kw'>&lt;-</span> <span class='no'>abra</span>[-<span class='fl'>1</span> * <span class='no'>report</span>$<span class='no'>row</span>,]
 <span class='no'>ok</span> <span class='kw'>&lt;-</span> <span class='fu'>check_onland</span>(<span class='no'>abra</span>, <span class='kw'>report</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>buffer</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-<span class='fu'>print</span>(<span class='fu'>nrow</span>(<span class='no'>ok</span>))</div><div class='output co'>#&gt; [1] 1</div></pre>
+<span class='fu'>print</span>(<span class='fu'>nrow</span>(<span class='no'>ok</span>))
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

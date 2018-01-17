@@ -19,8 +19,9 @@
 #'   same order as the requested data as a list, with for each list item the
 #'   requested values. For invalid coordinates \code{NULL} is returned.
 #' @examples
+#' \dontrun{
 #' lookup_xy(abra, shoredistance = TRUE, grids = TRUE, areas = FALSE)
-#'
+#' }
 #' @seealso \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
 lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataframe=TRUE) {
