@@ -18,8 +18,8 @@
 [Map column names to Darwin Core terms](#map-column-names-to-darwin-core-terms)  
 [Check eventDate](#check-eventdate)  
 [Dataset structure](#dataset-structure)    
-[Data quality report](#data-quality-report)
-[Lookup XY](#lookup-xy)
+[Data quality report](#data-quality-report)  
+[Lookup XY](#lookup-xy)  
 
 ## Installation
 

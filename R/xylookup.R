@@ -6,9 +6,9 @@
 #' @param data The data frame with columns decimalLongitude and decimalLatitude.
 #' @param shoredistance Indicate whether the shoredistance should be returned
 #'   (default \code{TRUE}).
-#' @param grids Indictate whether the grid values such as temperature and
+#' @param grids Indicate whether the grid values such as temperature and
 #'   bathymetry should be returned (default \code{TRUE})
-#' @param areas Indictate whether the area values should be returned (default
+#' @param areas Indicate whether the area values should be returned (default
 #'   \code{FALSE}).
 #' @param asdataframe Indicate whether a dataframe or a list should be returned
 #'   (default \code{TRUE}).
@@ -40,22 +40,19 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
     # Divide in chunks of 25000 coordinates
     chunks <- split(splists, ceiling(seq_along(splists)/25000))
 
-
-    content <- lapply(chunks, function(chunk) {
-      msg <- jsonlite::toJSON(list(points=chunk, shoredistance=shoredistance, grids=grids, areas=areas), auto_unbox=T)
+    content_chunks <- lapply(chunks, function(chunk) {
+      msg <- jsonlite::toJSON(list(points=chunk, shoredistance=shoredistance, grids=grids, areas=areas), auto_unbox=TRUE)
       raw_content <- lookup_xy_chunk(msg)
-      # jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = asdataframe)
       jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = FALSE)
     })
-    content <- unlist(content, recursive = FALSE, use.names = FALSE)
-
+    content <- unlist(content_chunks, recursive = FALSE, use.names = FALSE)
     if(asdataframe) {
       # Convert to dataframe while ensuring that:
       # 1. area is a nested list in the data.frame
       # 2. grids and shoredistance results are columns
       # 3. NA values are written for coordinates that were not OK (!isclean)
       # 4. results for the non-unique coordinates are duplicated
-      content <- jsonlite:::simplify(content) # warning this is using undocumented code
+      content <- jsonlite::fromJSON(jsonlite::toJSON(content, auto_unbox = TRUE), simplifyVector = TRUE)
       content <- as.data.frame(content)
       df <- data.frame(row.names = seq_len(NROW(content)))
       if (shoredistance) {

@@ -1,4 +1,4 @@
-#' Taxpn matching using WoRMS.
+#' Taxon matching using WoRMS.
 #'
 #' @param names Vector of scientific names.
 #' @param ask Ask user in case of multiple matches.

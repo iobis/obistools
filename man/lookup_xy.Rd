@@ -13,10 +13,10 @@ lookup_xy(data, shoredistance=TRUE, grids=TRUE, areas=FALSE,
 \item{shoredistance}{Indicate whether the shoredistance should be returned
 (default \code{TRUE}).}
 
-\item{grids}{Indictate whether the grid values such as temperature and
+\item{grids}{Indicate whether the grid values such as temperature and
 bathymetry should be returned (default \code{TRUE})}
 
-\item{areas}{Indictate whether the area values should be returned (default
+\item{areas}{Indicate whether the area values should be returned (default
 \code{FALSE}).}
 
 \item{asdataframe}{Indicate whether a dataframe or a list should be returned

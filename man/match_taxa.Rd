@@ -2,7 +2,7 @@
 % Please edit documentation in R/match_taxa.R
 \name{match_taxa}
 \alias{match_taxa}
-\title{Taxpn matching using WoRMS.}
+\title{Taxon matching using WoRMS.}
 \usage{
 match_taxa(names, ask = TRUE)
 }
@@ -15,5 +15,5 @@ match_taxa(names, ask = TRUE)
 Data frame with scientific name, scientific name ID and match type.
 }
 \description{
-Taxpn matching using WoRMS.
+Taxon matching using WoRMS.
 }
