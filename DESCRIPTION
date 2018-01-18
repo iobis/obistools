@@ -4,8 +4,8 @@ Description: Prepare data sets for submission to the Ocean Biogeographical Infor
 Version: 0.0.5
 Date: 2018-01-17
 Authors@R: c(
-    person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = "aut",
-    person("Samuel", "Bosch", , "mail@samuelbosch.com", role = c("cre", "aut"),
+    person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = "aut"),
+    person("Samuel", "Bosch", , "mail@samuelbosch.com", role = c("cre", "aut")),
     person("Ward", "Appeltans", role = "ctb"),
     person(, "OBIS", , "support@iobis.org", role = "cph")
     )
