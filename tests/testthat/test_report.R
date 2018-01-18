@@ -39,8 +39,9 @@ test_that("Testing several issues related to reporting and QC in general for lar
   check_onland(FED_Rockfish_Event_0ce4_4095_ea03)
   check_depth(fullRockfish)
 
-  write.table(FED_Rockfish_Event_0ce4_4095_ea03, file="RockfishRecruitmentAndEcosystemAssessmentSurveyCatchData_event.csv", sep = "|", dec = ".", qmethod = "double",
-              col.names = TRUE, row.names=FALSE, fileEncoding="UTF-8", quote=TRUE)
-  write.table(FED_Rockfish_Occurrence_f448_b903_e664, file="RockfishRecruitmentAndEcosystemAssessmentSurveyCatchData_occurrence.csv", sep = "|", dec = ".", qmethod = "double",
-              col.names = TRUE, row.names=FALSE, fileEncoding="UTF-8", quote=TRUE)
+  # write.table(FED_Rockfish_Event_0ce4_4095_ea03, file="RockfishRecruitmentAndEcosystemAssessmentSurveyCatchData_event.csv", sep = "|", dec = ".", qmethod = "double",
+  #             col.names = TRUE, row.names=FALSE, fileEncoding="UTF-8", quote=TRUE)
+  # write.table(FED_Rockfish_Occurrence_f448_b903_e664, file="RockfishRecruitmentAndEcosystemAssessmentSurveyCatchData_occurrence.csv", sep = "|", dec = ".", qmethod = "double",
+  #             col.names = TRUE, row.names=FALSE, fileEncoding="UTF-8", quote=TRUE)
+  # head(fullRockfish)
 })

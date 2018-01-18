@@ -10,7 +10,7 @@ There were no ERRORs and WARNINGs.
 There is 1 NOTE as it is the first submission. Biogeographic is not mis-spelled. 
 
 * checking CRAN incoming feasibility ... NOTE
-Maintainer: 'OBIS <support@iobis.org>'
+Maintainer:  ‘Samuel Bosch <mail@samuelbosch.com>’
 
 New submission
 

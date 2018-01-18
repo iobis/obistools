@@ -70,3 +70,25 @@ get_xy_clean_duplicates <- function(data, asdataframe=TRUE) {
          isclean = NULL, duplicated_lookup = NULL)
   }
 }
+
+list_cache <- function() {
+  list.files(rappdirs::user_cache_dir("obistools"), "call_", full.names = TRUE)
+}
+
+clear_cache <- function(age=36) {
+  cachefiles <- list_cache()
+  rmfiles <- cachefiles[difftime(Sys.time(), file.info(cachefiles)[,"mtime"], units = "hours") > age]
+  unlink(rmfiles)
+}
+
+cache_call <- function(key, expr) {
+  cache_dir <- rappdirs::user_cache_dir("obistools")
+  cachefile <- file.path(cache_dir, paste0("call_", digest::digest(key)))
+  if(file.exists(cachefile) && difftime(Sys.time(), file.info(cachefile)[,"mtime"], units = "hours") < 36) {
+    return(readRDS(cachefile))
+  } else {
+    result <- eval(expr)
+    saveRDS(result, cachefile)
+    return(result)
+  }
+}

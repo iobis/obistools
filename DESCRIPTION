@@ -36,7 +36,8 @@ Imports:
     xml2,
     rappdirs,
     maps,
-    knitr
+    knitr,
+    digest
 Suggests:
     testthat
 RoxygenNote: 6.0.1
