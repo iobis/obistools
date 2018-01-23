@@ -16,6 +16,10 @@ Data frame with centroid coordinates and radius in meter.
 \description{
 Calculates the centroid and radius of a WKT geometry.
 }
+\details{
+The centroid is defined as the centroid of the convex hull of the
+  provided geometry.
+}
 \examples{
 calculate_centroid("POLYGON ((-1 -1, -1 1, 1 1, 1 -1, -1 -1))")
 calculate_centroid("MULTIPOLYGON (((-1 -1, -1 1, 1 1, 1 -1, -1 -1)))")

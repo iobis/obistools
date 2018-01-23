@@ -47,7 +47,7 @@ check_lonlat <- function(data, report) {
   return(NULL)
 }
 
-get_xy_clean_duplicates <- function(data, asdataframe=TRUE) {
+get_xy_clean_duplicates <- function(data) {
   check_lonlat(data, report = FALSE)
   if(NROW(data) > 0) {
     sp <- data %>% select(decimalLongitude, decimalLatitude)

@@ -101,6 +101,11 @@ coordinates (epsg=4326)</p></td>
 
     <p>Data frame with centroid coordinates and radius in meter.</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The centroid is defined as the centroid of the convex hull of the
+  provided geometry.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>calculate_centroid</span>(<span class='st'>"POLYGON ((-1 -1, -1 1, 1 1, 1 -1, -1 -1))"</span>)</div><div class='output co'>#&gt;   decimalLongitude decimalLatitude coordinateUncertaintyInMeters
@@ -117,6 +122,8 @@ coordinates (epsg=4326)</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

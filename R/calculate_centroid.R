@@ -2,6 +2,8 @@
 #'
 #' @param wkt character vector One or more WKT strings with longitude/latitude
 #'   coordinates (epsg=4326)
+#' @details The centroid is defined as the centroid of the convex hull of the
+#'   provided geometry.
 #' @return Data frame with centroid coordinates and radius in meter.
 #' @examples
 #' calculate_centroid("POLYGON ((-1 -1, -1 1, 1 1, 1 -1, -1 -1))")

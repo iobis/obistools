@@ -315,16 +315,23 @@ Multiple matches, pick a number or leave empty to skip: 2
 3 error  16 eventDate                 eventDate  does not seem to be a valid date
 4 error  17 eventDate               eventDate NA does not seem to be a valid date</code></pre>
 </section><section class="level2"><h2>Dataset structure</h2>
-<p><code>treeStucture()</code> generates a simplified event/occurrence tree showing the relationships between the different types (based on <code>type</code> and <code>measurementType</code>) of events and occurrences. Each node in the simplified tree is given a name based on the <code>eventID</code> or <code>occurrenceID</code> of one of the events of occurrences of that node type. </p>
+<p><code>treeStucture()</code> generates a simplified event/occurrence tree showing the relationships between the different types (based on <code>type</code> and <code>measurementType</code>) of events and occurrences. Each node in the simplified tree is given a name based on the <code>eventID</code> or <code>occurrenceID</code> of one of the events of occurrences of that node type.</p>
 <p>Note that an <code>eventID</code> column is required in the measurements table.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">archive &lt;-<span class="st"> </span>finch<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/finch/topics/dwca_read">dwca_read</a></span>(<span class="st">"http://ipt.iobis.org/obis-env/archive.do?r=nsbs&amp;v=1.6"</span>, <span class="dt">read =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">event &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>event.txt</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">occurrence &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>occurrence.txt</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">emof &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>extendedmeasurementorfact.txt</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5">emof<span class="op">$</span>eventID &lt;-<span class="st"> </span>emof<span class="op">$</span>id</a>
-<a class="sourceLine" id="cb31-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb31-7" data-line-number="7">tree &lt;-<span class="st"> </span><span class="kw"><a href="reference/treeStructure.html">treeStructure</a></span>(event, occurrence, emof)</a>
-<a class="sourceLine" id="cb31-8" data-line-number="8"><span class="kw"><a href="reference/exportTree.html">exportTree</a></span>(tree, <span class="st">"tree.html"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># Get sample data (test dataset from IPT if finch is installed)</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="cf">if</span>(<span class="kw">requireNamespace</span>(<span class="st">"finch"</span>)) {</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">    archive &lt;-<span class="st"> </span>finch<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/finch/topics/dwca_read">dwca_read</a></span>(<span class="st">"http://ipt.iobis.org/obis-env/archive.do?r=nsbs&amp;v=1.6"</span>, <span class="dt">read =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb31-4" data-line-number="4">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb31-5" data-line-number="5">   archive &lt;-<span class="st"> </span>obistools<span class="op">::</span>hyperbenthos</a>
+<a class="sourceLine" id="cb31-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb31-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb31-8" data-line-number="8">event &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>event.txt</a>
+<a class="sourceLine" id="cb31-9" data-line-number="9">occurrence &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>occurrence.txt</a>
+<a class="sourceLine" id="cb31-10" data-line-number="10">emof &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>extendedmeasurementorfact.txt</a>
+<a class="sourceLine" id="cb31-11" data-line-number="11">emof<span class="op">$</span>eventID &lt;-<span class="st"> </span>emof<span class="op">$</span>id</a>
+<a class="sourceLine" id="cb31-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb31-13" data-line-number="13"><span class="co"># Create tree structure</span></a>
+<a class="sourceLine" id="cb31-14" data-line-number="14">tree &lt;-<span class="st"> </span><span class="kw"><a href="reference/treeStructure.html">treeStructure</a></span>(event, occurrence, emof)</a>
+<a class="sourceLine" id="cb31-15" data-line-number="15"><span class="kw"><a href="reference/exportTree.html">exportTree</a></span>(tree, <span class="st">"tree.html"</span>)</a></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png"></p>
 </section><section class="level2"><h2>Data quality report</h2>
 <p><code><a href="reference/report.html">report()</a></code> generates a basic data quality report.</p>
