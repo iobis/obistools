@@ -24,13 +24,13 @@ treeStructure <- function(event, occurrence, measurement = NULL) {
 
   # measurements
 
-  if (!is.null(measurement) & nrow(measurement) > 0) {
+  if (!is.null(measurement) && nrow(measurement) > 0) {
 
     if (!"occurrenceID" %in% names(measurement)) {
       measurement$occurrenceID <- NA
     }
     omeasurement <- measurement %>% filter(!is.na(occurrenceID))
-    measurement <- measurement %>% filter(is.na(occurrenceID))
+    measurement <- measurement %>% filter(is.na(occurrenceID) | occurrenceID == "")
 
     # event measurements
 

@@ -409,7 +409,7 @@ Note that an `eventID` column is required in the measurements table.
 ```R
 # Get sample data (use a test dataset from IPT if finch is installed)
 if(requireNamespace("finch")) {
-    archive <- finch::dwca_read("http://ipt.iobis.org/obis-env/archive.do?r=nsbs&v=1.6", read = TRUE)
+   archive <- finch::dwca_read("http://ipt.iobis.org/obis-env/archive.do?r=nsbs&v=1.6", read = TRUE)
 } else {
    archive <- obistools::hyperbenthos
 }
