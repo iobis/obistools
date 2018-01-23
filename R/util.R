@@ -88,6 +88,9 @@ cache_call <- function(key, expr) {
     return(readRDS(cachefile))
   } else {
     result <- eval(expr)
+    if(!dir.exists(cache_dir)) {
+      dir.create(cache_dir, showWarnings = FALSE)
+    }
     saveRDS(result, cachefile)
     return(result)
   }
