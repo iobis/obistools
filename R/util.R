@@ -83,13 +83,13 @@ clear_cache <- function(age=36) {
 
 cache_call <- function(key, expr) {
   cache_dir <- rappdirs::user_cache_dir("obistools")
-  cachefile <- file.path(cache_dir, paste0("call_", digest::digest(key)))
+  cachefile <- file.path(cache_dir, paste0("call_", digest::digest(key), ".rds"))
   if(file.exists(cachefile) && difftime(Sys.time(), file.info(cachefile)[,"mtime"], units = "hours") < 36) {
     return(readRDS(cachefile))
   } else {
     result <- eval(expr)
     if(!dir.exists(cache_dir)) {
-      dir.create(cache_dir, showWarnings = FALSE)
+      dir.create(cache_dir, showWarnings = FALSE, recursive = TRUE)
     }
     saveRDS(result, cachefile)
     return(result)

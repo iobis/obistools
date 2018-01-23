@@ -21,3 +21,23 @@ test_that("check lon lat works as expected", {
   expect_equal(0, NROW(x))
   expect_error(obistools:::check_lonlat(data.frame(), report = FALSE), "missing")
 })
+
+test_that("cache call works", {
+  set.seed(42)
+  original <- obistools:::cache_call("random5", runif(5))
+  set.seed(50)
+  same <- obistools:::cache_call("random5", runif(5))
+  set.seed(50)
+  different <- obistools:::cache_call("random5diff", runif(5))
+  set.seed(50)
+  original2 <- obistools:::cache_call("random5", { runif(5, min = 0, max = 1) })
+  expect_equal(original, same)
+  expect_false(!all(original == different))
+  expect_equal(original2, different)
+  expect_gte(length(obistools:::list_cache()), 3)
+  # only run on Travis as clearing the cache between the test runs is annoying
+  if(identical(Sys.getenv("TRAVIS"), "true")) {
+    obistools::clear_cache(-1)
+    expect_equal(length(obistools:::list_cache()), 0)
+  }
+})
