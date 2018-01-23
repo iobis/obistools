@@ -39,6 +39,5 @@ Imports:
     knitr,
     digest
 Suggests:
-    testthat,
-    finch
+    testthat
 RoxygenNote: 6.0.1
