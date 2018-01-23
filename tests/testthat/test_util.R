@@ -39,7 +39,7 @@ test_that("cache call works", {
   expect_gte(length(obistools:::list_cache()), 3)
   # only run on Travis as clearing the cache between the test runs is annoying
   if(identical(Sys.getenv("TRAVIS"), "true")) {
-    obistools::clear_cache(-1)
+    obistools:::clear_cache(-1)
     expect_equal(length(obistools:::list_cache()), 0)
   }
 })
