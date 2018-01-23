@@ -81,13 +81,17 @@ clear_cache <- function(age=36) {
   unlink(rmfiles)
 }
 
-cache_call <- function(key, expr) {
+cache_call <- function(key, expr, env = NULL) {
+  stopifnot(is.expression(expr))
+  if(is.null(env)) {
+    env = parent.frame()
+  }
   cache_dir <- rappdirs::user_cache_dir("obistools")
-  cachefile <- file.path(cache_dir, paste0("call_", digest::digest(key), ".rds"))
+  cachefile <- file.path(cache_dir, paste0("call_", digest::digest(list(key=key, expr=expr)), ".rds"))
   if(file.exists(cachefile) && difftime(Sys.time(), file.info(cachefile)[,"mtime"], units = "hours") < 36) {
     return(readRDS(cachefile))
   } else {
-    result <- eval(expr)
+    result <- eval(expr, envir = NULL, enclos = env)
     if(!dir.exists(cache_dir)) {
       dir.create(cache_dir, showWarnings = FALSE, recursive = TRUE)
     }

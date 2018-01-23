@@ -11,7 +11,7 @@ match_taxa <- function(names, ask = TRUE) {
   unames <- levels(f)
 
   pages <- split(unames, as.integer((seq_along(unames) - 1) / 50))
-  paged_worms_taxamatch_call <- function(page) { cache_call(page, worrms::wm_records_taxamatch(page))}
+  paged_worms_taxamatch_call <- function(page) { cache_call(page, expression(worrms::wm_records_taxamatch(page)))}
   matches <- unlist(lapply(pages, paged_worms_taxamatch_call), recursive = FALSE)
   # matches <- worms::matchAphiaRecordsByNames(unames)
 
