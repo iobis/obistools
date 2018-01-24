@@ -317,9 +317,9 @@ Multiple matches, pick a number or leave empty to skip: 2
 </section><section class="level2"><h2>Dataset structure</h2>
 <p><code>treeStucture()</code> generates a simplified event/occurrence tree showing the relationships between the different types (based on <code>type</code> and <code>measurementType</code>) of events and occurrences. Each node in the simplified tree is given a name based on the <code>eventID</code> or <code>occurrenceID</code> of one of the events of occurrences of that node type.</p>
 <p>Note that an <code>eventID</code> column is required in the measurements table.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># Get sample data (test dataset from IPT if finch is installed)</span></a>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># Get sample data (use a test dataset from IPT if finch is installed)</span></a>
 <a class="sourceLine" id="cb31-2" data-line-number="2"><span class="cf">if</span>(<span class="kw">requireNamespace</span>(<span class="st">"finch"</span>)) {</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">    archive &lt;-<span class="st"> </span>finch<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/finch/topics/dwca_read">dwca_read</a></span>(<span class="st">"http://ipt.iobis.org/obis-env/archive.do?r=nsbs&amp;v=1.6"</span>, <span class="dt">read =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">   archive &lt;-<span class="st"> </span>finch<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/finch/topics/dwca_read">dwca_read</a></span>(<span class="st">"http://ipt.iobis.org/obis-env/archive.do?r=nsbs&amp;v=1.6"</span>, <span class="dt">read =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb31-4" data-line-number="4">} <span class="cf">else</span> {</a>
 <a class="sourceLine" id="cb31-5" data-line-number="5">   archive &lt;-<span class="st"> </span>obistools<span class="op">::</span>hyperbenthos</a>
 <a class="sourceLine" id="cb31-6" data-line-number="6">}</a>
