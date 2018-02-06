@@ -311,7 +311,7 @@ flatten_occurrence(event, occurrence)
 
 ## Calculate centroid and radius for WKT geometries
 
-`calculate_centroid()` calculates a centroid and radius for WKT strings. This is useful for populating `decimalLongitiude`, `decimalLatitude` and `coordinateUncertaintyInMeters`.
+`calculate_centroid()` calculates a centroid and radius for WKT strings. This is useful for populating `decimalLongitude`, `decimalLatitude` and `coordinateUncertaintyInMeters`.
 
 ```R
 wkt <- c(
