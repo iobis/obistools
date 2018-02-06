@@ -200,7 +200,7 @@ field level  row                                                                
 
 ## Check eventID and parentEventID
 
-`check_eventids()` checks if both `eventID()` and `parentEventID` fields are present in an event table, and if al `parentEventID`s have a corresponding `eventID`.
+`check_eventids()` checks if both `eventID()` and `parentEventID` fields are present in an event table, and if all `parentEventID`s have a corresponding `eventID`.
 
 ```R
 data <- data.frame(
