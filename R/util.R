@@ -79,6 +79,7 @@ clear_cache <- function(age=36) {
   cachefiles <- list_cache()
   rmfiles <- cachefiles[difftime(Sys.time(), file.info(cachefiles)[,"mtime"], units = "hours") > age]
   unlink(rmfiles)
+  rmfiles
 }
 
 cache_call <- function(key, expr, env = NULL) {

@@ -1,6 +1,6 @@
-#' obistools: Tools for data enhancement and quality control
+#' obistools: Data Enhancement and Quality Control of Marine Species Observations
 #'
-#' Tools for data enhancement and quality control for marine species observations. Commonly used to prepare data sets for submission to the Ocean Biogeographical Information System (<http://iobis.org>).
+#' Prepare data sets for submission to the Ocean Biogeographical Information System (<http://iobis.org>). It can also be used for checking the quality of a set of marine species distribution records.
 #'
 #' @docType package
 #' @name obistools

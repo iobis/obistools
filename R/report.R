@@ -32,7 +32,7 @@ report_summary <- function(qcreport, maxrows) {
 #'   \code{rappdirs::user_cache_dir("obistools")}).
 #' @param view Logical, show the report in a browser after creation (default
 #'   \code{TRUE}).
-#'
+#' @return Returns the full path to the generated html report.
 #' @examples
 #' \dontrun{
 #' report(abra)

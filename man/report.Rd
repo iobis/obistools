@@ -20,6 +20,9 @@ data.}
 \item{view}{Logical, show the report in a browser after creation (default
 \code{TRUE}).}
 }
+\value{
+Returns the full path to the generated html report.
+}
 \description{
 Creates a basic data quality report.
 }
