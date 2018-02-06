@@ -22,7 +22,7 @@ for (field in names(qc)) {
   cat("\n\n###", field, "\n\n")
   errors <- qc[[field]]
   if(nrow(errors) == maxrows) {
-    cat(paste("\n\nMore than**", maxrows, "**errors and warnings related to this field were found, the first**", maxrows, "**are printed below and shown on a map whenever possible.\n"))
+    cat(paste0("\n\nMore than **", maxrows, "** errors and warnings related to this field were found, the first **", maxrows, "** are printed below and shown on a map whenever possible.\n"))
   }
   print(knitr::kable(errors, row.names = FALSE))
   
