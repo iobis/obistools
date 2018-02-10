@@ -6,9 +6,6 @@
 #' @name obistools
 #' @import dplyr
 #' @import ggplot2
-#' @importFrom grid seekViewport
-#' @importFrom grid grid.locator
-#' @importFrom grid current.vpTree
 #' @import sp
 #' @importFrom rgeos gDistance
 #' @importFrom rgeos readWKT

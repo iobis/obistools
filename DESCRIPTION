@@ -32,12 +32,12 @@ Imports:
     stringr,
     tidyr,
     worrms,
-    grid,
     xml2,
     rappdirs,
     maps,
     knitr
 Suggests:
     testthat,
-    finch
+    finch,
+    grid
 RoxygenNote: 6.0.1

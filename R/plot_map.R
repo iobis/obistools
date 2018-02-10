@@ -45,13 +45,15 @@ plot_map <- function(data, zoom = FALSE) {
 #' }
 #' @export
 identify_map <- function(data) {
+  .Deprecated()
   if(nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
     warning("This function returns incorrect results in some versions of RStudio")
   }
-  tree <- as.character(current.vpTree())
+  stopifnot(requireNamespace("grid"))
+  tree <- as.character(grid::current.vpTree())
   panel <- str_match(tree, "\\[(panel.*?)\\]")[1, 2]
-  seekViewport(panel)
-  g <- grid.locator("npc")
+  grid::seekViewport(panel)
+  g <- grid::grid.locator("npc")
   nx <- as.numeric(g$x)
   ny <- as.numeric(g$y)
   l <- last_plot()
