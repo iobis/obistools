@@ -168,7 +168,7 @@ Multiple matches, pick a number or leave empty to skip: 2
 5 minimumDepthInMeters error 1249   Depth value (68.3) is greater than the value found in the bathymetry raster (depth=8.0, margin=50)
 6 minimumDepthInMeters error 1250   Depth value (72.9) is greater than the value found in the bathymetry raster (depth=5.0, margin=50)</code></pre>
 </section><section class="level2"><h2>Check eventID and parentEventID</h2>
-<p><code><a href="reference/check_eventids.html">check_eventids()</a></code> checks if both <code>eventID()</code> and <code>parentEventID</code> fields are present in an event table, and if al <code>parentEventID</code>s have a corresponding <code>eventID</code>.</p>
+<p><code><a href="reference/check_eventids.html">check_eventids()</a></code> checks if both <code>eventID()</code> and <code>parentEventID</code> fields are present in an event table, and if all <code>parentEventID</code>s have a corresponding <code>eventID</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>, <span class="st">"e"</span>, <span class="st">"f"</span>),</a>
 <a class="sourceLine" id="cb17-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="st">""</span>, <span class="st">""</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"bb"</span>, <span class="st">"b"</span>),</a>
@@ -247,7 +247,7 @@ Multiple matches, pick a number or leave empty to skip: 2
 7 subsample_1 Desmolaimus zeelandicus 2017-01-03            55.8              4.7
 8 subsample_1          Aponema torosa 2017-01-03            55.8              4.7</code></pre>
 </section><section class="level2"><h2>Calculate centroid and radius for WKT geometries</h2>
-<p><code><a href="reference/calculate_centroid.html">calculate_centroid()</a></code> calculates a centroid and radius for WKT strings. This is useful for populating <code>decimalLongitiude</code>, <code>decimalLatitude</code> and <code>coordinateUncertaintyInMeters</code>.</p>
+<p><code><a href="reference/calculate_centroid.html">calculate_centroid()</a></code> calculates a centroid and radius for WKT strings. This is useful for populating <code>decimalLongitude</code>, <code>decimalLatitude</code> and <code>coordinateUncertaintyInMeters</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">wkt &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
 <a class="sourceLine" id="cb25-2" data-line-number="2">  <span class="st">"POLYGON ((2.53784 51.12421, 2.99377 51.32031, 3.34534 51.39578, 2.82349 51.85614, 2.27417 51.69980, 2.53784 51.12421))"</span>,</a>
 <a class="sourceLine" id="cb25-3" data-line-number="3">  <span class="st">"POLYGON ((3.15582 42.23564, 3.13248 42.14202, 3.22037 42.11249, 3.26019 42.21530, 3.15582 42.23564))"</span></a>

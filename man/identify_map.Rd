@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_map.R
 \name{identify_map}
 \alias{identify_map}
-\title{Identify a point on a map.}
+\title{Deprecated: Identify a point on a map.}
 \usage{
 identify_map(data)
 }
@@ -13,7 +13,7 @@ identify_map(data)
 The nearest record.
 }
 \description{
-Identify a point on a map.
+Deprecated: Identify a point on a map.
 }
 \examples{
 \dontrun{
