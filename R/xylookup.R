@@ -60,13 +60,13 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
         df <- cbind(df, shoredistance=content[,"shoredistance", drop=TRUE])
       }
       if (grids) {
-        df <- merge(df, content[,"grids", drop=TRUE], by=0, sort = FALSE)[,-1]
+        df <- merge(df, content[,"grids", drop=TRUE], by=0, sort = FALSE)[, -1, drop=FALSE]
       }
       if (areas) {
-        df <- merge(df, content[,"areas", drop=TRUE], by=0, sort = FALSE)[,-1]
+        df <- merge(df, content[,"areas", drop=TRUE], by=0, sort = FALSE)[, -1, drop=FALSE]
       }
       output <- stats::setNames(data.frame(matrix(ncol=NCOL(df), nrow=NROW(data))), colnames(df))
-      output[xy$isclean,] <- df[xy$duplicated_lookup,]
+      output[xy$isclean,] <- df[xy$duplicated_lookup, , drop=FALSE]
     } else {
       # Convert to list, keep into account invalid coordinates and duplicate coordinates
       output <- list()

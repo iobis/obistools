@@ -81,6 +81,13 @@ test_that("wrong url fails", {
   expect_error(lookup_xy(data))
 })
 
+test_that("lookup_xy only areas works", {
+  data <- test_data(x=c(0,1),y=c(0,0))
+  result <- lookup_xy(data, shoredistance = FALSE, grids = FALSE, areas = TRUE)
+  expect_equal(nrow(result), 2)
+  expect_equal(ncol(result), 1)
+})
+
 test_that("lookup_xy works for Calanus: issue 48", {
   skip_if_not_installed("robis")
   skip("Very SLOOOOW test, only run on major releases")
