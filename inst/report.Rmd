@@ -30,36 +30,40 @@ for (field in names(qc)) {
   mapdata <- data[stats::na.omit(errors$row),, drop=FALSE]
   mapplot <- NULL
   if(NROW(mapdata) > 0) {
-    cat("\n\n")
     if(startsWith(field, 'Outliers ')) {
       outliers_info <- errors[errors$level == 'debug',]$extra[[1]]
       boxplots <- NULL
-      try({ boxplots <- obistools:::plot_outliers_environmental(outliers_info, title=field) })
+      try({ boxplots <- obistools:::plot_outliers_environmental(outliers_info) })
       if(!is.null(boxplots)) {
+          cat("\n\n")
           print(boxplots)
+          cat("\n\n")
       }
 
       try({mapplot <- obistools:::plot_outliers_spatial(outliers_info)})
       if(!is.null(mapplot)) {
-        print("leaflet")
+        cat("\n\n")
         cat(htmltools::renderTags(mapplot)$html)
         deps <- c(deps, htmltools::renderTags(mapplot)$dependencies)
+        cat("\n\n")
       }
     } else {
       try(mapplot <- obistools::plot_map(mapdata, zoom = TRUE))
       if(!is.null(mapplot)) {
-        print(paste0("plot_map ", field))
-        # print(mapplot)
+        #print(paste0("plot_map ", field))
+        cat("\n\n")
+        print(mapplot)
+        cat("\n\n")
       }
     }
-    cat("\n\n")
+    
   }
 }
 ```
 
 ```{r echo=FALSE, messages=FALSE, warning=FALSE}
 # attach the Dependencies
-# since the do not get included with renderTags(...)$html
+# since they do not get included with renderTags(...)$html
 htmltools::attachDependencies(
   htmltools::tagList(),
   deps #unlist(deps,recursive=FALSE)

@@ -9,7 +9,7 @@
 #' @export
 check_fields <- function(data, level = "error") {
 
-    errors <- data.frame()
+    errors <- data_frame()
     required <- c("eventDate", "decimalLongitude", "decimalLatitude", "scientificName", "scientificNameID", "occurrenceStatus", "basisOfRecord")
     recommended <- c("minimumDepthInMeters", "maximumDepthInMeters")
 
@@ -17,7 +17,7 @@ check_fields <- function(data, level = "error") {
 
     fields <- missing_fields(data, required)
     if (length(fields) > 0) {
-      errors <- bind_rows(errors, data.frame(
+      errors <- bind_rows(errors, data_frame(
         field = fields,
         level = "error",
         message = paste0("Required field ", fields, " is missing"),
@@ -31,7 +31,7 @@ check_fields <- function(data, level = "error") {
       if (field %in% names(data)) {
         rows <- missing_values(data[,field])
         if (length(which(rows)) > 0) {
-          errors <- bind_rows(errors, data.frame(
+          errors <- bind_rows(errors, data_frame(
             level = "error",
             field = field,
             row = which(rows),
@@ -50,7 +50,7 @@ check_fields <- function(data, level = "error") {
 
       fields <- missing_fields(data, recommended)
       if (length(fields) > 0) {
-        errors <- bind_rows(errors, data.frame(
+        errors <- bind_rows(errors, data_frame(
           field = fields,
           level = "warning",
           message = paste0("Recommended field ", fields, " is missing"),
@@ -64,7 +64,7 @@ check_fields <- function(data, level = "error") {
         if (field %in% names(data)) {
           rows <- missing_values(data[,field])
           if (length(which(rows)) > 0) {
-            errors <- bind_rows(errors, data.frame(
+            errors <- bind_rows(errors, data_frame(
               level = "warning",
               field = field,
               row = which(rows),
@@ -78,5 +78,4 @@ check_fields <- function(data, level = "error") {
     }
 
     return(errors)
-
 }

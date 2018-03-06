@@ -11,7 +11,7 @@ add_depth_message <- function(result, data, columns, i, message, extra_data=NULL
       args[['extra_data']] <- extra_data[i]
     }
     message <- do.call(sprintf, args)
-    result <- rbind(result, data.frame(field = rep(columns, length(i)), level = level, row = i, message = message, stringsAsFactors = FALSE))
+    result <- rbind(result, data_frame(field = rep(columns, length(i)), level = level, row = i, message = message, stringsAsFactors = FALSE))
   }
   return(result)
 }
@@ -20,7 +20,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
   if (column %in% colnames(data)) {
     depths <- as.numeric(as.character(data[,column]))
     if(all(is.na(data[[column]]) | data[[column]] == '')) {
-      result <- rbind(result, data.frame(field=column, level = 'warning', row = NA,
+      result <- rbind(result, data_frame(field=column, level = 'warning', row = NA,
                                          message = paste('Column',column,'empty'), stringsAsFactors = FALSE))
     }
     invalid <- is.na(depths) & data[,column] != ''
@@ -34,7 +34,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
       result <- add_depth_message(result, data, column, negativewrong, paste0('Depth value (%s) is negative for offshore points (shoredistance=%s, margin=', shoremargin,')'),lookupvalues$shoredistance)
     }
   } else {
-    result <- rbind(result, data.frame(field = column, level = 'warning', row = NA,
+    result <- rbind(result, data_frame(field = column, level = 'warning', row = NA,
                                        message = paste('Column',column,'missing')))
   }
   return(result)
@@ -82,7 +82,7 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
   if (NROW(errors) > 0 && report) {
     return(errors)
   }
-  result <- data.frame(
+  result <- data_frame(
     level = character(),
     row = integer(),
     field = character(),

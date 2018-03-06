@@ -54,15 +54,14 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = 
   }
   if (report) {
     if (length(i) > 0) {
-      return(data.frame(
+      return(data_frame(
         field = NA,
         level = "warning",
         row = i,
-        message = paste0("Coordinates are located on land"),
-        stringsAsFactors = FALSE
+        message = paste0("Coordinates are located on land")
       ))
     } else {
-      return(data.frame())
+      return(data_frame())
     }
   } else {
     return(data[i,])

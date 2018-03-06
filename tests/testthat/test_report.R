@@ -24,13 +24,15 @@ test_that("Testing several issues related to reporting and QC in general for lar
   FED_Rockfish_Event_0ce4_4095_ea03$decimalLatitude <- FED_Rockfish_Event_0ce4_4095_ea03$latitude
   FED_Rockfish_Event_0ce4_4095_ea03$decimalLongitude <- FED_Rockfish_Event_0ce4_4095_ea03$longitude
   check_onland(FED_Rockfish_Event_0ce4_4095_ea03)
-  # FED_Rockfish_Event_0ce4_4095_ea03$decimalLatitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$latitude)
-  # FED_Rockfish_Event_0ce4_4095_ea03$decimalLongitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$longitude)
+
 
   # FED_Rockfish_Occurrence_f448_b903_e664$occurrenceStatus <- ifelse(FED_Rockfish_Occurrence_f448_b903_e664$individualCount > 0, "present", "absent")
   # FED_Rockfish_Occurrence_f448_b903_e664 <- FED_Rockfish_Occurrence_f448_b903_e664[which(!is.na(FED_Rockfish_Occurrence_f448_b903_e664$individualCount)),]
 
   # Check data using OBIS tools
+  FED_Rockfish_Event_0ce4_4095_ea03$decimalLatitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$latitude)
+  FED_Rockfish_Event_0ce4_4095_ea03$decimalLongitude <- as.numeric(FED_Rockfish_Event_0ce4_4095_ea03$longitude)
+
   fullRockfish <- merge(FED_Rockfish_Event_0ce4_4095_ea03, FED_Rockfish_Occurrence_f448_b903_e664, by = "eventID", all.x = T, all.y = T)
   # check_eventdate(FED_Rockfish_Event_0ce4_4095_ea03)
   check_fields(fullRockfish)

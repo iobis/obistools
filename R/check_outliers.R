@@ -140,24 +140,30 @@ plot_outliers_environmental <- function(outliers_info, title = '') {
       databox <- data.frame(Statistic = c('MAD', 'IQR'),
                             ymin = c(o$mad_limits[1], o$iqr_limits[1]),
                             ymax = c(o$mad_limits[2], o$iqr_limits[2]),
-                            lower = o$q1,
-                            middle = o$median,
-                            upper = o$q3)
-
+                            lower = ifelse(is.null(o$q1) || is.na(o$q1), NA, o$q1) ,
+                            middle = ifelse(is.null(o$median) || is.na(o$median), NA, o$median) ,
+                            upper = ifelse(is.null(o$q3) || is.na(o$q3), NA, o$q3) )
+      databox <- databox[complete.cases(databox),]
       datapoints <- data.frame(Statistic=c(rep('MAD', n) , rep('IQR', n)),
                          Ok = c(o$ok_mad, o$ok_iqr),
                          Value=rep(o$values, 2), stringsAsFactors = TRUE)
-      datapoints <- datapoints[complete.cases(datapoints),]
-
-      p <- ggplot() +
-        geom_boxplot(data=databox, aes(x=Statistic, ymin=ymin, ymax=ymax, lower=lower, middle=middle, upper=upper), stat='identity') +
-        geom_point(data=datapoints[!datapoints$Ok,], aes(x=Statistic, y=Value), color='red') +
-        labs(y=name)
-      plots[[name]] <- p
+      datapoints <- datapoints[complete.cases(datapoints) & datapoints$Statistic %in% databox$Statistic,]
+      if(nrow(databox) > 0) {
+        p <- ggplot() +
+          geom_boxplot(data=databox, aes(x=Statistic, ymin=ymin, ymax=ymax, lower=lower, middle=middle, upper=upper), stat='identity') +
+          geom_point(data=datapoints[!datapoints$Ok,], aes(x=Statistic, y=Value), color='red') +
+          labs(y=name)
+        plots[[name]] <- p
+      }
     }
   }
   if(length(plots) > 0) {
-    return(cowplot::plot_grid(plotlist = plots, nrow=1))
+    p <- cowplot::plot_grid(plotlist = plots, nrow=1)
+    if(!is.null(title) && title != '') {
+      title <- ggdraw() + draw_label(title, fontface='bold')
+      p <- plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title margins
+    }
+    return(p)
   } else {
     return(NULL)
   }
@@ -169,9 +175,10 @@ plot_outliers_spatial <- function(outliers_info, title='') {
   if (nrow(data[!o$ok_iqr | !o$ok_mad,]) > 0){
     data[,'color'] <- '#1b9e77'
     data[,'radius'] <- 3.5
-    data[!o$ok_iqr & o$ok_mad,'color'] <- '#d95f02'
-    data[!o$ok_iqr & !o$ok_mad,'color'] <- '#e7298a'
-    data[o$ok_iqr & !o$ok_mad,'color'] <- '#7570b3'
+    data[!o$ok_iqr & o$ok_mad, 'color'] <- '#d95f02'
+    data[!o$ok_iqr & !o$ok_mad, 'color'] <- '#e7298a'
+    data[o$ok_iqr & !o$ok_mad, 'color'] <- '#7570b3'
+    data <- unique(data)
     # add centroid
     centroid <- sf::st_coordinates(sf::st_as_sfc(o$centroid))
     data <- rbind(data, data_frame(decimalLongitude=centroid[1,1], decimalLatitude=centroid[1,2], color='yellow', radius=5))
