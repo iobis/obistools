@@ -10,13 +10,15 @@
 report_summary <- function(qcreport, maxrows) {
   summary <- list()
   fields <- unique(qcreport$field)
-  for(field in stats::na.omit(fields)) {
-    fieldqc <- qcreport[!is.na(qcreport$field) & qcreport$field == field, , drop = FALSE]
-    summary[[field]] <- fieldqc[1:min(nrow(fieldqc), maxrows), , drop = FALSE]
-  }
   if(any(is.na(fields))) {
     fieldqc <- qcreport[is.na(qcreport$field), , drop = FALSE]
-    summary[["Other errors and warnings"]] <- fieldqc[1:min(nrow(fieldqc), maxrows), , drop = FALSE]
+    summary[["General errors and warnings"]] <- fieldqc[1:min(nrow(fieldqc), maxrows), , drop = FALSE]
+  }
+  for(field in stats::na.omit(fields)) {
+    fieldqc <- qcreport[!is.na(qcreport$field) & qcreport$field == field, , drop = FALSE]
+    if(!all(fieldqc$level == 'debug')) {
+      summary[[field]] <- fieldqc[1:min(nrow(fieldqc), maxrows), , drop = FALSE]
+    }
   }
   return(summary)
 }
@@ -47,7 +49,9 @@ report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRU
       check_fields(data),
       check_eventdate(data),
       check_onland(data, report = TRUE),
-      check_depth(data, report = TRUE)
+      check_depth(data, report = TRUE),
+      check_outliers_dataset(data, report = TRUE),
+      check_outliers_species(data, report = TRUE)
     )
     qc <- qc[!duplicated(qc), ]
   }

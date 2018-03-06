@@ -446,7 +446,7 @@ head(xydata)
 ```
 
 ```
-shoredistance sstemperature sssalinity bathymetry                                                                                                   final_grid5
+shoredistance sstemperature sssalinity bathymetry obis
 1            30      10.28631   34.76271       -4.0 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
 2          1080      10.33242   34.90622       61.4 United Kingdom, United Kingdom, T, F, eez, eez, United Kingdom, United Kingdom: all, 221, United Kingdom: all
 3          1184      10.72199   34.88896      122.2 United Kingdom, United Kingdom, T, F, eez, eez, United Kingdom, United Kingdom: all, 221, United Kingdom: all

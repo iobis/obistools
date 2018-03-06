@@ -1,0 +1,225 @@
+#' Check which points are spatial dataset outliers.
+#'
+#' @usage check_outliers_species(data, report = FALSE, mad_coef = 6, iqr_coef =
+#'   3)
+#'
+#' @param data The data frame with decimalLongitude, decimalLatitude and
+#'   scientificNameID columns.
+#' @param report If TRUE, errors are returned instead of records.
+#' @param mad_coef Coefficient to multiply the median absolute deviation (MAD)
+#'   by in order to determine the range of valid values. Default is \code{6}.
+#' @param iqr_coef Coefficient to multiply the interquartile range (IQR) by in
+#'   order to determine the range of valid values. Default values is \code{3}.
+#'
+#' @return Problematic records or an errors report.
+#' @examples
+#' \dontrun{
+#' notok <- check_outliers_species(abra, report = FALSE)
+#' print(nrow(notok))
+#' r <- check_outliers_species(abra, report = TRUE, mad_coef = 3, iqr_coef = 1.5)
+#' print(r)
+#' plot_map_leaflet(abra[r$row,], popup = "id")
+#' }
+#' @seealso \code{\link{check_outliers_species}} \code{\link{check_onland}}
+#'   \code{\link{check_depth}}
+#' @export
+check_outliers_species <- function(data, report = FALSE, mad_coef = 6, iqr_coef = 3) {
+  errors <- check_lonlat(data, report = TRUE)
+  if (!'scientificNameID' %in% colnames(data)) {
+    errors <- rbind(errors, data_frame(level = 'error', message = 'Column scientificNameID missing'))
+  } else {
+    aphiaidregex <- regexec('(?:urn[:]lsid[:]marinespecies.org[:]taxname[:])([0-9]+)', as.character(data$scientificNameID))
+    aphiaidmatches <- regmatches(data$scientificNameID, aphiaidregex)
+    aphiaids <- unlist(lapply(aphiaidmatches, function(x) ifelse(length(x) == 2, as.integer(x[2]), NA)))
+    if(all(is.na(aphiaids))) {
+      errors <- rbind(errors, data_frame(level = 'error', message = 'Column scientificNameID contains no records with lsid from marinspecies.org'))
+    }
+  }
+  if (NROW(errors) > 0) {
+    if(report) {
+      return(errors)
+    }
+    stop(paste(errors, collapse = ", "))
+  }
+  result <- NULL
+  taxa <- unique(na.omit(aphiaids))
+  for(taxon in taxa) {
+    return_values = report # values are practical for creating the report
+    istaxon <- !is.na(aphiaids) & aphiaids == taxon
+    outliers_info <- qcservice_outliers(data[istaxon,], 'outlierstaxon', mad_coef, iqr_coef, return_values, aphiaid = taxon)
+    result <- report_outliers(outliers_info, rownumbers = which(istaxon), report = result, title=paste0('Taxon [', taxon, ']'))
+  }
+  if (!report) {
+    result <- original_data[sort(unique(stats::na.omit(result$row))),]
+  }
+  return(result)
+}
+
+#' Check which points are spatial dataset outliers.
+#'
+#' @usage check_outliers_dataset(data, report = FALSE, mad_coef = 6, iqr_coef =
+#'
+#'   3)
+#' @param data The data frame with decimalLongitude and decimalLatitude columns.
+#' @param report If TRUE, errors are returned instead of records.
+#' @param mad_coef Coefficient to multiply the median absolute deviation (MAD)
+#'   by in order to determine the range of valid values. Default is \code{6}.
+#' @param iqr_coef Coefficient to multiply the interquartile range (IQR) by in
+#'   order to determine the range of valid values. Default values is \code{3}.
+#'
+#' @return Problematic records or an errors report.
+#' @examples
+#' \dontrun{
+#' ok <- check_outliers_dataset(abra, report = FALSE)
+#' print(nrow(ok))
+#' r <- check_outliers_dataset(abra, report = TRUE, mad_coef = 3, iqr_coef = 1.5)
+#' print(r)
+#' plot_map_leaflet(abra[r$row,], popup = "id")
+#' }
+#' @seealso \code{\link{check_outliers_species}} \code{\link{check_onland}}
+#'   \code{\link{check_depth}}
+#' @export
+check_outliers_dataset <- function(data, report = FALSE, mad_coef = 6, iqr_coef = 3) {
+  errors <- check_lonlat(data, report)
+  if (NROW(errors) > 0 && report) {
+    return(errors)
+  }
+  return_values = report # values are practical for creating the report
+  outliers_info <- qcservice_outliers(data, 'outliersdataset', mad_coef, iqr_coef, return_values)
+
+  result <- report_outliers(outliers_info, title="Dataset")
+
+  if (!report) {
+    result <- original_data[sort(unique(stats::na.omit(result$row))),]
+  }
+  return(result)
+}
+
+qcservice_outliers <- function(data, endpoint, mad_coef, iqr_coef, return_values, aphiaid=NULL) {
+  xy <- get_xy_clean_duplicates(data)
+  if(NROW(xy$uniquesp) == 0) {
+    return(NULL)
+  } else {
+    # Prepare message
+    url <- paste0(getOption("obistools_api_root", "http://api.iobis.org/"), endpoint, '/')
+    params <- list(points=as.matrix(xy$uniquesp), mad_coef=mad_coef, iqr_coef=iqr_coef, returnvalues=return_values)
+    if(!is.null(aphiaid) && !is.na(aphiaid)) {
+      params <- c(params, aphiaid = aphiaid)
+    }
+    msg <- jsonlite::toJSON(params, auto_unbox=TRUE)
+    raw_content <- service_call(url, msg)
+    output <- jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = TRUE)
+
+    expandnames <- c('ok_mad', 'ok_iqr')
+    if(return_values) {
+      expandnames <- c(expandnames, 'values')
+    }
+    for(n in names(output)) {
+      for(x in expandnames) {
+        if(x %in% names(output[[n]])) {
+          output[[n]][[x]][xy$isclean] <- output[[n]][[x]][xy$duplicated_lookup]
+        }
+      }
+    }
+
+    ## Add coordinates
+    output[['spatial']][['xy']] <- data[,c('decimalLongitude', 'decimalLatitude')]
+    output[['spatial']][['xy']][!xy$isclean,] <- NA
+
+    return(output)
+  }
+}
+
+plot_outliers_environmental <- function(outliers_info, title = '') {
+  plots <- list()
+  for(name in names(outliers_info)) {
+    if(!(name %in% c('id','count','spatial'))) {
+      o <- outliers_info[[name]]
+      n <- length(o$ok_mad)
+
+      databox <- data.frame(Statistic = c('MAD', 'IQR'),
+                            ymin = c(o$mad_limits[1], o$iqr_limits[1]),
+                            ymax = c(o$mad_limits[2], o$iqr_limits[2]),
+                            lower = o$q1,
+                            middle = o$median,
+                            upper = o$q3)
+
+      datapoints <- data.frame(Statistic=c(rep('MAD', n) , rep('IQR', n)),
+                         Ok = c(o$ok_mad, o$ok_iqr),
+                         Value=rep(o$values, 2), stringsAsFactors = TRUE)
+      datapoints <- datapoints[complete.cases(datapoints),]
+
+      p <- ggplot() +
+        geom_boxplot(data=databox, aes(x=Statistic, ymin=ymin, ymax=ymax, lower=lower, middle=middle, upper=upper), stat='identity') +
+        geom_point(data=datapoints[!datapoints$Ok,], aes(x=Statistic, y=Value), color='red') +
+        labs(y=name)
+      plots[[name]] <- p
+    }
+  }
+  if(length(plots) > 0) {
+    return(cowplot::plot_grid(plotlist = plots, nrow=1))
+  } else {
+    return(NULL)
+  }
+}
+
+plot_outliers_spatial <- function(outliers_info, title='') {
+  o <- outliers_info[['spatial']]
+  data <- as_data_frame(o$xy)
+  if (nrow(data[!o$ok_iqr | !o$ok_mad,]) > 0){
+    data[,'color'] <- '#1b9e77'
+    data[,'radius'] <- 3.5
+    data[!o$ok_iqr & o$ok_mad,'color'] <- '#d95f02'
+    data[!o$ok_iqr & !o$ok_mad,'color'] <- '#e7298a'
+    data[o$ok_iqr & !o$ok_mad,'color'] <- '#7570b3'
+    # add centroid
+    centroid <- sf::st_coordinates(sf::st_as_sfc(o$centroid))
+    data <- rbind(data, data_frame(decimalLongitude=centroid[1,1], decimalLatitude=centroid[1,2], color='yellow', radius=5))
+    # legend
+    cols <- c('yellow', '#1b9e77', '#d95f02', '#7570b3', '#e7298a')
+    legend <- c('Centroid', 'Ok', 'IQR', 'MAD', 'IQR and MAD')
+    # create map
+    leaflet::leaflet(data) %>%
+      leaflet::addProviderTiles("CartoDB.Positron") %>%
+      leaflet::addCircleMarkers(lat = ~decimalLatitude, lng = ~decimalLongitude,
+                       radius = ~radius, weight = 0, fillColor = ~color, fillOpacity = 1) %>%
+      leaflet::addLegend("topright", colors = cols, labels = legend,
+                title = title,
+                opacity = 1)
+  } else {
+    return(NULL)
+  }
+}
+
+report_outliers <- function(outliers_info, rownumbers = NULL, report = NULL, title = '') {
+  if(is.null(report)) {
+    report <- data_frame(level = character(), row = integer(),
+                         field = character(), message = character(), extra = list())
+  }
+  statsinfo <- list(mad = list(ok='ok_mad', name='MAD', limits='mad_limits'),
+                    iqr = list(ok='ok_iqr', name='IQR', limits='iqr_limits'))
+  report <- rbind(report, data_frame(level='debug', row=NA, field=paste('Outliers', title), message=title, extra=list(info=outliers_info)))
+  outliersnames <- setdiff(names(outliers_info), c('count', 'id'))
+  for (n in outliersnames) { # spatial, sstemperature, ...
+    outliersqc <- outliers_info[[n]]
+    for(fields in statsinfo) {
+      ok <- outliersqc[[fields$ok]]
+      rows <- which(!ok)
+      if(!is.null(rownumbers)) {
+        rows <- rownumbers[rows]
+      }
+      if(length(rows) > 0) {
+        if('values' %in% names(outliersqc)) { # create long messages and fill extra field
+          values <- outliersqc$values
+          msg <- paste0(n, ' [', signif(values[rows], 7), '] is not within ', fields$name, ' limits [',
+                        paste0(signif(outliersqc[[fields$limits]], 7), collapse=', '), ']')
+        } else {
+          msg <- paste0('Value for ', n, ' is not within ', fields$name, ' limits [',
+                        paste0(signifoutliersqc[[fields$limits]], collapse=', '), ']')
+        }
+        report <- rbind(report, data_frame(level='warning', row=rows, field=paste('Outliers', title), message=msg, extra=NA))
+      }
+    }
+  }
+  return(report)
+}

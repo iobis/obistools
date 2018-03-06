@@ -22,7 +22,7 @@ FALSE}.}
 OBIS webservice is used. The default value is \code{FALSE}.}
 }
 \value{
-Errors or records.
+Errors or problematic records.
 }
 \description{
 Check which points are located on land.
@@ -38,4 +38,8 @@ ok <- abra[-1 * report$row,]
 ok <- check_onland(abra, report = FALSE, buffer = 100)
 print(nrow(ok))
 }
+}
+\seealso{
+\code{\link{check_depth}} \code{\link{check_outliers_dataset}}
+  \code{\link{check_outliers_species}} \code{\link{lookup_xy}}
 }

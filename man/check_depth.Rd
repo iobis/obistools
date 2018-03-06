@@ -24,7 +24,7 @@ against. If \code{NULL} (default) then the bathymetry from the xylookup
 service is used.}
 }
 \value{
-Records or an errors report.
+Problematic records or an errors report.
 }
 \description{
 Check which points have potentially invalid depths.
@@ -41,13 +41,14 @@ Multiple checks are performed in this function: \enumerate{ \item
 }
 \examples{
 \dontrun{
-ok <- check_depth(abra, report = FALSE)
-print(nrow(ok))
+notok <- check_depth(abra, report = FALSE)
+print(nrow(notok))
 r <- check_depth(abra, report = TRUE, depthmargin = 100, shoremargin = 100)
 print(r)
 plot_map_leaflet(abra[r$row,], popup = "id")
 }
 }
 \seealso{
-\code{\link{check_onland}} \code{\link{check_depth}}
+\code{\link{check_onland}} \code{\link{check_outliers_dataset}}
+  \code{\link{check_outliers_species}} \code{\link{lookup_xy}}
 }

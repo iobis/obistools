@@ -21,12 +21,12 @@ test_that("lookup_xy returns correct data", {
 test_that("lookup_xy results filtering works", {
   results <- lookup_xy(test_data(), areas = TRUE)
   expect_equal(nrow(results), 3)
-  expect_true(all(c("shoredistance", "bathymetry", "sssalinity", "sstemperature", "final_grid5") %in% colnames(results)))
+  expect_true(all(c("shoredistance", "bathymetry", "sssalinity", "sstemperature", "obis") %in% colnames(results)))
   results <- lookup_xy(test_data(), areas = FALSE, grids = FALSE, shoredistance = TRUE)
   expect_equal(results[1,,drop=F]$shoredistance, 1604)
-  expect_false(any(c("bathymetry", "final_grid5") %in% colnames(results)))
+  expect_false(any(c("bathymetry", "obis") %in% colnames(results)))
   results <- lookup_xy(test_data(), areas = FALSE, grids = TRUE, shoredistance = FALSE)
-  expect_false(any(c("shoredistance", "final_grid5") %in% colnames(results)))
+  expect_false(any(c("shoredistance", "obis") %in% colnames(results)))
   expect_equal(results[1,,drop=F]$bathymetry, 2)
 })
 

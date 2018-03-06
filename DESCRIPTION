@@ -15,6 +15,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    cowplot,
     data.tree,
     digest,
     dplyr,

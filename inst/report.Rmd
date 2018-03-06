@@ -16,21 +16,52 @@ tryCatch(obistools::plot_map(params$data, zoom = TRUE),
 # Issues
 
 ```{r echo = FALSE, results='asis', message = FALSE}
-maxrows <- 50
+maxrows <- 25
 qc <- obistools::report_summary(qc, maxrows = maxrows)
+deps <- c()
 for (field in names(qc)) {
   cat("\n\n###", field, "\n\n")
   errors <- qc[[field]]
   if(nrow(errors) == maxrows) {
     cat(paste0("\n\nMore than **", maxrows, "** errors and warnings related to this field were found, the first **", maxrows, "** are printed below and shown on a map whenever possible.\n"))
   }
-  print(knitr::kable(errors, row.names = FALSE))
+  print(knitr::kable(errors[errors$level != 'debug', c('field', 'row', 'level', 'message')], row.names = FALSE))
   
   mapdata <- data[stats::na.omit(errors$row),, drop=FALSE]
+  mapplot <- NULL
   if(NROW(mapdata) > 0) {
     cat("\n\n")
-    try(print(obistools::plot_map(mapdata, zoom = TRUE)))
+    if(startsWith(field, 'Outliers ')) {
+      outliers_info <- errors[errors$level == 'debug',]$extra[[1]]
+      boxplots <- NULL
+      try({ boxplots <- obistools:::plot_outliers_environmental(outliers_info, title=field) })
+      if(!is.null(boxplots)) {
+          print(boxplots)
+      }
+
+      try({mapplot <- obistools:::plot_outliers_spatial(outliers_info)})
+      if(!is.null(mapplot)) {
+        print("leaflet")
+        cat(htmltools::renderTags(mapplot)$html)
+        deps <- c(deps, htmltools::renderTags(mapplot)$dependencies)
+      }
+    } else {
+      try(mapplot <- obistools::plot_map(mapdata, zoom = TRUE))
+      if(!is.null(mapplot)) {
+        print(paste0("plot_map ", field))
+        # print(mapplot)
+      }
+    }
     cat("\n\n")
   }
 }
+```
+
+```{r echo=FALSE, messages=FALSE, warning=FALSE}
+# attach the Dependencies
+# since the do not get included with renderTags(...)$html
+htmltools::attachDependencies(
+  htmltools::tagList(),
+  deps #unlist(deps,recursive=FALSE)
+)
 ```
