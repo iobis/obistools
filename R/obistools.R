@@ -21,4 +21,6 @@
 #' @import tidyr
 #' @import data.tree
 #' @import digest
+#' @importFrom stats complete.cases
+#' @importFrom stats na.omit
 NULL

@@ -11,7 +11,7 @@ add_depth_message <- function(result, data, columns, i, message, extra_data=NULL
       args[['extra_data']] <- extra_data[i]
     }
     message <- do.call(sprintf, args)
-    result <- rbind(result, data_frame(field = rep(columns, length(i)), level = level, row = i, message = message, stringsAsFactors = FALSE))
+    result <- rbind(result, data_frame(level = level, row = i, field = rep(columns, length(i)), message = message))
   }
   return(result)
 }
@@ -20,8 +20,8 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
   if (column %in% colnames(data)) {
     depths <- as.numeric(as.character(data[,column]))
     if(all(is.na(data[[column]]) | data[[column]] == '')) {
-      result <- rbind(result, data_frame(field=column, level = 'warning', row = NA,
-                                         message = paste('Column',column,'empty'), stringsAsFactors = FALSE))
+      result <- rbind(result, data_frame(level = 'warning', row = NA, field=column,
+                                         message = paste('Column',column,'empty')))
     }
     invalid <- is.na(depths) & data[,column] != ''
     result <- add_depth_message(result, data, column, invalid, 'Depth value (%s) is not numeric and not empty')
@@ -34,7 +34,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
       result <- add_depth_message(result, data, column, negativewrong, paste0('Depth value (%s) is negative for offshore points (shoredistance=%s, margin=', shoremargin,')'),lookupvalues$shoredistance)
     }
   } else {
-    result <- rbind(result, data_frame(field = column, level = 'warning', row = NA,
+    result <- rbind(result, data_frame(level = 'warning', row = NA, field = column,
                                        message = paste('Column',column,'missing')))
   }
   return(result)
@@ -86,8 +86,7 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
     level = character(),
     row = integer(),
     field = character(),
-    message = character(),
-    stringsAsFactors = FALSE
+    message = character()
   )
   original_data <- data
   data <- as.data.frame(data) # make sure it is a data frame and not a tibble or anything else
@@ -117,23 +116,25 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
   }
 
   depthcols <- c('minimumDepthInMeters', 'maximumDepthInMeters')
-  for(column in depthcols) {
-    result <- check_depth_column(result, data, column, lookupvalues, depthmargin, shoremargin)
-  }
 
   if(all(depthcols %in% colnames(data))) {
     mind <- as.numeric(as.character(data[,depthcols[1]]))
     maxd <- as.numeric(as.character(data[,depthcols[2]]))
     minGTmax <- !is.na(maxd) & !is.na(mind) & mind > maxd
-    result <- add_depth_message(result, data, depthcols, minGTmax, "Minimum depth [%s] is greater than maximum depth [%s]")
+    result <- add_depth_message(result, data, depthcols[1], minGTmax, 'Minimum depth [%s] is greater than maximum depth [%s]', extra_data = data$maximumDepthInMeters, level='error')
   }
+
+  for(column in depthcols) {
+    result <- check_depth_column(result, data, column, lookupvalues, depthmargin, shoremargin)
+  }
+
   # handle longitude/latitude outside bathymetry raster / world bounds
   wrong_x <- is.na(data$decimalLongitude) | data$decimalLongitude < xmin | data$decimalLongitude > xmax
   wrong_y <- is.na(data$decimalLatitude) | data$decimalLatitude < ymin | data$decimalLatitude > ymax
   result <- add_depth_message(result, data, "decimalLongitude", wrong_x, "Longitude [%s] is outside the bounds of the provided raster (%s)", rep(paste(xmin, xmax), nrow(data)), level="warning")
   result <- add_depth_message(result, data, "decimalLatitude", wrong_y, "Latitude [%s] is outside the bounds of the provided raster (%s)", rep(paste(ymin, ymax), nrow(data)), level="warning")
   # handle NA values in raster/lookup
-  result <- add_depth_message(result, data, c("decimalLongitude","decimalLatitude"), is.na(lookupvalues$bathymetry), "No bathymetry value found for coordinate [%s]", level="warning")
+  result <- add_depth_message(result, data, "decimalLongitude", is.na(lookupvalues$bathymetry), "No bathymetry value found for coordinate (%s, %s)", level="warning", extra_data = data$decimalLatitude)
 
   if (!report) {
     result <- original_data[sort(unique(stats::na.omit(result$row))),]

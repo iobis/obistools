@@ -2,8 +2,9 @@
 utils::globalVariables(c('decimalLongitude','decimalLatitude', 'x', 'y',
                          'AphiaID', 'scientificname', 'authority', 'status',
                          'match_type', 'occurrenceID', 'eventID',
-                         'measurementType', 'parentEventID', 'leaf'))
-
+                         'measurementType', 'parentEventID', 'leaf',
+                         'original_data', 'Statistic', 'ymin', 'ymax', 'lower',
+                         'middle', 'upper', 'Value'))
 
 .onLoad <- function(libname, pkgname){
   clear_cache(age=36)

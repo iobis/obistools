@@ -160,8 +160,8 @@ plot_outliers_environmental <- function(outliers_info, title = '') {
   if(length(plots) > 0) {
     p <- cowplot::plot_grid(plotlist = plots, nrow=1)
     if(!is.null(title) && title != '') {
-      title <- ggdraw() + draw_label(title, fontface='bold')
-      p <- plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title margins
+      title <- cowplot::ggdraw() + cowplot::draw_label(title, fontface='bold')
+      p <- cowplot::plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title margins
     }
     return(p)
   } else {
@@ -222,7 +222,7 @@ report_outliers <- function(outliers_info, rownumbers = NULL, report = NULL, tit
                         paste0(signif(outliersqc[[fields$limits]], 7), collapse=', '), ']')
         } else {
           msg <- paste0('Value for ', n, ' is not within ', fields$name, ' limits [',
-                        paste0(signifoutliersqc[[fields$limits]], collapse=', '), ']')
+                        paste0(signif(outliersqc[[fields$limits]], 7), collapse=', '), ']')
         }
         report <- rbind(report, data_frame(level='warning', row=rows, field=paste('Outliers', title), message=msg, extra=NA))
       }
