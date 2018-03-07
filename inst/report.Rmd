@@ -32,15 +32,13 @@ for (field in names(qc)) {
   if(NROW(mapdata) > 0) {
     if(startsWith(field, 'Outliers ')) {
       outliers_info <- errors[errors$level == 'debug',]$extra[[1]]
-      boxplots <- NULL
-      try({ boxplots <- obistools:::plot_outliers_environmental(outliers_info) })
+      boxplots <- obistools:::plot_outliers_environmental(outliers_info)
       if(!is.null(boxplots)) {
           cat("\n\n")
           print(boxplots)
           cat("\n\n")
       }
-
-      try({mapplot <- obistools:::plot_outliers_spatial(outliers_info)})
+      mapplot <- obistools:::plot_outliers_spatial(outliers_info)
       if(!is.null(mapplot)) {
         cat("\n\n")
         cat(htmltools::renderTags(mapplot)$html)

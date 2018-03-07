@@ -50,7 +50,7 @@ check_outliers_species <- function(data, report = FALSE, mad_coef = 6, iqr_coef 
     result <- report_outliers(outliers_info, rownumbers = which(istaxon), report = result, title=paste0('Taxon [', taxon, ']'))
   }
   if (!report) {
-    result <- original_data[sort(unique(stats::na.omit(result$row))),]
+    result <- data[sort(unique(stats::na.omit(result$row))),]
   }
   return(result)
 }
@@ -90,7 +90,7 @@ check_outliers_dataset <- function(data, report = FALSE, mad_coef = 6, iqr_coef 
   result <- report_outliers(outliers_info, title="Dataset")
 
   if (!report) {
-    result <- original_data[sort(unique(stats::na.omit(result$row))),]
+    result <- data[sort(unique(stats::na.omit(result$row))),]
   }
   return(result)
 }
