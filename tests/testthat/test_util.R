@@ -43,3 +43,18 @@ test_that("cache call works", {
     expect_equal(length(obistools:::list_cache()), 0)
   }
 })
+
+test_that("get_xy_clean_duplicates works", {
+  n <- 100
+  set.seed(42)
+  lots_duplicates <- data_frame(decimalLongitude=as.numeric(sample(1:10, n, replace=TRUE)), decimalLatitude=as.numeric(sample(1:10, n, replace=TRUE)))
+  lots_duplicates[5,] <- c(NA,1.0)
+  lots_duplicates[6,] <- c(2.0,NA)
+  lots_duplicates[7,] <- c(NA,NA)
+  xy <- obistools:::get_xy_clean_duplicates(lots_duplicates)
+
+  replicate <- data_frame(decimalLongitude=rep(NA,n), decimalLatitude=rep(NA,n))
+  replicate[xy$isclean,] <- xy$uniquesp[xy$duplicated_lookup,]
+  replicate[!xy$isclean,] <- lots_duplicates[!xy$isclean,]
+  expect_equal(lots_duplicates, replicate)
+})

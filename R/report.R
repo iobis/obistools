@@ -53,7 +53,7 @@ report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRU
       check_outliers_dataset(data, report = TRUE),
       check_outliers_species(data, report = TRUE)
     )
-    qc <- unique(qc)
+    qc <- distinct(qc)
   }
   if(is.null(dir) || is.na(dir)) dir <- rappdirs::user_cache_dir("obistools")
   if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)

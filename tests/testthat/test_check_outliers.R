@@ -3,12 +3,17 @@ context("check outliers")
 
 
 test_that("check_outliers_datasets identifies outliers", {
-  data <- data.frame(decimalLongitude=170, decimalLatitude=1:25)
-  check_outliers_dataset(data, report = TRUE)
-  check_outliers_species(data, report = TRUE)
-  #lookup_xy(data)
+  data <- data.frame(decimalLongitude=170, decimalLatitude=c(50, 1:25))
+  rp <- check_outliers_dataset(data, report = TRUE)
+  expect_gt(nrow(rp), 1)
+  d <- check_outliers_dataset(data, report = FALSE)
+  expect_equal(d, data[1,])
+})
 
-  data <- data.frame(decimalLongitude=170, decimalLatitude=1:25, scientificNameID="")
-  check_outliers_dataset(data, report = TRUE)
-  check_outliers_species(data, report = TRUE)
+test_that("check_outliers_species identifies outliers", {
+  data <- data_frame(decimalLongitude=170, decimalLatitude=c(50, 1:25), scientificNameID="")
+  rp <- check_outliers_species(data, report = TRUE)
+  expect_gt(nrow(rp), 1)
+  d <- check_outliers_species(data, report = FALSE)
+  expect_equal(d, data[1,])
 })

@@ -60,10 +60,10 @@ get_xy_clean_duplicates <- function(data) {
       sp$decimalLatitude >= -90.0 & sp$decimalLatitude <= 90.0
     cleansp <- sp[isclean,,drop=FALSE]
     # Only lookup values for unique coordinates
-    uniquesp <- unique(cleansp)
-    mapping_unique <- merge(cbind(cleansp, clean_id=seq_len(nrow(cleansp))),
-                            cbind(uniquesp, unique_id=seq_len(nrow(uniquesp))))
-    duplicated_lookup <- mapping_unique[order(mapping_unique$clean_id),"unique_id"]
+    key <- paste(cleansp$decimalLongitude, cleansp$decimalLatitude, sep='\r')
+    notdup <- !duplicated(key)
+    uniquesp <- cleansp[notdup,]
+    duplicated_lookup <- match(key, key[notdup])
     list(uniquesp=uniquesp, isclean=isclean, duplicated_lookup=duplicated_lookup)
   } else {
     list(uniquesp = data.frame(decimalLongitude = numeric(0), decimalLatitude = numeric(0)),

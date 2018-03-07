@@ -4,7 +4,7 @@ utils::globalVariables(c('decimalLongitude','decimalLatitude', 'x', 'y',
                          'match_type', 'occurrenceID', 'eventID',
                          'measurementType', 'parentEventID', 'leaf',
                          'original_data', 'Statistic', 'ymin', 'ymax', 'lower',
-                         'middle', 'upper', 'Value'))
+                         'middle', 'upper', 'Value', 'Ok'))
 
 .onLoad <- function(libname, pkgname){
   clear_cache(age=36)

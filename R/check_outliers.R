@@ -130,28 +130,31 @@ qcservice_outliers <- function(data, endpoint, mad_coef, iqr_coef, return_values
   }
 }
 
-plot_outliers_environmental <- function(outliers_info, title = '') {
+plot_outliers_environmental <- function(outliers_info, title = '', sample_outliers=100) {
   plots <- list()
   for(name in names(outliers_info)) {
     if(!(name %in% c('id','count','spatial'))) {
       o <- outliers_info[[name]]
       n <- length(o$ok_mad)
 
-      databox <- data.frame(Statistic = c('MAD', 'IQR'),
+      databox <- data_frame(Statistic = c('MAD', 'IQR'),
                             ymin = c(o$mad_limits[1], o$iqr_limits[1]),
                             ymax = c(o$mad_limits[2], o$iqr_limits[2]),
                             lower = ifelse(is.null(o$q1) || is.na(o$q1), NA, o$q1) ,
                             middle = ifelse(is.null(o$median) || is.na(o$median), NA, o$median) ,
                             upper = ifelse(is.null(o$q3) || is.na(o$q3), NA, o$q3) )
       databox <- databox[complete.cases(databox),]
-      datapoints <- data.frame(Statistic=c(rep('MAD', n) , rep('IQR', n)),
+      datapoints <- data_frame(Statistic=c(rep('MAD', n) , rep('IQR', n)),
                          Ok = c(o$ok_mad, o$ok_iqr),
                          Value=rep(o$values, 2), stringsAsFactors = TRUE)
-      datapoints <- datapoints[complete.cases(datapoints) & datapoints$Statistic %in% databox$Statistic,]
-      if(nrow(databox) > 0) {
+      datapoints <- datapoints %>% filter(!is.na(Value) & (as.character(Statistic) %in% as.character(databox$Statistic)) & !Ok)
+      if(nrow(databox) > 0 & nrow(datapoints) > 0) {
+        if(!is.null(sample_outliers) & !is.na(sample_outliers) & (sample_outliers < nrow(datapoints)) & sample_outliers > 10) {
+          datapoints <- sample_n(datapoints, sample_outliers)
+        }
         p <- ggplot() +
           geom_boxplot(data=databox, aes(x=Statistic, ymin=ymin, ymax=ymax, lower=lower, middle=middle, upper=upper), stat='identity') +
-          geom_point(data=datapoints[!datapoints$Ok,], aes(x=Statistic, y=Value), color='red') +
+          geom_point(data=datapoints, aes(x=Statistic, y=Value), color='red') +
           labs(y=name)
         plots[[name]] <- p
       }
@@ -169,16 +172,23 @@ plot_outliers_environmental <- function(outliers_info, title = '') {
   }
 }
 
-plot_outliers_spatial <- function(outliers_info, title='') {
+plot_outliers_spatial <- function(outliers_info, title='', sample_okpoints=1000) {
   o <- outliers_info[['spatial']]
   data <- as_data_frame(o$xy)
   if (nrow(data[!o$ok_iqr | !o$ok_mad,]) > 0){
-    data[,'color'] <- '#1b9e77'
+    okcolor <- '#1b9e77'
+    data[,'color'] <- okcolor
     data[,'radius'] <- 3.5
     data[!o$ok_iqr & o$ok_mad, 'color'] <- '#d95f02'
     data[!o$ok_iqr & !o$ok_mad, 'color'] <- '#e7298a'
     data[o$ok_iqr & !o$ok_mad, 'color'] <- '#7570b3'
     data <- unique(data)
+    if(!is.null(sample_okpoints) & !is.na(sample_okpoints) & sample_okpoints > 10 & nrow(data) > sample_okpoints) {
+      whichok <- which(data$color == okcolor)
+      if(length(whichok) > sample_okpoints) {
+        data <- data[-1 * sample(whichok, length(whichok) - sample_okpoints),]
+      }
+    }
     # add centroid
     centroid <- sf::st_coordinates(sf::st_as_sfc(o$centroid))
     data <- rbind(data, data_frame(decimalLongitude=centroid[1,1], decimalLatitude=centroid[1,2], color='yellow', radius=5))
