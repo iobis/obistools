@@ -9,9 +9,9 @@
 [Plot points on a map](#plot-points-on-a-map)  
 [Identify points on a map](#identify-points-on-a-map)  
 [Check points on land](#check-points-on-land)  
-[Check depth](#check-depth)
-[Check outliers](#check-outliers)
-[Check eventID and parentEventID](#check-eventid-and-parenteventid)  
+[Check depth](#check-depth)  
+[Check outliers](#check-outliers)  
+[Check eventID and parentEventID](#check-eventid-and-parenteventid)  
 [Check eventID in an extension](#check-eventid-in-an-extension)  
 [Flatten event records](#flatten-event-records)  
 [Flatten occurrence and event records](#flatten-occurrence-and-event-records)  
