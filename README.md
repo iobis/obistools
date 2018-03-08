@@ -13,7 +13,7 @@
 [Check outliers](#check-outliers)  
 [Check eventID and parentEventID](#check-eventid-and-parenteventid)  
 [Check eventID in an extension](#check-eventid-in-an-extension)  
-[Flatten event records](#flatten-event-records)  
+[Flatten event records](#flatten-event-records)  
 [Flatten occurrence and event records](#flatten-occurrence-and-event-records)  
 [Calculate centroid and radius for WKT geometries](#calculate-centroid-and-radius-for-wkt-geometries)  
 [Map column names to Darwin Core terms](#map-column-names-to-darwin-core-terms)  
