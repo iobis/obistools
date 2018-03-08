@@ -157,7 +157,7 @@ Multiple matches, pick a number or leave empty to skip: 2
 <li>minimum depth greater than maximum depth (error)</li>
 </ul>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="reference/plot_map.html">plot_map</a></span>(<span class="kw"><a href="reference/check_depth.html">check_depth</a></span>(abra, <span class="dt">depthmargin =</span> <span class="dv">50</span>), <span class="dt">zoom =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/abra_check_depth_50.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png"></p>
+<p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/abra_check_depth_50.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/abra_check_depth_50.png"></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">report &lt;-<span class="st"> </span><span class="kw"><a href="reference/check_depth.html">check_depth</a></span>(abra, <span class="dt">report=</span>T, <span class="dt">depthmargin =</span> <span class="dv">50</span>)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">head</span>(report)</a></code></pre></div>
 <pre><code>field level  row                                                                                              message
@@ -167,48 +167,76 @@ Multiple matches, pick a number or leave empty to skip: 2
 4 minimumDepthInMeters error 1235   Depth value (61.2) is greater than the value found in the bathymetry raster (depth=4.0, margin=50)
 5 minimumDepthInMeters error 1249   Depth value (68.3) is greater than the value found in the bathymetry raster (depth=8.0, margin=50)
 6 minimumDepthInMeters error 1250   Depth value (72.9) is greater than the value found in the bathymetry raster (depth=5.0, margin=50)</code></pre>
+</section><section class="level2"><h2>Check outliers</h2>
+<p><code>check_outliers_species</code> and <code>check_outliers_dataset</code> use the qc-service web service to identify which records are statistical outliers. For species outlier checks are performed for both environmental data (bathymetry, sea surface salinity and sea surface temperature) as well as spatially. Outliers are identified as all points that deviate more then six times the median absolute deviation (MAD) or three times the interquartile range (IQR) from the median. The <code>check_outliers_species</code> requires that the scientificNameID is filled in. When the species is already a known species in OBIS then the median, MAD and IQR from the known records are used for comparing the new species records. For datasets, only the spatial outliers are identified. Spatial outliers are detected based on the distance to the geographical centroid of all unique coordinates. The list in the extra field of the debug level output in the report provides all relevant statistics on which the outlier analysis is based. The <code>report</code> also gives an overview of these outliers. Outliers can be plotted with <code><a href="reference/plot_outliers.html">plot_outliers(report)</a></code></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">report &lt;-<span class="st"> </span><span class="kw"><a href="reference/check_outliers_species.html">check_outliers_species</a></span>(abra, <span class="dt">report=</span>T)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">head</span>(report)</a></code></pre></div>
+<pre><code># A tibble: 6 x 5
+  level     row field                   message                                               extra     
+  &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;                   &lt;chr&gt;                                                 &lt;list&gt;    
+1 debug      NA Outliers Taxon [141433] Taxon [141433]                                        &lt;list [6]&gt;
+2 warning     2 Outliers Taxon [141433] bathymetry [61.4] is not within MAD limits [-56, 40]  &lt;lgl [1]&gt; 
+3 warning     3 Outliers Taxon [141433] bathymetry [122.2] is not within MAD limits [-56, 40] &lt;lgl [1]&gt; 
+4 warning     5 Outliers Taxon [141433] bathymetry [51] is not within MAD limits [-56, 40]    &lt;lgl [1]&gt; 
+5 warning     9 Outliers Taxon [141433] bathymetry [66] is not within MAD limits [-56, 40]    &lt;lgl [1]&gt; 
+6 warning    11 Outliers Taxon [141433] bathymetry [179.2] is not within MAD limits [-56, 40] &lt;lgl [1]&gt; </code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">report &lt;-<span class="st"> </span><span class="kw"><a href="reference/check_outliers_dataset.html">check_outliers_dataset</a></span>(abra, <span class="dt">report=</span>T)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">head</span>(report)</a></code></pre></div>
+<pre><code># A tibble: 6 x 5
+  level     row field            message                                                         extra     
+  &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;                                                           &lt;list&gt;    
+1 debug      NA Outliers Dataset Dataset                                                         &lt;list [2]&gt;
+2 warning  2057 Outliers Dataset spatial [2341877] is not within MAD limits [210972.4, 818968.6] &lt;lgl [1]&gt; 
+3 warning  2058 Outliers Dataset spatial [2344195] is not within MAD limits [210972.4, 818968.6] &lt;lgl [1]&gt; 
+4 warning  2059 Outliers Dataset spatial [2344021] is not within MAD limits [210972.4, 818968.6] &lt;lgl [1]&gt; 
+5 warning  2060 Outliers Dataset spatial [2361854] is not within MAD limits [210972.4, 818968.6] &lt;lgl [1]&gt; 
+6 warning  2061 Outliers Dataset spatial [2384709] is not within MAD limits [210972.4, 818968.6] &lt;lgl [1]&gt; </code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">report &lt;-<span class="st"> </span><span class="kw"><a href="reference/check_outliers_species.html">check_outliers_species</a></span>(abra, <span class="dt">report=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw"><a href="reference/plot_outliers.html">plot_outliers</a></span>(report)</a></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_environmental.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_environmental.png"></p>
+<p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_spatial.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_spatial.png"></p>
 </section><section class="level2"><h2>Check eventID and parentEventID</h2>
 <p><code><a href="reference/check_eventids.html">check_eventids()</a></code> checks if both <code>eventID()</code> and <code>parentEventID</code> fields are present in an event table, and if all <code>parentEventID</code>s have a corresponding <code>eventID</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>, <span class="st">"e"</span>, <span class="st">"f"</span>),</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="st">""</span>, <span class="st">""</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"bb"</span>, <span class="st">"b"</span>),</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw"><a href="reference/check_eventids.html">check_eventids</a></span>(data)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>, <span class="st">"e"</span>, <span class="st">"f"</span>),</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="st">""</span>, <span class="st">""</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"bb"</span>, <span class="st">"b"</span>),</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="kw"><a href="reference/check_eventids.html">check_eventids</a></span>(data)</a></code></pre></div>
 <pre><code>          field level row                                       message
 1 parentEventID error   5 parentEventID bb has no corresponding eventID</code></pre>
 </section><section class="level2"><h2>Check eventID in an extension</h2>
 <p><code><a href="reference/check_extension_eventids.html">check_extension_eventids()</a></code> checks if all <code>eventID</code>s in an extension have matching <code>eventID</code>s in the core table.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">event &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">"cruise_1"</span>, <span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_3"</span>),</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">  <span class="dt">eventDate =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">  <span class="dt">decimalLongitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb19-6" data-line-number="6">  <span class="dt">decimalLatitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb19-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb19-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb19-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb19-10" data-line-number="10">occurrence &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb19-11" data-line-number="11">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"sample_1"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_28"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_1"</span>),</a>
-<a class="sourceLine" id="cb19-12" data-line-number="12">  <span class="dt">scientificName =</span> <span class="kw">c</span>(<span class="st">"Abra alba"</span>, <span class="st">"Lanice conchilega"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Nephtys hombergii"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Amphiura filiformis"</span>, <span class="st">"Desmolaimus zeelandicus"</span>, <span class="st">"Aponema torosa"</span>),</a>
-<a class="sourceLine" id="cb19-13" data-line-number="13">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb19-14" data-line-number="14">)</a>
-<a class="sourceLine" id="cb19-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb19-16" data-line-number="16"><span class="kw"><a href="reference/check_extension_eventids.html">check_extension_eventids</a></span>(event, occurrence)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">event &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">"cruise_1"</span>, <span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_3"</span>),</a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">  <span class="dt">eventDate =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">  <span class="dt">decimalLongitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb24-6" data-line-number="6">  <span class="dt">decimalLatitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb24-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb24-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb24-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb24-10" data-line-number="10">occurrence &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb24-11" data-line-number="11">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"sample_1"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_28"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_1"</span>),</a>
+<a class="sourceLine" id="cb24-12" data-line-number="12">  <span class="dt">scientificName =</span> <span class="kw">c</span>(<span class="st">"Abra alba"</span>, <span class="st">"Lanice conchilega"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Nephtys hombergii"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Amphiura filiformis"</span>, <span class="st">"Desmolaimus zeelandicus"</span>, <span class="st">"Aponema torosa"</span>),</a>
+<a class="sourceLine" id="cb24-13" data-line-number="13">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb24-14" data-line-number="14">)</a>
+<a class="sourceLine" id="cb24-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb24-16" data-line-number="16"><span class="kw"><a href="reference/check_extension_eventids.html">check_extension_eventids</a></span>(event, occurrence)</a></code></pre></div>
 <pre><code>    field level row                                                    message
 1 eventID error   4 eventID sample_28 has no corresponding eventID in the core</code></pre>
 </section><section class="level2"><h2>Flatten event records</h2>
 <p><code><a href="reference/flatten_event.html">flatten_event()</a></code> will recursively add event information from parent events to child events.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">event &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">"cruise_1"</span>, <span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_3"</span>),</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">  <span class="dt">eventDate =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">  <span class="dt">decimalLongitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb21-6" data-line-number="6">  <span class="dt">decimalLatitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb21-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb21-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb21-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb21-10" data-line-number="10"><span class="kw"><a href="reference/flatten_event.html">flatten_event</a></span>(event)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">event &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">"cruise_1"</span>, <span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_3"</span>),</a>
+<a class="sourceLine" id="cb26-4" data-line-number="4">  <span class="dt">eventDate =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb26-5" data-line-number="5">  <span class="dt">decimalLongitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb26-6" data-line-number="6">  <span class="dt">decimalLatitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb26-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb26-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb26-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb26-10" data-line-number="10"><span class="kw"><a href="reference/flatten_event.html">flatten_event</a></span>(event)</a></code></pre></div>
 <pre><code>      eventID parentEventID  eventDate decimalLongitude decimalLatitude
 1    cruise_1          &lt;NA&gt;       &lt;NA&gt;               NA              NA
 2   station_1      cruise_1       &lt;NA&gt;              2.9            54.1
@@ -221,22 +249,22 @@ Multiple matches, pick a number or leave empty to skip: 2
 9 subsample_2      sample_3 2017-01-03              4.7            55.8</code></pre>
 </section><section class="level2"><h2>Flatten occurrence and event records</h2>
 <p><code><a href="reference/flatten_occurrence.html">flatten_occurrence()</a></code> will add event information to occurrence records.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">event &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">"cruise_1"</span>, <span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_3"</span>),</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">  <span class="dt">eventDate =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5">  <span class="dt">decimalLongitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb23-6" data-line-number="6">  <span class="dt">decimalLatitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb23-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb23-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb23-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb23-10" data-line-number="10">occurrence &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb23-11" data-line-number="11">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"sample_1"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_1"</span>),</a>
-<a class="sourceLine" id="cb23-12" data-line-number="12">  <span class="dt">scientificName =</span> <span class="kw">c</span>(<span class="st">"Abra alba"</span>, <span class="st">"Lanice conchilega"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Nephtys hombergii"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Amphiura filiformis"</span>, <span class="st">"Desmolaimus zeelandicus"</span>, <span class="st">"Aponema torosa"</span>),</a>
-<a class="sourceLine" id="cb23-13" data-line-number="13">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb23-14" data-line-number="14">)</a>
-<a class="sourceLine" id="cb23-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb23-16" data-line-number="16"><span class="kw"><a href="reference/flatten_occurrence.html">flatten_occurrence</a></span>(event, occurrence)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">event &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">  <span class="dt">parentEventID =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">"cruise_1"</span>, <span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_3"</span>),</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">  <span class="dt">eventDate =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">  <span class="dt">decimalLongitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb28-6" data-line-number="6">  <span class="dt">decimalLatitude =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb28-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb28-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb28-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb28-10" data-line-number="10">occurrence &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb28-11" data-line-number="11">  <span class="dt">eventID =</span> <span class="kw">c</span>(<span class="st">"sample_1"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_1"</span>),</a>
+<a class="sourceLine" id="cb28-12" data-line-number="12">  <span class="dt">scientificName =</span> <span class="kw">c</span>(<span class="st">"Abra alba"</span>, <span class="st">"Lanice conchilega"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Nephtys hombergii"</span>, <span class="st">"Pectinaria koreni"</span>, <span class="st">"Amphiura filiformis"</span>, <span class="st">"Desmolaimus zeelandicus"</span>, <span class="st">"Aponema torosa"</span>),</a>
+<a class="sourceLine" id="cb28-13" data-line-number="13">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb28-14" data-line-number="14">)</a>
+<a class="sourceLine" id="cb28-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb28-16" data-line-number="16"><span class="kw"><a href="reference/flatten_occurrence.html">flatten_occurrence</a></span>(event, occurrence)</a></code></pre></div>
 <pre><code>      eventID          scientificName  eventDate decimalLatitude decimalLongitude
 1    sample_1               Abra alba 2017-01-01            54.1              2.9
 2    sample_1       Lanice conchilega 2017-01-01            54.1              2.9
@@ -248,35 +276,35 @@ Multiple matches, pick a number or leave empty to skip: 2
 8 subsample_1          Aponema torosa 2017-01-03            55.8              4.7</code></pre>
 </section><section class="level2"><h2>Calculate centroid and radius for WKT geometries</h2>
 <p><code><a href="reference/calculate_centroid.html">calculate_centroid()</a></code> calculates a centroid and radius for WKT strings. This is useful for populating <code>decimalLongitude</code>, <code>decimalLatitude</code> and <code>coordinateUncertaintyInMeters</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">wkt &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">  <span class="st">"POLYGON ((2.53784 51.12421, 2.99377 51.32031, 3.34534 51.39578, 2.82349 51.85614, 2.27417 51.69980, 2.53784 51.12421))"</span>,</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">  <span class="st">"POLYGON ((3.15582 42.23564, 3.13248 42.14202, 3.22037 42.11249, 3.26019 42.21530, 3.15582 42.23564))"</span></a>
-<a class="sourceLine" id="cb25-4" data-line-number="4">)</a>
-<a class="sourceLine" id="cb25-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb25-6" data-line-number="6"><span class="kw"><a href="reference/calculate_centroid.html">calculate_centroid</a></span>(wkt)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">wkt &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">  <span class="st">"POLYGON ((2.53784 51.12421, 2.99377 51.32031, 3.34534 51.39578, 2.82349 51.85614, 2.27417 51.69980, 2.53784 51.12421))"</span>,</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">  <span class="st">"POLYGON ((3.15582 42.23564, 3.13248 42.14202, 3.22037 42.11249, 3.26019 42.21530, 3.15582 42.23564))"</span></a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">)</a>
+<a class="sourceLine" id="cb30-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="kw"><a href="reference/calculate_centroid.html">calculate_centroid</a></span>(wkt)</a></code></pre></div>
 <pre><code>  decimalLongitude decimalLatitude coordinateUncertaintyInMeters
 1         2.747292        51.50939                     45287.041
 2         3.193570        42.17716                      7531.455</code></pre>
 </section><section class="level2"><h2>Map column names to Darwin Core terms</h2>
 <p><code><a href="reference/map_fields.html">map_fields()</a></code> changes column names using a terms map.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">  <span class="dt">id =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3">  <span class="dt">date =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb27-4" data-line-number="4">  <span class="dt">locality =</span> <span class="kw">rep</span>(<span class="st">"North Sea"</span>, <span class="dv">9</span>),</a>
-<a class="sourceLine" id="cb27-5" data-line-number="5">  <span class="dt">lon =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb27-6" data-line-number="6">  <span class="dt">lat =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
-<a class="sourceLine" id="cb27-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb27-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb27-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb27-10" data-line-number="10">mapping &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb27-11" data-line-number="11">  <span class="dt">decimalLongitude =</span> <span class="st">"lon"</span>,</a>
-<a class="sourceLine" id="cb27-12" data-line-number="12">  <span class="dt">decimalLatitude =</span> <span class="st">"lat"</span>,</a>
-<a class="sourceLine" id="cb27-13" data-line-number="13">  <span class="dt">datasetName =</span> <span class="st">"dataset"</span>,</a>
-<a class="sourceLine" id="cb27-14" data-line-number="14">  <span class="dt">eventID =</span> <span class="st">"id"</span>,</a>
-<a class="sourceLine" id="cb27-15" data-line-number="15">  <span class="dt">eventDate =</span> <span class="st">"date"</span></a>
-<a class="sourceLine" id="cb27-16" data-line-number="16">)</a>
-<a class="sourceLine" id="cb27-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb27-18" data-line-number="18"><span class="kw"><a href="reference/map_fields.html">map_fields</a></span>(data, mapping)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">  <span class="dt">id =</span> <span class="kw">c</span>(<span class="st">"cruise_1"</span>, <span class="st">"station_1"</span>, <span class="st">"station_2"</span>, <span class="st">"sample_1"</span>, <span class="st">"sample_2"</span>, <span class="st">"sample_3"</span>, <span class="st">"sample_4"</span>, <span class="st">"subsample_1"</span>, <span class="st">"subsample_2"</span>),</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">  <span class="dt">date =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"2017-01-01"</span>, <span class="st">"2017-01-02"</span>, <span class="st">"2017-01-03"</span>, <span class="st">"2017-01-04"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb32-4" data-line-number="4">  <span class="dt">locality =</span> <span class="kw">rep</span>(<span class="st">"North Sea"</span>, <span class="dv">9</span>),</a>
+<a class="sourceLine" id="cb32-5" data-line-number="5">  <span class="dt">lon =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">2.9</span>, <span class="fl">4.7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb32-6" data-line-number="6">  <span class="dt">lat =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="fl">54.1</span>, <span class="fl">55.8</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb32-7" data-line-number="7">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb32-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb32-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb32-10" data-line-number="10">mapping &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb32-11" data-line-number="11">  <span class="dt">decimalLongitude =</span> <span class="st">"lon"</span>,</a>
+<a class="sourceLine" id="cb32-12" data-line-number="12">  <span class="dt">decimalLatitude =</span> <span class="st">"lat"</span>,</a>
+<a class="sourceLine" id="cb32-13" data-line-number="13">  <span class="dt">datasetName =</span> <span class="st">"dataset"</span>,</a>
+<a class="sourceLine" id="cb32-14" data-line-number="14">  <span class="dt">eventID =</span> <span class="st">"id"</span>,</a>
+<a class="sourceLine" id="cb32-15" data-line-number="15">  <span class="dt">eventDate =</span> <span class="st">"date"</span></a>
+<a class="sourceLine" id="cb32-16" data-line-number="16">)</a>
+<a class="sourceLine" id="cb32-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb32-18" data-line-number="18"><span class="kw"><a href="reference/map_fields.html">map_fields</a></span>(data, mapping)</a></code></pre></div>
 <pre><code>      eventID  eventDate  locality decimalLongitude decimalLatitude
 1    cruise_1       &lt;NA&gt; North Sea               NA              NA
 2   station_1       &lt;NA&gt; North Sea              2.9            54.1
@@ -288,27 +316,27 @@ Multiple matches, pick a number or leave empty to skip: 2
 8 subsample_1       &lt;NA&gt; North Sea               NA              NA
 9 subsample_2       &lt;NA&gt; North Sea               NA              NA</code></pre>
 </section><section class="level2"><h2>Check eventDate</h2>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">eventDate =</span> <span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">  <span class="st">"2016"</span>,</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3">  <span class="st">"2016-01"</span>,</a>
-<a class="sourceLine" id="cb29-4" data-line-number="4">  <span class="st">"2016-01-02"</span>,</a>
-<a class="sourceLine" id="cb29-5" data-line-number="5">  <span class="st">"2016-01-02 12"</span>,</a>
-<a class="sourceLine" id="cb29-6" data-line-number="6">  <span class="st">"2016-01-02 12:34"</span>,</a>
-<a class="sourceLine" id="cb29-7" data-line-number="7">  <span class="st">"2016-01-02 12:34:48"</span>,</a>
-<a class="sourceLine" id="cb29-8" data-line-number="8">  <span class="st">"2016-01-02T13:00:00+01:00"</span>,</a>
-<a class="sourceLine" id="cb29-9" data-line-number="9">  <span class="st">"2016-01-02T13:00:00+0100"</span>,</a>
-<a class="sourceLine" id="cb29-10" data-line-number="10">  <span class="st">"2016-01-02T13:00:00+01"</span>,</a>
-<a class="sourceLine" id="cb29-11" data-line-number="11">  <span class="st">"2016-01-02T13:00:00Z"</span>,</a>
-<a class="sourceLine" id="cb29-12" data-line-number="12">  <span class="st">"2016-01-02 13:00:00/2016-01-02 14:00:00"</span>,</a>
-<a class="sourceLine" id="cb29-13" data-line-number="13">  <span class="st">"2016-01-02 13:00:00/14:00:00"</span>,</a>
-<a class="sourceLine" id="cb29-14" data-line-number="14">  <span class="st">"2016-01-02/05"</span>,</a>
-<a class="sourceLine" id="cb29-15" data-line-number="15">  <span class="st">"2016-01-01 13u40"</span>,</a>
-<a class="sourceLine" id="cb29-16" data-line-number="16">  <span class="st">"2016/01/03"</span>,</a>
-<a class="sourceLine" id="cb29-17" data-line-number="17">  <span class="st">""</span>,</a>
-<a class="sourceLine" id="cb29-18" data-line-number="18">  <span class="ot">NA</span></a>
-<a class="sourceLine" id="cb29-19" data-line-number="19">), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb29-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb29-21" data-line-number="21"><span class="kw"><a href="reference/check_eventdate.html">check_eventdate</a></span>(data)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">eventDate =</span> <span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">  <span class="st">"2016"</span>,</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">  <span class="st">"2016-01"</span>,</a>
+<a class="sourceLine" id="cb34-4" data-line-number="4">  <span class="st">"2016-01-02"</span>,</a>
+<a class="sourceLine" id="cb34-5" data-line-number="5">  <span class="st">"2016-01-02 12"</span>,</a>
+<a class="sourceLine" id="cb34-6" data-line-number="6">  <span class="st">"2016-01-02 12:34"</span>,</a>
+<a class="sourceLine" id="cb34-7" data-line-number="7">  <span class="st">"2016-01-02 12:34:48"</span>,</a>
+<a class="sourceLine" id="cb34-8" data-line-number="8">  <span class="st">"2016-01-02T13:00:00+01:00"</span>,</a>
+<a class="sourceLine" id="cb34-9" data-line-number="9">  <span class="st">"2016-01-02T13:00:00+0100"</span>,</a>
+<a class="sourceLine" id="cb34-10" data-line-number="10">  <span class="st">"2016-01-02T13:00:00+01"</span>,</a>
+<a class="sourceLine" id="cb34-11" data-line-number="11">  <span class="st">"2016-01-02T13:00:00Z"</span>,</a>
+<a class="sourceLine" id="cb34-12" data-line-number="12">  <span class="st">"2016-01-02 13:00:00/2016-01-02 14:00:00"</span>,</a>
+<a class="sourceLine" id="cb34-13" data-line-number="13">  <span class="st">"2016-01-02 13:00:00/14:00:00"</span>,</a>
+<a class="sourceLine" id="cb34-14" data-line-number="14">  <span class="st">"2016-01-02/05"</span>,</a>
+<a class="sourceLine" id="cb34-15" data-line-number="15">  <span class="st">"2016-01-01 13u40"</span>,</a>
+<a class="sourceLine" id="cb34-16" data-line-number="16">  <span class="st">"2016/01/03"</span>,</a>
+<a class="sourceLine" id="cb34-17" data-line-number="17">  <span class="st">""</span>,</a>
+<a class="sourceLine" id="cb34-18" data-line-number="18">  <span class="ot">NA</span></a>
+<a class="sourceLine" id="cb34-19" data-line-number="19">), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb34-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb34-21" data-line-number="21"><span class="kw"><a href="reference/check_eventdate.html">check_eventdate</a></span>(data)</a></code></pre></div>
 <pre><code>  level row     field                                                     message
 1 error  14 eventDate eventDate 2016-01-01 13u40 does not seem to be a valid date
 2 error  15 eventDate       eventDate 2016/01/03 does not seem to be a valid date
@@ -317,30 +345,30 @@ Multiple matches, pick a number or leave empty to skip: 2
 </section><section class="level2"><h2>Dataset structure</h2>
 <p><code>treeStucture()</code> generates a simplified event/occurrence tree showing the relationships between the different types (based on <code>type</code> and <code>measurementType</code>) of events and occurrences. Each node in the simplified tree is given a name based on the <code>eventID</code> or <code>occurrenceID</code> of one of the events of occurrences of that node type.</p>
 <p>Note that an <code>eventID</code> column is required in the measurements table.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># Get sample data (use a test dataset from IPT if finch is installed)</span></a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="cf">if</span>(<span class="kw">requireNamespace</span>(<span class="st">"finch"</span>)) {</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">   archive &lt;-<span class="st"> </span>finch<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/finch/topics/dwca_read">dwca_read</a></span>(<span class="st">"http://ipt.iobis.org/obis-env/archive.do?r=nsbs&amp;v=1.6"</span>, <span class="dt">read =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">} <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5">   archive &lt;-<span class="st"> </span>obistools<span class="op">::</span>hyperbenthos</a>
-<a class="sourceLine" id="cb31-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb31-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb31-8" data-line-number="8">event &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>event.txt</a>
-<a class="sourceLine" id="cb31-9" data-line-number="9">occurrence &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>occurrence.txt</a>
-<a class="sourceLine" id="cb31-10" data-line-number="10">emof &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>extendedmeasurementorfact.txt</a>
-<a class="sourceLine" id="cb31-11" data-line-number="11">emof<span class="op">$</span>eventID &lt;-<span class="st"> </span>emof<span class="op">$</span>id</a>
-<a class="sourceLine" id="cb31-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb31-13" data-line-number="13"><span class="co"># Create tree structure</span></a>
-<a class="sourceLine" id="cb31-14" data-line-number="14">tree &lt;-<span class="st"> </span><span class="kw"><a href="reference/treeStructure.html">treeStructure</a></span>(event, occurrence, emof)</a>
-<a class="sourceLine" id="cb31-15" data-line-number="15"><span class="kw"><a href="reference/exportTree.html">exportTree</a></span>(tree, <span class="st">"tree.html"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># Get sample data (use a test dataset from IPT if finch is installed)</span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="cf">if</span>(<span class="kw">requireNamespace</span>(<span class="st">"finch"</span>)) {</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">   archive &lt;-<span class="st"> </span>finch<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/finch/topics/dwca_read">dwca_read</a></span>(<span class="st">"http://ipt.iobis.org/obis-env/archive.do?r=nsbs&amp;v=1.6"</span>, <span class="dt">read =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb36-5" data-line-number="5">   archive &lt;-<span class="st"> </span>obistools<span class="op">::</span>hyperbenthos</a>
+<a class="sourceLine" id="cb36-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb36-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb36-8" data-line-number="8">event &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>event.txt</a>
+<a class="sourceLine" id="cb36-9" data-line-number="9">occurrence &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>occurrence.txt</a>
+<a class="sourceLine" id="cb36-10" data-line-number="10">emof &lt;-<span class="st"> </span>archive<span class="op">$</span>data<span class="op">$</span>extendedmeasurementorfact.txt</a>
+<a class="sourceLine" id="cb36-11" data-line-number="11">emof<span class="op">$</span>eventID &lt;-<span class="st"> </span>emof<span class="op">$</span>id</a>
+<a class="sourceLine" id="cb36-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb36-13" data-line-number="13"><span class="co"># Create tree structure</span></a>
+<a class="sourceLine" id="cb36-14" data-line-number="14">tree &lt;-<span class="st"> </span><span class="kw"><a href="reference/treeStructure.html">treeStructure</a></span>(event, occurrence, emof)</a>
+<a class="sourceLine" id="cb36-15" data-line-number="15"><span class="kw"><a href="reference/exportTree.html">exportTree</a></span>(tree, <span class="st">"tree.html"</span>)</a></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png"></p>
 </section><section class="level2"><h2>Data quality report</h2>
 <p><code><a href="reference/report.html">report()</a></code> generates a basic data quality report.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw"><a href="reference/report.html">report</a></span>(abra)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw"><a href="reference/report.html">report</a></span>(abra)</a></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/report.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/report.png"></p>
 </section><section class="level2"><h2>Lookup XY</h2>
 <p><code>lookup_xy</code> returns basic spatial information for a given set of points. Currently three main things are returned: information from vector data (areas), information from rasters (grids) and the shoredistance.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">xydata &lt;-<span class="st"> </span><span class="kw"><a href="reference/lookup_xy.html">lookup_xy</a></span>(abra, <span class="dt">shoredistance =</span> <span class="ot">TRUE</span>, <span class="dt">grids =</span> <span class="ot">TRUE</span>, <span class="dt">areas =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">head</span>(xydata)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">xydata &lt;-<span class="st"> </span><span class="kw"><a href="reference/lookup_xy.html">lookup_xy</a></span>(abra, <span class="dt">shoredistance =</span> <span class="ot">TRUE</span>, <span class="dt">grids =</span> <span class="ot">TRUE</span>, <span class="dt">areas =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">head</span>(xydata)</a></code></pre></div>
 <pre><code>shoredistance sstemperature sssalinity bathymetry obis
 1            30      10.28631   34.76271       -4.0 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
 2          1080      10.33242   34.90622       61.4 United Kingdom, United Kingdom, T, F, eez, eez, United Kingdom, United Kingdom: all, 221, United Kingdom: all
@@ -348,8 +376,8 @@ Multiple matches, pick a number or leave empty to skip: 2
 4           290      10.79197   34.29342       20.6 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
 5           259      10.72199   34.88896       51.0 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221
 6           506      10.77101   34.30700       32.4 United Kingdom, United Kingdom, F, T, eez, eez, United Kingdom: all, United Kingdom, United Kingdom: all, 221</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">ggplot</span>(xydata, <span class="kw">aes</span>(sssalinity, sstemperature, <span class="dt">color=</span>bathymetry)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">alpha=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">ggplot</span>(xydata, <span class="kw">aes</span>(sssalinity, sstemperature, <span class="dt">color=</span>bathymetry)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">alpha=</span><span class="fl">0.5</span>)</a></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/iobis/obistools/master/images/abra_sss_sst.png" alt="https://raw.githubusercontent.com/iobis/obistools/master/images/abra_sss_sst.png"></p>
 </section></section>
 </div>

@@ -32,9 +32,10 @@ print(nrow(notok))
 r <- check_outliers_species(abra, report = TRUE, mad_coef = 3, iqr_coef = 1.5)
 print(r)
 plot_map_leaflet(abra[r$row,], popup = "id")
+plot_outliers(r)
 }
 }
 \seealso{
-\code{\link{check_outliers_species}} \code{\link{check_onland}}
-  \code{\link{check_depth}}
+\code{\link{plot_outliers}} \code{\link{check_outliers_dataset}}
+  \code{\link{check_onland}} \code{\link{check_depth}}
 }

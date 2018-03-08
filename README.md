@@ -181,7 +181,7 @@ check_onland(abra, report = TRUE)
 plot_map(check_depth(abra, depthmargin = 50), zoom = TRUE)
 ```
 
-![https://raw.githubusercontent.com/iobis/obistools/master/images/abra.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra_check_depth_50.png)
+![https://raw.githubusercontent.com/iobis/obistools/master/images/abra_check_depth_50.png](https://raw.githubusercontent.com/iobis/obistools/master/images/abra_check_depth_50.png)
 
 ```R
 report <- check_depth(abra, report=T, depthmargin = 50)
@@ -197,6 +197,53 @@ field level  row                                                                
 5 minimumDepthInMeters error 1249   Depth value (68.3) is greater than the value found in the bathymetry raster (depth=8.0, margin=50)
 6 minimumDepthInMeters error 1250   Depth value (72.9) is greater than the value found in the bathymetry raster (depth=5.0, margin=50)
 ```
+
+## Check outliers
+
+`check_outliers_species` and `check_outliers_dataset` use the qc-service web service to identify which records are statistical outliers. For species outlier checks are performed for both environmental data (bathymetry, sea surface salinity and sea surface temperature) as well as spatially. Outliers are identified as all points that deviate more then six times the median absolute deviation (MAD) or three times the interquartile range (IQR) from the median. The `check_outliers_species` requires that the scientificNameID is filled in. When the species is already a known species in OBIS then the median, MAD and IQR from the known records are used for comparing the new species records. For datasets, only the spatial outliers are identified. Spatial outliers are detected based on the distance to the geographical centroid of all unique coordinates. The list in the extra field of the debug level output in the report provides all relevant statistics on which the outlier analysis is based. The `report` also gives an overview of these outliers. Outliers can be plotted with `plot_outliers(report)`
+
+```R
+report <- check_outliers_species(abra, report=T)
+head(report)
+```
+
+```
+# A tibble: 6 x 5
+  level     row field                   message                                               extra     
+  <chr>   <int> <chr>                   <chr>                                                 <list>    
+1 debug      NA Outliers Taxon [141433] Taxon [141433]                                        <list [6]>
+2 warning     2 Outliers Taxon [141433] bathymetry [61.4] is not within MAD limits [-56, 40]  <lgl [1]> 
+3 warning     3 Outliers Taxon [141433] bathymetry [122.2] is not within MAD limits [-56, 40] <lgl [1]> 
+4 warning     5 Outliers Taxon [141433] bathymetry [51] is not within MAD limits [-56, 40]    <lgl [1]> 
+5 warning     9 Outliers Taxon [141433] bathymetry [66] is not within MAD limits [-56, 40]    <lgl [1]> 
+6 warning    11 Outliers Taxon [141433] bathymetry [179.2] is not within MAD limits [-56, 40] <lgl [1]> 
+```
+
+```R
+report <- check_outliers_dataset(abra, report=T)
+head(report)
+```
+
+```
+# A tibble: 6 x 5
+  level     row field            message                                                         extra     
+  <chr>   <int> <chr>            <chr>                                                           <list>    
+1 debug      NA Outliers Dataset Dataset                                                         <list [2]>
+2 warning  2057 Outliers Dataset spatial [2341877] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
+3 warning  2058 Outliers Dataset spatial [2344195] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
+4 warning  2059 Outliers Dataset spatial [2344021] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
+5 warning  2060 Outliers Dataset spatial [2361854] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
+6 warning  2061 Outliers Dataset spatial [2384709] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
+```
+
+```R
+report <- check_outliers_species(abra, report=TRUE)
+plot_outliers(report)
+```
+
+![https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_environmental.png](https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_environmental.png)
+
+![https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_spatial.png](https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_spatial.png)
 
 ## Check eventID and parentEventID
 
