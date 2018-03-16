@@ -19,8 +19,19 @@ tryCatch(obistools::plot_map(params$data, zoom = TRUE),
 maxrows <- 25
 qc <- obistools::report_summary(qc, maxrows = maxrows)
 deps <- c()
+firstOutliers <- TRUE
 for (field in names(qc)) {
+  
+  if(startsWith(field, 'Outliers') & firstOutliers) {
+    
+    cat('<button style="margin:20px 0px 20px 0px" class="btn btn-primary" data-toggle="collapse" data-target="#outliers"> Show/Hide Outliers </button>')
+    cat("\n\n## Outliers\n\n")
+    
+    #cat('<div id="outliers-div" class="collapse">')
+    firstOutliers <- FALSE
+  }
   cat("\n\n###", field, "\n\n")
+  
   errors <- qc[[field]]
   if(nrow(errors) == maxrows) {
     cat(paste0("\n\nMore than **", maxrows, "** errors and warnings related to this field were found, the first **", maxrows, "** are printed below and shown on a map whenever possible.\n"))
@@ -67,3 +78,7 @@ htmltools::attachDependencies(
   deps #unlist(deps,recursive=FALSE)
 )
 ```
+
+<script>
+$("#outliers").attr("class","collapse");
+</script>
