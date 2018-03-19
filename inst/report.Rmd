@@ -23,7 +23,7 @@ firstOutliers <- TRUE
 for (field in names(qc)) {
   
   if(startsWith(field, 'Outliers') & firstOutliers) {
-    
+    cat("\n\n")
     cat('<button style="margin:20px 0px 20px 0px" class="btn btn-primary" data-toggle="collapse" data-target="#outliers"> Show/Hide Outliers </button>')
     cat("\n\n## Outliers\n\n")
     
@@ -39,8 +39,9 @@ for (field in names(qc)) {
   print(knitr::kable(errors[errors$level != 'debug', c('field', 'row', 'level', 'message')], row.names = FALSE))
   
   mapdata <- data[stats::na.omit(errors$row),, drop=FALSE]
-  mapplot <- NULL
+  
   if(NROW(mapdata) > 0) {
+    mapplot <- NULL
     if(startsWith(field, 'Outliers ')) {
       outliers_info <- errors[errors$level == 'debug',]$extra[[1]]
       boxplots <- obistools:::plot_outliers_environmental(outliers_info)

@@ -18,8 +18,9 @@ check_fields <- function(data, level = "error") {
     fields <- missing_fields(data, required)
     if (length(fields) > 0) {
       errors <- bind_rows(errors, data_frame(
-        field = fields,
         level = "error",
+        field = fields,
+        row = NA,
         message = paste0("Required field ", fields, " is missing"),
         stringsAsFactors = FALSE
       ))
