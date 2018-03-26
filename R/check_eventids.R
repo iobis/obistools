@@ -15,8 +15,7 @@ check_eventids <- function(event) {
     return(data_frame(
       field = fields,
       level = "error",
-      message = paste0("Field ", fields, " is missing"),
-      stringsAsFactors = FALSE
+      message = paste0("Field ", fields, " is missing")
     ))
   }
 
@@ -34,8 +33,7 @@ check_eventids <- function(event) {
       field = "eventID",
       level = "error",
       row = rows,
-      message = paste0("eventID ", event$eventID[rows], " is duplicated"),
-      stringsAsFactors = FALSE
+      message = paste0("eventID ", event$eventID[rows], " is duplicated")
     ))
   }
 
@@ -49,8 +47,7 @@ check_eventids <- function(event) {
       field = "parentEventID",
       level = "error",
       row = rows,
-      message = paste0("parentEventID ", event$parentEventID[rows], " has no corresponding eventID"),
-      stringsAsFactors = FALSE
+      message = paste0("parentEventID ", event$parentEventID[rows], " has no corresponding eventID")
     ))
   }
 
@@ -67,7 +64,7 @@ check_eventids <- function(event) {
 check_extension_eventids <- function(event, extension, field = "eventID") {
   rows <- which(!extension[[field]] %in% event$eventID)
   if (length(rows) > 0) {
-    return(data_frame(
+    return(data.frame(
       field = field,
       level = "error",
       row = rows,

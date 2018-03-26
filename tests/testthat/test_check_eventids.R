@@ -52,10 +52,10 @@ test_that("check_eventids detects duplicate eventIDs", {
 test_that("check_extension_eventids works", {
 
   event <- data.frame(eventID = c("a", "b", "b", "c"), stringsAsFactors = FALSE)
-  extension <- data.frame(xeventID = c("a", "b", "b", "d"), stringsAsFactors = FALSE)
+  extension <- data.frame(xeventID = c("a", "b", "b", "d", "e"), stringsAsFactors = FALSE)
   df <- check_extension_eventids(event, extension, "xeventID")
-  expect_equal(nrow(df), 1)
-  expect_equal(df$row, 4)
+  expect_equal(nrow(df), 2)
+  expect_true(all(c(4,5) %in% df$row))
 
   df <- check_extension_eventids(event[NULL, , drop=FALSE], extension[NULL, , drop=FALSE], "xeventID")
   expect_equal(nrow(df), 0)
