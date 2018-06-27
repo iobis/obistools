@@ -47,3 +47,38 @@ test_that("Testing several issues related to reporting and QC in general for lar
   #             col.names = TRUE, row.names=FALSE, fileEncoding="UTF-8", quote=TRUE)
   # head(fullRockfish)
 })
+
+test_that('Deep sea', {
+  skip("Skip deep sea file checking")
+  library(openxlsx)
+  library(obistools)
+  path <- "/Users/samuel/Downloads/OBIS-ENV-DATA_BENEFICIAL_deepsea.xlsx"
+  events <- read.xlsx(path, sheet = 1)
+  occurrences <- read.xlsx(path, sheet = 2)
+  emof <- read.xlsx(path, sheet = 3)
+
+  issues <- check_eventids(events)
+  View(issues)
+  flat_events <- flatten_event(events)
+
+  issues <- check_extension_eventids(events, occurrences)
+
+  data <- flatten_occurrence(events, occurrences)
+  report(data)
+
+
+
+
+  download_all <- function(url) {
+     data <- data.frame(stringsAsFactors = FALSE)
+     v <- jsonlite::fromJSON(url)
+     while(!is.null(v$odata.nextLink) && NROW(v$value) > 0) {
+       v <- jsonlite::fromJSON(v$odata.nextLink)
+       data <- rbind(data, v$value)
+     }
+     data
+   }
+  events <- download_all('http://testbed.ymparisto.fi/api/Pohjaelainrajapinta/1.0/odata/Event/')
+
+
+})

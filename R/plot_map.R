@@ -85,11 +85,17 @@ identify_map <- function(data) {
 #' @examples
 #' plot_map_leaflet(abra)
 #' plot_map_leaflet(abra, popup = "datasetID")
+#' plot_map_leaflet(abra, popup = head(colnames(abra)))
 #' @export
 plot_map_leaflet <- function(data, provider = "Esri.OceanBasemap", popup = NULL) {
   check_lonlat(data, FALSE)
-  if (!is.null(popup) && popup %in% names(data)) {
-    popupdata <- as.character(data[,popup])
+  if (!is.null(popup) && all(popup %in% names(data))) {
+    if(length(popup) == 1) {
+      popupdata <- as.character(data[,popup])
+    } else {
+      popupdata <- apply(data[,popup], 1, knitr::kable, format="html")
+      popupdata <- gsub("<thead>.*</thead>", "", popupdata) # remove column header
+    }
   } else if (length(popup) == NROW(data)) {
     popupdata <- as.character(popup)
   } else {

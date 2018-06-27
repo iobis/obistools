@@ -24,4 +24,5 @@ Create a Leaflet map.
 \examples{
 plot_map_leaflet(abra)
 plot_map_leaflet(abra, popup = "datasetID")
+plot_map_leaflet(abra, popup = head(colnames(abra)))
 }
