@@ -8,8 +8,8 @@
 #'   (default \code{TRUE}).
 #' @param grids Indicate whether the grid values such as temperature and
 #'   bathymetry should be returned (default \code{TRUE})
-#' @param areas Indicate whether the area values should be returned (default
-#'   \code{FALSE}).
+#' @param areas Indicate whether the area values should be returned and from
+#'   which distance in meters to the provided points (default \code{FALSE}).
 #' @param asdataframe Indicate whether a dataframe or a list should be returned
 #'   (default \code{TRUE}).
 #'
@@ -18,6 +18,11 @@
 #' @details When \code{asdataframe} is \code{FALSE} then data is returned in the
 #'   same order as the requested data as a list, with for each list item the
 #'   requested values. For invalid coordinates \code{NULL} is returned.
+#'
+#'   When parameter \code{areas} is a positive integer then all areas within a radius of
+#'   this distance in meters will be returned. A value of \code{TRUE} is
+#'   equivalent to a distance of 0 meters, \code{FALSE} indicates that no area
+#'   results are required.
 #' @examples
 #' \dontrun{
 #' lookup_xy(abra, shoredistance = TRUE, grids = TRUE, areas = FALSE)
@@ -36,13 +41,26 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
     }
     return(output)
   } else {
+    areasdistancewithin = 0
+    if(is.numeric(areas) && as.numeric(as.integer(areas)) == areas) {
+      if(areas < 0) {
+        warning("Areas parameter should be TRUE/FALSE or a positive integer")
+      } else {
+        areasdistancewithin = areas
+        areas = TRUE
+      }
+    } else if(!is.logical(areas)) {
+        warning("Areas parameter should be TRUE/FALSE or a positive integer")
+        areas = FALSE
+    }
+
     # Prepare message
     splists <- unname(split(as.matrix(xy$uniquesp), seq(nrow(xy$uniquesp))))
     # Divide in chunks of 25000 coordinates
     chunks <- split(splists, ceiling(seq_along(splists)/25000))
 
     content_chunks <- lapply(chunks, function(chunk) {
-      msg <- jsonlite::toJSON(list(points=chunk, shoredistance=shoredistance, grids=grids, areas=areas), auto_unbox=TRUE)
+      msg <- jsonlite::toJSON(list(points=chunk, shoredistance=shoredistance, grids=grids, areas=areas, areasdistancewithin=areasdistancewithin), auto_unbox=TRUE)
       raw_content <- lookup_xy_chunk(msg)
       jsonlite::fromJSON(rawToChar(raw_content), simplifyVector = FALSE)
     })

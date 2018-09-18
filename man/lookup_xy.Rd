@@ -16,8 +16,8 @@ lookup_xy(data, shoredistance=TRUE, grids=TRUE, areas=FALSE,
 \item{grids}{Indicate whether the grid values such as temperature and
 bathymetry should be returned (default \code{TRUE})}
 
-\item{areas}{Indicate whether the area values should be returned (default
-\code{FALSE}).}
+\item{areas}{Indicate whether the area values should be returned and from
+which distance in meters to the provided points (default \code{FALSE}).}
 
 \item{asdataframe}{Indicate whether a dataframe or a list should be returned
 (default \code{TRUE}).}
@@ -33,6 +33,11 @@ Lookup spatial data for a set of points.
 When \code{asdataframe} is \code{FALSE} then data is returned in the
   same order as the requested data as a list, with for each list item the
   requested values. For invalid coordinates \code{NULL} is returned.
+
+  When parameter \code{areas} is a positive integer then all areas within a radius of
+  this distance in meters will be returned. A value of \code{TRUE} is
+  equivalent to a distance of 0 meters, \code{FALSE} indicates that no area
+  results are required.
 }
 \examples{
 \dontrun{
