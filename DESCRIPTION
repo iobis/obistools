@@ -1,7 +1,7 @@
 Package: obistools
 Title: Data Enhancement and Quality Control of Marine Species Observations
 Description: Prepare data sets for submission to the Ocean Biogeographical Information System (<http://iobis.org>). It can also be used for checking the quality of a set of marine species distribution records.
-Version: 0.0.5.9001
+Version: 0.0.5.9002
 Date: 2018-01-17
 Authors@R: c(
     person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = "aut"),

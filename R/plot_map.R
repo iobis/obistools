@@ -15,9 +15,10 @@ plot_map <- function(data, zoom = FALSE) {
     xlab("longitude") +
     ylab("latitude")
 
-  if (zoom) {
-    xrange <- range(data$decimalLongitude)
-    yrange <- range(data$decimalLatitude)
+  xrange <- range(data$decimalLongitude, na.rm = TRUE)
+  yrange <- range(data$decimalLatitude, na.rm = TRUE)
+
+  if (zoom & all(is.finite(xrange)) & all(is.finite(yrange))) {
     margin <- 0.3
     dx <- margin * (xrange[2] - xrange[1])
     dy <- margin * (yrange[2] - yrange[1])
