@@ -107,8 +107,8 @@ bathymetry should be returned (default <code>TRUE</code>)</p></td>
     </tr>
     <tr>
       <th>areas</th>
-      <td><p>Indicate whether the area values should be returned (default
-<code>FALSE</code>).</p></td>
+      <td><p>Indicate whether the area values should be returned and from
+which distance in meters to the provided points (default <code>FALSE</code>).</p></td>
     </tr>
     <tr>
       <th>asdataframe</th>
@@ -127,6 +127,10 @@ bathymetry should be returned (default <code>TRUE</code>)</p></td>
     <p>When <code>asdataframe</code> is <code>FALSE</code> then data is returned in the
   same order as the requested data as a list, with for each list item the
   requested values. For invalid coordinates <code>NULL</code> is returned.</p>
+<p>When parameter <code>areas</code> is a positive integer then all areas within a radius of
+  this distance in meters will be returned. A value of <code>TRUE</code> is
+  equivalent to a distance of 0 meters, <code>FALSE</code> indicates that no area
+  results are required.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

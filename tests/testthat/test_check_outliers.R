@@ -17,3 +17,8 @@ test_that("check_outliers_species identifies outliers", {
   d <- check_outliers_species(data, report = FALSE)
   expect_equal(d, data[unique(na.omit(rp$row)),])
 })
+
+test_that("check_outliers_species works for abra", {
+  d <- check_outliers_species(abra)
+  expect_gte(nrow(d), 500)
+})

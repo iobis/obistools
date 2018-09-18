@@ -102,19 +102,21 @@ cache_call <- function(key, expr, env = NULL) {
 }
 
 service_call <- function(url, msg) {
-  response <- cache_call(key = paste(url, msg),
-                         expression(httr::POST(url,
-                                               httr::content_type("application/json"),
-                                               httr::user_agent("obistools - https://github.com/iobis/obistools"),
-                                               body=msg)))
+  cache_call(key = paste(url, msg),
+             expression({
+               response <- httr::POST(url,
+                                      httr::content_type("application/json"),
+                                      httr::user_agent("obistools - https://github.com/iobis/obistools"),
+                                      body=msg)
 
-  # Parse result
-  raw_content <- httr::content(response, as="raw")
-  if(response$status_code != 200) {
-    if(is.list(raw_content) && all(c("title", "description") %in% names(raw_content))) {
-      stop(paste0(raw_content$title, ": ", raw_content$description))
-    }
-    stop(rawToChar(raw_content))
-  }
-  raw_content
+               # Parse result
+               raw_content <- httr::content(response, as="raw")
+               if(response$status_code != 200) {
+                 if(is.list(raw_content) && all(c("title", "description") %in% names(raw_content))) {
+                   stop(paste0(raw_content$title, ": ", raw_content$description))
+                 }
+                 stop(rawToChar(raw_content))
+               }
+               raw_content
+             }))
 }
