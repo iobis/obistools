@@ -109,18 +109,20 @@ flatten_occurrence <- function(event, occurrence, field = "eventID", fields = NU
   }
 
   # populate occurrences
-  for (i in 1:nrow(occurrence)) {
-    eventid <- occurrence[[field]][i]
-    if (!is.na(eventid) & eventid != "") {
-      occurrence_events <- event[event$eventID == eventid,]
-      if (nrow(occurrence_events) == 1) {
-        for (f in fields) {
-          if (is.na(occurrence[[f]][i]) || occurrence[[f]][i] == "") {
-            occurrence[[f]][i] <- occurrence_events[[f]][1]
-          }
-        }
-      }
+  for (f in fields) {
+    if (!f %in% names(occurrence)) {
+      occurrence[[f]] <- NA
     }
+  }
+  eventid <- occurrence[[field]]
+  missing_eventid <- is.na(eventid) | eventid == ""
+  occurrence_events <- event[event$eventID %in% eventid[!missing_eventid],]
+  nonunique_events <- unique(occurrence_events$eventID[duplicated(occurrence_events$eventID)])
+  unique_occurrence_events <- occurrence_events[!(occurrence_events$eventID %in% nonunique_events),]
+  occindices <- occurrence[[field]] %in% unique_occurrence_events$eventID
+  eventindices <- match(occurrence[occindices,field], unique_occurrence_events$eventID)
+  for(f in fields) {
+    occurrence[occindices,f] <- unique_occurrence_events[eventindices,f]
   }
 
   return(occurrence)
