@@ -82,3 +82,33 @@ test_that('Deep sea', {
 
 
 })
+
+test_that('issue with NA long/lat', {
+  skip("Skip issue with NA long/lat")
+  require(obistools)
+  require(finch)
+
+  dwca_cache$delete_all()
+  out <- dwca_read('http://www.dassh.ac.uk/ipt/archive?r=emodnet_07_cefas_mcz_improved', read = TRUE)
+
+  Event <- out$data[["event.txt"]]
+  Event$parentEventID <- NA
+
+  Occurrence <- out$data[["occurrence.txt"]]
+  eMoF <- out$data[["extendedmeasurementorfact.txt"]]
+
+
+  flat <- flatten_occurrence(Event, Occurrence)
+
+  report(flat)
+  # Quitting from lines 12-14 (report.Rmd)
+  # Error in if (zero_range(range)) { : missing value where TRUE/FALSE needed
+  #   In addition: Warning message:
+  #     distinct() does not fully support columns of type `list`.
+  #   List elements are compared by reference, see ?distinct for details.
+  #   This affects the following columns:
+  #     - `extra`
+  #
+  #   Volgende werkt wel
+  #   report(flatten_occurrence(Event,Occurrence) %>% filter (!is.na(decimalLatitude), !is.na(decimalLongitude)) , view = FALSE)
+})
