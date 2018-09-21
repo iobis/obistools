@@ -8,29 +8,34 @@
 #' @export
 plot_map <- function(data, zoom = FALSE) {
   check_lonlat(data, FALSE)
-  world <- borders("world", colour="gray80", fill="gray80")
-  m <- ggplot() +
-    world +
-    geom_point(data = data, aes(x = decimalLongitude, y = decimalLatitude), size = 2, stroke = 1, alpha = 0.3, colour = "#FF368B") +
-    xlab("longitude") +
-    ylab("latitude")
+  m <- NULL
+  data <- get_xy_clean(data)
+  if(NROW(data) > 0) {
+    world <- borders("world", colour="gray80", fill="gray80")
+    m <- ggplot() +
+      world +
+      geom_point(data = data, aes(x = decimalLongitude, y = decimalLatitude), size = 2, stroke = 1, alpha = 0.3, colour = "#FF368B") +
+      xlab("longitude") +
+      ylab("latitude")
 
-  xrange <- range(data$decimalLongitude, na.rm = TRUE)
-  yrange <- range(data$decimalLatitude, na.rm = TRUE)
+    xrange <- range(data$decimalLongitude, na.rm = TRUE)
+    yrange <- range(data$decimalLatitude, na.rm = TRUE)
 
-  if (zoom & all(is.finite(xrange)) & all(is.finite(yrange))) {
-    margin <- 0.3
-    dx <- margin * (xrange[2] - xrange[1])
-    dy <- margin * (yrange[2] - yrange[1])
-    xrange[1] <- xrange[1] - dx
-    xrange[2] <- xrange[2] + dx
-    yrange[1] <- yrange[1] - dy
-    yrange[2] <- yrange[2] + dy
-    m <- m + coord_quickmap(xlim = xrange, ylim = yrange)
+    if (zoom & all(is.finite(xrange)) & all(is.finite(yrange))) {
+      margin <- 0.3
+      dx <- margin * (xrange[2] - xrange[1])
+      dy <- margin * (yrange[2] - yrange[1])
+      xrange[1] <- xrange[1] - dx
+      xrange[2] <- xrange[2] + dx
+      yrange[1] <- yrange[1] - dy
+      yrange[2] <- yrange[2] + dy
+      m <- m + coord_quickmap(xlim = xrange, ylim = yrange)
+    } else {
+      m <- m + coord_quickmap()
+    }
   } else {
-    m <- m + coord_quickmap()
+    warning("No valid coordinates found for plotting")
   }
-
   return(m)
 
 }

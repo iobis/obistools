@@ -34,13 +34,15 @@ report_summary <- function(qcreport, maxrows) {
 #'   \code{rappdirs::user_cache_dir("obistools")}).
 #' @param view Logical, show the report in a browser after creation (default
 #'   \code{TRUE}).
+#' @param topnspecies Integer, number of species ordered by number of records
+#'   for which you want to do the outlier analysis
 #' @return Returns the full path to the generated html report.
 #' @examples
 #' \dontrun{
 #' report(abra)
 #' }
 #' @export
-report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRUE) {
+report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRUE, topnspecies = 20) {
 
   reportfile <- system.file("", "report.Rmd", package = "obistools")
 
@@ -51,7 +53,7 @@ report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRU
       check_onland(data, report = TRUE),
       check_depth(data, report = TRUE),
       check_outliers_dataset(data, report = TRUE),
-      check_outliers_species(data, report = TRUE)
+      check_outliers_species(data, report = TRUE, topn = topnspecies)
     )
     qc <- distinct(qc)
   }
@@ -63,4 +65,3 @@ report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRU
   }
   return(outputfile)
 }
-

@@ -4,7 +4,8 @@
 \alias{report}
 \title{Creates a basic data quality report.}
 \usage{
-report(data, qc = NULL, file = "report.html", dir = NULL, view = TRUE)
+report(data, qc = NULL, file = "report.html", dir = NULL, view = TRUE,
+  topnspecies = 20)
 }
 \arguments{
 \item{data}{The data frame.}
@@ -19,6 +20,9 @@ data.}
 
 \item{view}{Logical, show the report in a browser after creation (default
 \code{TRUE}).}
+
+\item{topnspecies}{Integer, number of species ordered by number of records
+for which you want to do the outlier analysis}
 }
 \value{
 Returns the full path to the generated html report.

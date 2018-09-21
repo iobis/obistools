@@ -21,8 +21,7 @@ check_fields <- function(data, level = "error") {
         level = "error",
         field = fields,
         row = NA,
-        message = paste0("Required field ", fields, " is missing"),
-        stringsAsFactors = FALSE
+        message = paste0("Required field ", fields, " is missing")
       ))
     }
 
@@ -36,8 +35,7 @@ check_fields <- function(data, level = "error") {
             level = "error",
             field = field,
             row = which(rows),
-            message = paste0("Empty value for required field ", field),
-            stringsAsFactors = FALSE
+            message = paste0("Empty value for required field ", field)
           ))
         }
       }
@@ -54,8 +52,7 @@ check_fields <- function(data, level = "error") {
         errors <- bind_rows(errors, data_frame(
           field = fields,
           level = "warning",
-          message = paste0("Recommended field ", fields, " is missing"),
-          stringsAsFactors = FALSE
+          message = paste0("Recommended field ", fields, " is missing")
         ))
       }
 
@@ -69,8 +66,7 @@ check_fields <- function(data, level = "error") {
               level = "warning",
               field = field,
               row = which(rows),
-              message = paste0("Empty value for recommended field ", field),
-              stringsAsFactors = FALSE
+              message = paste0("Empty value for recommended field ", field)
             ))
           }
         }

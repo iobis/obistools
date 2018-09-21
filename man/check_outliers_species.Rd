@@ -18,6 +18,9 @@ by in order to determine the range of valid values. Default is \code{6}.}
 
 \item{iqr_coef}{Coefficient to multiply the interquartile range (IQR) by in
 order to determine the range of valid values. Default values is \code{3}.}
+
+\item{topn}{Number of species for which the QC should be performed. Default
+is \code{NA} (all species).}
 }
 \value{
 Problematic records or an errors report.

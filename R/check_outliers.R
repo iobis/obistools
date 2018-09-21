@@ -10,7 +10,8 @@
 #'   by in order to determine the range of valid values. Default is \code{6}.
 #' @param iqr_coef Coefficient to multiply the interquartile range (IQR) by in
 #'   order to determine the range of valid values. Default values is \code{3}.
-#'
+#' @param topn Number of species for which the QC should be performed. Default
+#'   is \code{NA} (all species).
 #' @return Problematic records or an errors report.
 #' @examples
 #' \dontrun{
@@ -24,7 +25,7 @@
 #' @seealso \code{\link{plot_outliers}} \code{\link{check_outliers_dataset}}
 #'   \code{\link{check_onland}} \code{\link{check_depth}}
 #' @export
-check_outliers_species <- function(data, report = FALSE, mad_coef = 6, iqr_coef = 3) {
+check_outliers_species <- function(data, report = FALSE, mad_coef = 6, iqr_coef = 3, topn = NA) {
   errors <- check_lonlat(data, report = TRUE)
   if (!'scientificNameID' %in% colnames(data)) {
     errors <- rbind(errors, data_frame(level = 'error', message = 'Column scientificNameID missing'))
@@ -43,7 +44,12 @@ check_outliers_species <- function(data, report = FALSE, mad_coef = 6, iqr_coef 
     stop(paste(errors, collapse = ", "))
   }
   result <- NULL
-  taxa <- unique(na.omit(aphiaids))
+
+  taxa <- table(na.omit(aphiaids))
+  if(!is.na(topn) & !is.null(topn) & topn > 0 & topn < length(taxa)) {
+    taxa <- sort(taxa, decreasing = TRUE)[1:topn]
+  }
+  taxa <- as.integer(names(taxa))
   for(taxon in taxa) {
     return_values = report # values are practical for creating the report
     istaxon <- !is.na(aphiaids) & aphiaids == taxon
@@ -179,9 +185,9 @@ plot_outliers_environmental <- function(outliers_info, title = '', sample_outlie
                             upper = ifelse(is.null(o$q3) || is.na(o$q3), NA, o$q3) )
       databox <- databox[complete.cases(databox),]
       datapoints <- data_frame(Statistic=c(rep('MAD', n) , rep('IQR', n)),
-                         Ok = c(o$ok_mad, o$ok_iqr),
-                         Value=rep(o$values, 2), stringsAsFactors = TRUE)
-      datapoints <- datapoints %>% filter(!is.na(Value) & (as.character(Statistic) %in% as.character(databox$Statistic)) & !Ok)
+                               Ok = c(o$ok_mad, o$ok_iqr),
+                               Value=rep(o$values, 2))
+      datapoints <- datapoints %>% filter(!is.na(Ok) & !is.na(Value) & (as.character(Statistic) %in% as.character(databox$Statistic)) & !Ok)
       if(nrow(databox) > 0 & nrow(datapoints) > 0) {
         if(!is.null(sample_outliers) & !is.na(sample_outliers) & (sample_outliers < nrow(datapoints)) & sample_outliers > 10) {
           datapoints <- sample_n(datapoints, sample_outliers)
@@ -208,15 +214,19 @@ plot_outliers_environmental <- function(outliers_info, title = '', sample_outlie
 
 plot_outliers_spatial <- function(outliers_info, title='', sample_okpoints=1000) {
   o <- outliers_info[['spatial']]
-  data <- as_data_frame(o$xy)
-  if (nrow(data[!o$ok_iqr | !o$ok_mad,]) > 0){
+  ok_na <- is.na(o$ok_iqr) | is.na(o$ok_mad)
+  ok_iqr <- o$ok_iqr[!ok_na]
+  ok_mad <- o$ok_mad[!ok_na]
+  data <- as_data_frame(o$xy[!ok_na,])
+
+  if (nrow(data[!ok_iqr | !ok_mad,]) > 0){
     okcolor <- '#1b9e77'
     data[,'color'] <- okcolor
     data[,'radius'] <- 3.5
-    data[!o$ok_iqr & o$ok_mad, 'color'] <- '#d95f02'
-    data[!o$ok_iqr & !o$ok_mad, 'color'] <- '#e7298a'
-    data[o$ok_iqr & !o$ok_mad, 'color'] <- '#7570b3'
-    data <- unique(data)
+    data[!ok_iqr & ok_mad, 'color'] <- '#d95f02'
+    data[!ok_iqr & !ok_mad, 'color'] <- '#e7298a'
+    data[ok_iqr & !ok_mad, 'color'] <- '#7570b3'
+    data <- unique(data[complete.cases(data),])
     if(!is.null(sample_okpoints) & !is.na(sample_okpoints) & sample_okpoints > 10 & nrow(data) > sample_okpoints) {
       whichok <- which(data$color == okcolor)
       if(length(whichok) > sample_okpoints) {

@@ -39,7 +39,7 @@ check_lonlat <- function(data, report) {
   }
   if(length(errors) > 0) {
     if(report) {
-      return(data.frame(level = "error",  message = errors, stringsAsFactors = FALSE))
+      return(data_frame(level = "error",  message = errors))
     } else {
       stop(paste(errors, collapse = ", "))
     }
@@ -47,29 +47,44 @@ check_lonlat <- function(data, report) {
   return(NULL)
 }
 
-get_xy_clean_duplicates <- function(data) {
+
+get_xy_clean <- function(data, returnisclean=FALSE) {
   check_lonlat(data, report = FALSE)
+  sp <- data.frame(decimalLongitude = numeric(0), decimalLatitude = numeric(0))
+  isclean <- NULL
   if(NROW(data) > 0) {
     sp <- data %>% select(decimalLongitude, decimalLatitude)
-    # Only lookup values for valid coordinates
+    # Only valid coordinates
     isclean <- stats::complete.cases(sp) &
       sapply(sp$decimalLongitude, is.numeric) &
       sapply(sp$decimalLatitude, is.numeric) &
       !is.na(sp$decimalLongitude) & !is.na(sp$decimalLatitude) &
       sp$decimalLongitude >= -180.0 & sp$decimalLongitude <= 180.0 &
       sp$decimalLatitude >= -90.0 & sp$decimalLatitude <= 90.0
-    cleansp <- sp[isclean,,drop=FALSE]
+  }
+  cleansp <- sp[isclean,,drop=FALSE]
+  if(returnisclean) {
+    return(list(cleansp=cleansp, isclean=isclean))
+  } else {
+    return(cleansp)
+  }
+}
+
+get_xy_clean_duplicates <- function(data) {
+  clean <- get_xy_clean(data, returnisclean = TRUE)
+  if(NROW(clean$cleansp) > 0) {
     # Only lookup values for unique coordinates
-    key <- paste(cleansp$decimalLongitude, cleansp$decimalLatitude, sep='\r')
+    key <- paste(clean$cleansp$decimalLongitude, clean$cleansp$decimalLatitude, sep='\r')
     notdup <- !duplicated(key)
-    uniquesp <- cleansp[notdup,]
+    uniquesp <- clean$cleansp[notdup,]
     duplicated_lookup <- match(key, key[notdup])
-    list(uniquesp=uniquesp, isclean=isclean, duplicated_lookup=duplicated_lookup)
+    list(uniquesp=uniquesp, isclean=clean$isclean, duplicated_lookup=duplicated_lookup)
   } else {
     list(uniquesp = data.frame(decimalLongitude = numeric(0), decimalLatitude = numeric(0)),
          isclean = NULL, duplicated_lookup = NULL)
   }
 }
+
 
 list_cache <- function() {
   list.files(rappdirs::user_cache_dir("obistools"), "call_", full.names = TRUE)
@@ -89,7 +104,7 @@ cache_call <- function(key, expr, env = NULL) {
   }
   cache_dir <- rappdirs::user_cache_dir("obistools")
   cachefile <- file.path(cache_dir, paste0("call_", digest::digest(list(key=key, expr=expr)), ".rds"))
-  if(file.exists(cachefile) && difftime(Sys.time(), file.info(cachefile)[,"mtime"], units = "hours") < 36) {
+  if(file.exists(cachefile) && difftime(Sys.time(), file.info(cachefile)[,"mtime"], units = "hours") < 10) {
     return(readRDS(cachefile))
   } else {
     result <- eval(expr, envir = NULL, enclos = env)
