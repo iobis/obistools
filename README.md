@@ -2,6 +2,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/iobis/obistools.svg?branch=master)](https://travis-ci.org/iobis/obistools)
 [![Coverage Status](https://coveralls.io/repos/iobis/obistools/badge.svg?branch=master&service=github)](https://coveralls.io/github/iobis/obistools?branch=master)
+[![DOI](https://zenodo.org/badge/77918363.svg)](https://zenodo.org/badge/latestdoi/77918363)
 
 [Installation](#installation)  
 [Taxon matching](#taxon-matching)  
