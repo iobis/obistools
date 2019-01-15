@@ -57,7 +57,7 @@ match_taxa <- function(names, ask = TRUE) {
     row <- list(scientificName = NA, scientificNameID = NA, match_type = NA)
 
     match <- matches[[i]]
-    if (is.data.frame(match)) {
+    if (is.data.frame(match) & nrow(match) > 0) {
 
       if (nrow(match) == 1) {
 
