@@ -85,22 +85,9 @@ test_that("lookup_xy only areas works", {
   data <- test_data(x=c(0,1),y=c(0,0))
   result <- lookup_xy(data, shoredistance = FALSE, grids = FALSE, areas = TRUE)
   expect_equal(nrow(result), 2)
-  expect_equal(ncol(result), 1)
+  expect_true(!("shoredistance" %in% names(result)))
+  expect_true(!("sstemperature" %in% names(result)))
 })
-
-test_that("lookup_xy areas distance works", {
-  data <- test_data(x=c(0,1),y=c(0,0))
-  result <- lookup_xy(data, shoredistance = FALSE, grids = FALSE, areas = TRUE)
-  expect_equal(nrow(result), 2)
-  expect_equal(ncol(result), 1)
-  expect_gte(nrow(result[1,][[1]]), 3)
-  result0 <- lookup_xy(data, shoredistance = FALSE, grids = FALSE, areas = 0)
-  expect_equal(result, result0)
-  result <- lookup_xy(data, shoredistance = FALSE, grids = FALSE, areas = 1000000)
-  expect_gte(nrow(result[1,][[1]]), nrow(result0[1,][[1]]))
-})
-
-
 
 test_that("lookup_xy works for Calanus: issue 48", {
   skip_if_not_installed("robis")
@@ -111,4 +98,3 @@ test_that("lookup_xy works for Calanus: issue 48", {
   data <- lookup_xy(calfin, shoredistance = FALSE, grids = TRUE, areas = FALSE)
   expect_gt(nrow(data), 200000)
 })
-
