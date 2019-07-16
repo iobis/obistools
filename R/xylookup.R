@@ -96,6 +96,6 @@ lookup_xy <- function(data, shoredistance=TRUE, grids=TRUE, areas=FALSE, asdataf
 
 lookup_xy_chunk <- function(msg) {
   # Call service
-  url <- getOption("obistools_xylookup_url", "http://api.iobis.org/xylookup/")
+  url <- getOption("obistools_xylookup_url", "https://api.obis.org/xylookup/")
   service_call(url, msg)
 }

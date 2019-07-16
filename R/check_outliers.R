@@ -141,7 +141,7 @@ qcservice_outliers <- function(data, endpoint, mad_coef, iqr_coef, return_values
     return(NULL)
   } else {
     # Prepare message
-    url <- paste0(getOption("obistools_api_root", "http://api.iobis.org/"), endpoint, '/')
+    url <- paste0(getOption("obistools_api_root", "https://api.obis.org/"), endpoint, '/')
     params <- list(points=as.matrix(xy$uniquesp), mad_coef=mad_coef, iqr_coef=iqr_coef, returnvalues=return_values)
     if(!is.null(aphiaid) && !is.na(aphiaid)) {
       params <- c(params, aphiaid = aphiaid)

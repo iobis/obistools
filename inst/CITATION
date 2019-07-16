@@ -11,4 +11,4 @@ bibentry(bibtype = "TechReport",
          note = note,
          url = "https://cran.r-project.org/package=obistools")
 
-citFooter("See http://iobis.org/data/policy/ for guidelines on citing data from OBIS.")
+citFooter("See https://obis.org/data/policy/ for guidelines on citing data from OBIS.")
