@@ -3,7 +3,6 @@
 \docType{package}
 \name{obistools}
 \alias{obistools}
-\alias{obistools-package}
 \title{obistools: Data Enhancement and Quality Control of Marine Species Observations}
 \description{
 Prepare data sets for submission to the Ocean Biogeographical Information System (<https://obis.org>). It can also be used for checking the quality of a set of marine species distribution records.

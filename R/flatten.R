@@ -31,7 +31,7 @@ flatten_event <- function(event, fields = NULL) {
     for (i in 1:nrow(event)) {
 
       # check if event has parent
-      if (is.na(event$parentEventID[i]) || event$parentEventID[i] == "") {
+      if (is.na(event$parentEventID[i]) || as.character(event$parentEventID[i]) == "") {
         move <- c(move, i)
       }
 
@@ -42,7 +42,7 @@ flatten_event <- function(event, fields = NULL) {
 
         # populate fields
         for (field in fields) {
-          if (is.na(event[[field]][i]) || event[[field]][i] == "") {
+          if (is.na(event[[field]][i]) || as.character(event[[field]][i]) == "") {
             event[[field]][i] <- processed[[field]][parent]
           }
         }
@@ -115,7 +115,7 @@ flatten_occurrence <- function(event, occurrence, field = "eventID", fields = NU
     }
   }
   eventid <- occurrence[[field]]
-  missing_eventid <- is.na(eventid) | eventid == ""
+  missing_eventid <- is.na(eventid) | as.character(eventid) == ""
   occurrence_events <- event[event$eventID %in% eventid[!missing_eventid],]
   nonunique_events <- unique(occurrence_events$eventID[duplicated(occurrence_events$eventID)])
   unique_occurrence_events <- occurrence_events[!(occurrence_events$eventID %in% nonunique_events),]

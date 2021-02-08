@@ -4,8 +4,7 @@
 \alias{check_onland}
 \title{Check which points are located on land.}
 \usage{
-check_onland(data, land = NULL, report = FALSE, buffer = 0,
-  offline = FALSE)
+check_onland(data, land = NULL, report = FALSE, buffer = 0, offline = FALSE)
 }
 \arguments{
 \item{data}{The data frame.}

@@ -4,7 +4,9 @@
 \name{abra}
 \alias{abra}
 \title{Subset of Abra alba data from OBIS.}
-\format{An object of class \code{data.frame} with 2093 rows and 44 columns.}
+\format{
+An object of class \code{data.frame} with 2093 rows and 44 columns.
+}
 \usage{
 abra
 }

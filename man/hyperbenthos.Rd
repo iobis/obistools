@@ -4,7 +4,9 @@
 \name{hyperbenthos}
 \alias{hyperbenthos}
 \title{Hyperbenthic communities of the North Sea.}
-\format{An object of class \code{dwca_gbif} of length 5.}
+\format{
+An object of class \code{dwca_gbif} of length 5.
+}
 \usage{
 hyperbenthos
 }

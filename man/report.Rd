@@ -4,8 +4,14 @@
 \alias{report}
 \title{Creates a basic data quality report.}
 \usage{
-report(data, qc = NULL, file = "report.html", dir = NULL,
-  view = TRUE, topnspecies = 20)
+report(
+  data,
+  qc = NULL,
+  file = "report.html",
+  dir = NULL,
+  view = TRUE,
+  topnspecies = 20
+)
 }
 \arguments{
 \item{data}{The data frame.}
