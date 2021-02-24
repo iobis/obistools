@@ -9,7 +9,7 @@ before_install:
   # units/udunits2 dependency:
   - sudo apt-get install --yes libudunits2-dev
   # sf dependencies:
-  - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev
+  - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev libjq-dev
 
 env:
   global:
