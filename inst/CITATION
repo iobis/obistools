@@ -7,8 +7,8 @@ bibentry(bibtype = "TechReport",
          author = personList(person("Pieter", "Provoost"),
                              person("Samuel", "Bosch")),
          year = year,
-         institution = "Ocean Biogeographic Information System. Intergovernmental Oceanographic Commission of UNESCO",
+         institution = "Ocean Biodiversity Information System. Intergovernmental Oceanographic Commission of UNESCO",
          note = note,
          url = "https://cran.r-project.org/package=obistools")
 
-citFooter("See https://obis.org/data/policy/ for guidelines on citing data from OBIS.")
+citFooter("See https://manual.obis.org/policy.html for guidelines on citing data from OBIS.")
