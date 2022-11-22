@@ -50,7 +50,7 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = 
     i <- which(!is.na(over(sp, land)))
   } else {
     shoredistances <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE, asdataframe = TRUE)
-    i <- which(as.vector(shoredistances) < (-1*buffer))
+    i <- which(as.vector(unlist(shoredistances)) < (-1*buffer))
   }
   if (report) {
     if (length(i) > 0) {
