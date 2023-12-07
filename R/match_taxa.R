@@ -14,7 +14,7 @@ match_taxa <- function(names, ask = TRUE) {
   paged_worms_taxamatch_call <- function(page) { cache_call(page, expression(worrms::wm_records_taxamatch(page, marine_only = FALSE)))}
   matches <- unlist(lapply(pages, paged_worms_taxamatch_call), recursive = FALSE)
 
-  results <- data.frame(scientificName = character(), scientificNameID = character(), match_type = character(), stringsAsFactors = FALSE)
+  results <- data.frame(scientificName = character(), scientificNameID = character(), match_type = character(), acceptedNameUsageID = character(), stringsAsFactors = FALSE)
 
   # count no matches and multiple matches
 
@@ -53,7 +53,7 @@ match_taxa <- function(names, ask = TRUE) {
 
   for (i in seq_along(matches)) {
 
-    row <- list(scientificName = NA, scientificNameID = NA, match_type = NA)
+    row <- list(scientificName = NA, scientificNameID = NA, match_type = NA, acceptedNameUsageID = NA)
 
     match <- matches[[i]]
     if (is.data.frame(match) & nrow(match) > 0) {
@@ -65,6 +65,7 @@ match_taxa <- function(names, ask = TRUE) {
         row$scientificName = match$scientificname
         row$scientificNameID = match$lsid
         row$match_type = match$match_type
+        row$acceptedNameUsageID = as.character(match$valid_AphiaID)
 
       } else if (ask) {
 
@@ -78,6 +79,7 @@ match_taxa <- function(names, ask = TRUE) {
           row$scientificName = match$scientificname[s]
           row$scientificNameID = match$lsid[s]
           row$match_type = match$match_type[s]
+          row$acceptedNameUsageID = as.character(match$valid_AphiaID[s])
         }
 
       }

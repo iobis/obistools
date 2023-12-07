@@ -24,7 +24,7 @@
 #' @seealso \code{\link{check_depth}} \code{\link{check_outliers_dataset}}
 #'   \code{\link{check_outliers_species}} \code{\link{lookup_xy}}
 #' @export
-check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = FALSE) {
+check_onland <- function(data, land = NULL, report = FALSE, buffer = 0, offline = FALSE) {
   errors <- check_lonlat(data, report)
   if (NROW(errors) > 0 && report) {
     return(errors)
@@ -50,7 +50,7 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer=0, offline = 
     i <- which(!is.na(over(sp, land)))
   } else {
     shoredistances <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE, asdataframe = TRUE)
-    i <- which(as.vector(shoredistances) < (-1*buffer))
+    i <- which(as.vector(shoredistances$shoredistance) < (-1*buffer))
   }
   if (report) {
     if (length(i) > 0) {
