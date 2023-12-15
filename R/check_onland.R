@@ -1,7 +1,7 @@
 #' Check which points are located on land.
 #'
 #' @param data The data frame.
-#' @param land SpatialPolygonsDataFrame. If not provided the simplified land
+#' @param land sf object. If not provided the simplified land
 #'   polygons from OSM are used. This parameter is ignored when, \code{offline =
 #'   FALSE}.
 #' @param report If TRUE, errors are returned instead of records.
@@ -34,34 +34,37 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer = 0, offline 
 
   if (offline && is.null(land)) {
     cache_dir <- rappdirs::user_cache_dir("obistools")
-    landpath <- file.path(cache_dir, 'land.RData')
+    landpath <- file.path(cache_dir, 'land.gpkg')
     if(!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
     if (!file.exists(landpath)) {
       utils::download.file("https://obis-resources.s3.amazonaws.com/land.gpkg", landpath)
     }
-    sf::read_sf(landpath)
+    land <- sf::read_sf(landpath)
   }
 
-  if(offline) {
-    sp <- data %>% select(decimalLongitude, decimalLatitude)
-    coordinates(sp) <- ~ decimalLongitude + decimalLatitude
-    proj4string(sp) <- CRS("+init=epsg:4326")
-    sp <- spTransform(sp, proj4string(land))
-    i <- which(!is.na(over(sp, land)))
+  if (offline) {
+    # sp <- data %>% select(decimalLongitude, decimalLatitude)
+    # coordinates(sp) <- ~ decimalLongitude + decimalLatitude
+    # proj4string(sp) <- CRS("+init=epsg:4326")
+    # sp <- spTransform(sp, proj4string(land))
+    # i <- which(!is.na(over(sp, land)))
+    data_sf <- sf::st_as_sf(data, coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
+    sf::st_intersects(data_sf, land, sparse = FALSE)
+    i <- !is.na(which(sf::st_intersects(data_sf, land, sparse = FALSE)))
   } else {
     shoredistances <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE, asdataframe = TRUE)
     i <- which(as.vector(shoredistances$shoredistance) < (-1*buffer))
   }
   if (report) {
     if (length(i) > 0) {
-      return(data_frame(
+      return(tibble(
         field = NA,
         level = "warning",
         row = i,
         message = paste0("Coordinates are located on land")
       ))
     } else {
-      return(data_frame())
+      return(tibble())
     }
   } else {
     return(data[i,])
