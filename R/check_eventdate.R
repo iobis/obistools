@@ -43,7 +43,7 @@ check_date <- function(date) {
 check_eventdate <- function(data) {
 
   if (!"eventDate" %in% names(data)) {
-    return(data_frame(
+    return(tibble(
       level = "error",
       message = "Column eventDate missing"
     ))
@@ -52,9 +52,9 @@ check_eventdate <- function(data) {
   rows <- which(!vapply(as.character(data$eventDate), check_date, logical(1), USE.NAMES = FALSE))
 
   if (length(rows) == 0) {
-    return(data_frame())
+    return(tibble())
   } else {
-    return(data_frame(
+    return(tibble(
       level = "error",
       row = rows,
       field = "eventDate",

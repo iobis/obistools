@@ -16,7 +16,7 @@ test_that("check_depth detects invalid or impossible depth values", {
   # Min D | Max D < 0 & shoredist > 0 (and check shoremargin)
   # report: TRUE/FALSE
 
-  t1 <- data.frame(decimalLongitude=0, decimalLatitude=0,
+  t1 <- data.frame(decimalLongitude = 0, decimalLatitude = 0,
     minimumDepthInMeters = c("4936", "4938", "4935", "-20"),
     maximumDepthInMeters = c("4936", "4937", "5000", "-10"))
   d1 <- check_depth(t1, depthmargin = 0, shoremargin = NA, report = FALSE)

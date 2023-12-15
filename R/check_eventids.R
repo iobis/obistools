@@ -5,14 +5,14 @@
 #' @export
 check_eventids <- function(event) {
 
-  errors <- data_frame()
+  errors <- tibble()
 
   # check presence of eventID and parentEventID
 
   fields <- missing_fields(event, c("eventID", "parentEventID"))
 
   if (length(fields) > 0) {
-    return(data_frame(
+    return(tibble(
       field = fields,
       level = "error",
       message = paste0("Field ", fields, " is missing")
@@ -29,7 +29,7 @@ check_eventids <- function(event) {
   rows <- which(duplicated(eventIDs))
 
   if (length(rows) > 0) {
-    errors <- bind_rows(errors, data_frame(
+    errors <- bind_rows(errors, tibble(
       field = "eventID",
       level = "error",
       row = rows,
@@ -43,7 +43,7 @@ check_eventids <- function(event) {
   rows <- which(event$parentEventID %in% missing_ids)
 
   if (length(rows) > 0) {
-    errors <- bind_rows(errors, data_frame(
+    errors <- bind_rows(errors, tibble(
       field = "parentEventID",
       level = "error",
       row = rows,
@@ -72,6 +72,6 @@ check_extension_eventids <- function(event, extension, field = "eventID") {
       stringsAsFactors = FALSE
     ))
   } else {
-    return(data_frame())
+    return(tibble())
   }
 }

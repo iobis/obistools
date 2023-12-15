@@ -6,15 +6,11 @@
 #' @name obistools
 #' @import dplyr
 #' @import ggplot2
-#' @import sp
-#' @importFrom rgeos gDistance
-#' @importFrom rgeos readWKT
 #' @importFrom leaflet leaflet
 #' @importFrom leaflet addProviderTiles
 #' @importFrom leaflet addCircleMarkers
 #' @importFrom stringr str_match
 #' @importFrom stringr str_split
-#' @importFrom geosphere distm
 #' @import rmarkdown
 #' @import knitr
 #' @import xml2

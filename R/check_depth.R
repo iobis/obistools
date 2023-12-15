@@ -11,7 +11,7 @@ add_depth_message <- function(result, data, columns, i, message, extra_data=NULL
       args[['extra_data']] <- extra_data[i]
     }
     message <- do.call(sprintf, args)
-    result <- rbind(result, data_frame(level = level, row = i, field = rep(columns, length(i)), message = message))
+    result <- rbind(result, tibble(level = level, row = i, field = rep(columns, length(i)), message = message))
   }
   return(result)
 }
@@ -20,7 +20,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
   if (column %in% colnames(data)) {
     depths <- as.numeric(as.character(data[,column]))
     if(all(is.na(data[[column]]) | data[[column]] == '')) {
-      result <- rbind(result, data_frame(level = 'warning', row = NA, field=column,
+      result <- rbind(result, tibble(level = 'warning', row = NA, field=column,
                                          message = paste('Column',column,'empty')))
     }
     invalid <- is.na(depths) & data[,column] != ''
@@ -34,8 +34,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
       result <- add_depth_message(result, data, column, negativewrong, paste0('Depth value (%s) is negative for offshore points (shoredistance=%s, margin=', shoremargin,')'),lookupvalues$shoredistance)
     }
   } else {
-    result <- rbind(result, data_frame(level = 'warning', row = NA, field = column,
-                                       message = paste('Column',column,'missing')))
+    result <- rbind(result, tibble(level = 'warning', row = NA, field = column, message = paste('Column', column, 'missing')))
   }
   return(result)
 }
@@ -77,12 +76,12 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #' @seealso \code{\link{check_onland}} \code{\link{check_outliers_dataset}}
 #'   \code{\link{check_outliers_species}} \code{\link{lookup_xy}}
 #' @export
-check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry=NULL) {
+check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry = NULL) {
   errors <- check_lonlat(data, report)
   if (NROW(errors) > 0 && report) {
     return(errors)
   }
-  result <- data_frame(
+  result <- tibble(
     level = character(),
     row = integer(),
     field = character(),
@@ -94,7 +93,7 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
   ymin <- -90
   xmax <- 180
   ymax <- 90
-  if(is.null(bathymetry)) {
+  if (is.null(bathymetry)) {
     lookupvalues <- lookup_xy(data, shoredistance = !is.na(shoremargin), grids = TRUE, areas = FALSE)
   } else if (inherits(bathymetry, "Raster")){
     stopifnot(raster::nlayers(bathymetry) == 1 && !is.null("Only one bathymetry raster can be provided"))
@@ -117,7 +116,7 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
 
   depthcols <- c('minimumDepthInMeters', 'maximumDepthInMeters')
 
-  if(all(depthcols %in% colnames(data))) {
+  if (all(depthcols %in% colnames(data))) {
     mind <- as.numeric(as.character(data[,depthcols[1]]))
     maxd <- as.numeric(as.character(data[,depthcols[2]]))
     minGTmax <- !is.na(maxd) & !is.na(mind) & mind > maxd
