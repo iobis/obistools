@@ -37,9 +37,9 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer = 0, offline 
     landpath <- file.path(cache_dir, 'land.RData')
     if(!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
     if (!file.exists(landpath)) {
-      utils::download.file("https://obis.org/downloads/obistools/land.RData", landpath)
+      utils::download.file("https://obis-resources.s3.amazonaws.com/land.gpkg", landpath)
     }
-    load(landpath)
+    sf::read_sf(landpath)
   }
 
   if(offline) {
