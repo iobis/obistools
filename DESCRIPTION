@@ -31,7 +31,8 @@ Imports:
     xml2,
     rappdirs,
     maps,
-    knitr
+    knitr,
+    terra
 Suggests:
     testthat,
     finch,

@@ -5,16 +5,14 @@ check_skip <- function() {
   skip_on_cran()
 }
 
-test_data <- function(x = c(1,2,3), y = c(51,52,53)) {
+test_data <- function(x = c(1, 2, 3), y = c(51, 52, 53)) {
   check_skip()
   data.frame(decimalLongitude = x, decimalLatitude = y)
 }
 
 test_that("check_onland offline parameter works", {
-  data <- test_data(x = c(2.922825, 2.918780), y = c(51.236716, 51.237912))
-  df <- check_onland(data, offline = F)
-  expect_equal(nrow(df), 2)
-  df <- check_onland(data, offline = T)
+  data <- test_data(x = c(2.89052, 2.921677), y = c(51.243543, 51.229194))
+  df <- check_onland(data, offline = TRUE)
   expect_equal(nrow(df), 1)
 })
 

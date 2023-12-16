@@ -39,18 +39,12 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer = 0, offline 
     if (!file.exists(landpath)) {
       utils::download.file("https://obis-resources.s3.amazonaws.com/land.gpkg", landpath)
     }
-    land <- sf::read_sf(landpath)
+    land <- sf::read_sf(landpath) %>% terra::vect()
   }
 
   if (offline) {
-    # sp <- data %>% select(decimalLongitude, decimalLatitude)
-    # coordinates(sp) <- ~ decimalLongitude + decimalLatitude
-    # proj4string(sp) <- CRS("+init=epsg:4326")
-    # sp <- spTransform(sp, proj4string(land))
-    # i <- which(!is.na(over(sp, land)))
-    data_sf <- sf::st_as_sf(data, coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
-    sf::st_intersects(data_sf, land, sparse = FALSE)
-    i <- !is.na(which(sf::st_intersects(data_sf, land, sparse = FALSE)))
+    data_vect <- data %>% terra::vect(geom = c("decimalLongitude", "decimalLatitude"), crs = "EPSG:4326")
+    i <- which(colSums(terra::relate(land, data_vect, "intersects")) > 0)
   } else {
     shoredistances <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE, asdataframe = TRUE)
     i <- which(as.vector(shoredistances$shoredistance) < (-1*buffer))
