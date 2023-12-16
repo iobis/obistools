@@ -200,7 +200,7 @@ field level  row                                                                
 6 minimumDepthInMeters error 1250   Depth value (72.9) is greater than the value found in the bathymetry raster (depth=5.0, margin=50)
 ```
 
-## Check outliers
+## Check outliers (TEMPORARILY NOT AVAILABLE)
 
 `check_outliers_species` and `check_outliers_dataset` use the qc-service web service to identify which records are statistical outliers. For species outlier checks are performed for both environmental data (bathymetry, sea surface salinity and sea surface temperature) as well as spatially. Outliers are identified as all points that deviate more then six times the median absolute deviation (MAD) or three times the interquartile range (IQR) from the median. The `check_outliers_species` requires that the scientificNameID is filled in. When the species is already a known species in OBIS then the median, MAD and IQR from the known records are used for comparing the new species records. For datasets, only the spatial outliers are identified. Spatial outliers are detected based on the distance to the geographical centroid of all unique coordinates. The list in the extra field of the debug level output in the report provides all relevant statistics on which the outlier analysis is based. The `report` also gives an overview of these outliers. Outliers can be plotted with `plot_outliers(report)`
 

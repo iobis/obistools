@@ -95,23 +95,24 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
   ymax <- 90
   if (is.null(bathymetry)) {
     lookupvalues <- lookup_xy(data, shoredistance = !is.na(shoremargin), grids = TRUE, areas = FALSE)
-  } else if (inherits(bathymetry, "Raster")){
-    stopifnot(raster::nlayers(bathymetry) == 1 && !is.null("Only one bathymetry raster can be provided"))
-    if(!is.na(shoremargin)) {
-      lookupvalues <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE)
-    } else {
-      lookupvalues <- data.frame(row.names = seq_len(nrow(data)))
-    }
-    xy <- get_xy_clean_duplicates(data) # make sure to lookup no duplicated points and points outside
-    cells <- raster::cellFromXY(bathymetry, xy$uniquesp)
-    values <- raster::extract(bathymetry, cells)
-    lookupvalues[xy$isclean, "bathymetry"] <- values[xy$duplicated_lookup]
-    xmin <- raster::xmin(bathymetry)
-    ymin <- raster::ymin(bathymetry)
-    xmax <- raster::xmax(bathymetry)
-    ymax <- raster::ymax(bathymetry)
+  # } else if (inherits(bathymetry, "Raster")){
+  #   stopifnot(raster::nlayers(bathymetry) == 1 && !is.null("Only one bathymetry raster can be provided"))
+  #   if(!is.na(shoremargin)) {
+  #     lookupvalues <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE)
+  #   } else {
+  #     lookupvalues <- data.frame(row.names = seq_len(nrow(data)))
+  #   }
+  #   xy <- get_xy_clean_duplicates(data) # make sure to lookup no duplicated points and points outside
+  #   cells <- raster::cellFromXY(bathymetry, xy$uniquesp)
+  #   values <- raster::extract(bathymetry, cells)
+  #   lookupvalues[xy$isclean, "bathymetry"] <- values[xy$duplicated_lookup]
+  #   xmin <- raster::xmin(bathymetry)
+  #   ymin <- raster::ymin(bathymetry)
+  #   xmax <- raster::xmax(bathymetry)
+  #   ymax <- raster::ymax(bathymetry)
   } else {
-    stop("bathymetry should be a raster")
+    # stop("bathymetry should be a raster")
+    stop("Use of custom bathymetry currently not supported")
   }
 
   depthcols <- c('minimumDepthInMeters', 'maximumDepthInMeters')

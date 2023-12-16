@@ -80,28 +80,28 @@ test_that("Issue 42", {
   testthat::expect_lt(nrow(problems_margin10), nrow(problems))
 })
 
-test_that("External bathymetry raster is used", {
-  x <- raster::raster(nrow=10, ncol=10,
-                      xmn=-4.5, xmx=5.5, ymn=-4.5, ymx=5.5,
-                      crs="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
-                      resolution=1)
-  set.seed(42)
-  raster::values(x) <- runif(100, min = 0, max = 1000)
-  x[55] <- 7
-  x[10] <- NA
-
-  t1 <- data.frame(decimalLongitude=c(0,0,5,30), decimalLatitude=c(0,0,5,30),
-                   minimumDepthInMeters = c("5", "10", "20", "25"),
-                   maximumDepthInMeters = c("5", "10", "20", "25"))
-
-  d1 <- check_depth(t1, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry = x)
-  r1 <- check_depth(t1, report = TRUE, depthmargin = 0, shoremargin = NA, bathymetry = x)
-
-  expect_true(!1 %in% unique(r1$row))
-  expect_true(all(2:4 %in% unique(r1$row)))
-  expect_true(all(c("decimalLongitude", "decimalLatitude", "minimumDepthInMeters", "maximumDepthInMeters") %in% unique(r1$field)))
-  expect_true(any(c("error", "warning") %in% unique(r1$level)))
-})
+# test_that("External bathymetry raster is used", {
+#   x <- raster::raster(nrow=10, ncol=10,
+#                       xmn=-4.5, xmx=5.5, ymn=-4.5, ymx=5.5,
+#                       crs="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
+#                       resolution=1)
+#   set.seed(42)
+#   raster::values(x) <- runif(100, min = 0, max = 1000)
+#   x[55] <- 7
+#   x[10] <- NA
+#
+#   t1 <- data.frame(decimalLongitude=c(0,0,5,30), decimalLatitude=c(0,0,5,30),
+#                    minimumDepthInMeters = c("5", "10", "20", "25"),
+#                    maximumDepthInMeters = c("5", "10", "20", "25"))
+#
+#   d1 <- check_depth(t1, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry = x)
+#   r1 <- check_depth(t1, report = TRUE, depthmargin = 0, shoremargin = NA, bathymetry = x)
+#
+#   expect_true(!1 %in% unique(r1$row))
+#   expect_true(all(2:4 %in% unique(r1$row)))
+#   expect_true(all(c("decimalLongitude", "decimalLatitude", "minimumDepthInMeters", "maximumDepthInMeters") %in% unique(r1$field)))
+#   expect_true(any(c("error", "warning") %in% unique(r1$level)))
+# })
 
 test_that("support for tibble", {
   skip_if_not_installed("dplyr")
