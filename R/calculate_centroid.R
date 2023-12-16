@@ -20,20 +20,13 @@ calculate_centroid <- function(wkt) {
     mp <- sf::st_combine(p)
     h <- sf::st_convex_hull(mp)
     stopifnot(length(sf::st_geometry_type(h)) == 1 || is.null("calculate_centroid: hull should be a single geometry type"))
-    hxy <- sf::st_coordinates(h)[,c('X', 'Y')]
-    if (sf::st_geometry_type(h) == "POINT"){
-      centroid <- hxy
-    } else if (sf::st_geometry_type(h) == "LINESTRING" && nrow(hxy) == 2) {
-      centroid <- geosphere::midPoint(hxy[1,], hxy[2,])
-    } else if (sf::st_geometry_type(h) == "POLYGON"){
-      centroid <- geosphere::centroid(hxy)
-    } else {
-      stop("calculate_centroid: hull should be a point, line or polygon")
-    }
+    centroid <- sf::st_centroid(h)
+    centroid_vect <- terra::vect(centroid %>% sf::st_set_crs(4326))
+    hull_vect <- terra::vect(p %>% sf::st_set_crs(4326))
     return(data.frame(
-      decimalLongitude = centroid[1],
-      decimalLatitude = centroid[2],
-      coordinateUncertaintyInMeters = max(geosphere::distm(centroid, hxy))
+      decimalLongitude = sf::st_coordinates(centroid)[1],
+      decimalLatitude = sf::st_coordinates(centroid)[2],
+      coordinateUncertaintyInMeters = max(terra::distance(centroid_vect, hull_vect))
     ))
   })
   return(bind_rows(results))
