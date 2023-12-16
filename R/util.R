@@ -39,7 +39,7 @@ check_lonlat <- function(data, report) {
   }
   if(length(errors) > 0) {
     if(report) {
-      return(data_frame(level = "error",  message = errors))
+      return(tibble(level = "error",  message = errors))
     } else {
       stop(paste(errors, collapse = ", "))
     }

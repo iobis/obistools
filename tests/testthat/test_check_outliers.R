@@ -11,7 +11,7 @@ context("check outliers")
 # })
 #
 # test_that("check_outliers_species identifies outliers", {
-#   data <- data_frame(decimalLongitude = 170, decimalLatitude = c(50, 1:25), scientificNameID="urn:lsid:marinespecies.org:taxname:23109")
+#   data <- tibble(decimalLongitude = 170, decimalLatitude = c(50, 1:25), scientificNameID="urn:lsid:marinespecies.org:taxname:23109")
 #   rp <- check_outliers_species(data, report = TRUE)
 #   expect_gte(nrow(rp), 1)
 #   d <- check_outliers_species(data, report = FALSE)

@@ -28,13 +28,13 @@
 check_outliers_species <- function(data, report = FALSE, mad_coef = 6, iqr_coef = 3, topn = NA) {
   errors <- check_lonlat(data, report = TRUE)
   if (!'scientificNameID' %in% colnames(data)) {
-    errors <- rbind(errors, data_frame(level = 'error', message = 'Column scientificNameID missing'))
+    errors <- rbind(errors, tibble(level = 'error', message = 'Column scientificNameID missing'))
   } else {
     aphiaidregex <- regexec('(?:urn[:]lsid[:]marinespecies.org[:]taxname[:])([0-9]+)', as.character(data$scientificNameID))
     aphiaidmatches <- regmatches(data$scientificNameID, aphiaidregex)
     aphiaids <- unlist(lapply(aphiaidmatches, function(x) ifelse(length(x) == 2, as.integer(x[2]), NA)))
     if(all(is.na(aphiaids))) {
-      errors <- rbind(errors, data_frame(level = 'error', message = 'Column scientificNameID contains no records with lsid from marinspecies.org'))
+      errors <- rbind(errors, tibble(level = 'error', message = 'Column scientificNameID contains no records with lsid from marinspecies.org'))
     }
   }
   if (NROW(errors) > 0) {
@@ -177,14 +177,14 @@ plot_outliers_environmental <- function(outliers_info, title = '', sample_outlie
       o <- outliers_info[[name]]
       n <- length(o$ok_mad)
 
-      databox <- data_frame(Statistic = c('MAD', 'IQR'),
+      databox <- tibble(Statistic = c('MAD', 'IQR'),
                             ymin = c(o$mad_limits[1], o$iqr_limits[1]),
                             ymax = c(o$mad_limits[2], o$iqr_limits[2]),
                             lower = ifelse(is.null(o$q1) || is.na(o$q1), NA, o$q1) ,
                             middle = ifelse(is.null(o$median) || is.na(o$median), NA, o$median) ,
                             upper = ifelse(is.null(o$q3) || is.na(o$q3), NA, o$q3) )
       databox <- databox[complete.cases(databox),]
-      datapoints <- data_frame(Statistic=c(rep('MAD', n) , rep('IQR', n)),
+      datapoints <- tibble(Statistic=c(rep('MAD', n) , rep('IQR', n)),
                                Ok = c(o$ok_mad, o$ok_iqr),
                                Value=rep(o$values, 2))
       datapoints <- datapoints %>% filter(!is.na(Ok) & !is.na(Value) & (as.character(Statistic) %in% as.character(databox$Statistic)) & !Ok)
@@ -217,7 +217,7 @@ plot_outliers_spatial <- function(outliers_info, title='', sample_okpoints=1000)
   ok_na <- is.na(o$ok_iqr) | is.na(o$ok_mad)
   ok_iqr <- o$ok_iqr[!ok_na]
   ok_mad <- o$ok_mad[!ok_na]
-  data <- as_data_frame(o$xy[!ok_na,])
+  data <- as_tibble(o$xy[!ok_na,])
 
   if (nrow(data[!ok_iqr | !ok_mad,]) > 0){
     okcolor <- '#1b9e77'
@@ -235,7 +235,7 @@ plot_outliers_spatial <- function(outliers_info, title='', sample_okpoints=1000)
     }
     # add centroid
     centroid <- sf::st_coordinates(sf::st_as_sfc(o$centroid))
-    data <- rbind(data, data_frame(decimalLongitude=centroid[1,1], decimalLatitude=centroid[1,2], color='yellow', radius=5))
+    data <- rbind(data, tibble(decimalLongitude=centroid[1,1], decimalLatitude=centroid[1,2], color='yellow', radius=5))
     # legend
     cols <- c('yellow', '#1b9e77', '#d95f02', '#7570b3', '#e7298a')
     legend <- c('Centroid', 'Ok', 'IQR', 'MAD', 'IQR and MAD')
@@ -254,12 +254,12 @@ plot_outliers_spatial <- function(outliers_info, title='', sample_okpoints=1000)
 
 report_outliers <- function(outliers_info, rownumbers = NULL, report = NULL, title = '') {
   if(is.null(report)) {
-    report <- data_frame(level = character(), row = integer(),
+    report <- tibble(level = character(), row = integer(),
                          field = character(), message = character(), extra = list())
   }
   statsinfo <- list(mad = list(ok='ok_mad', name='MAD', limits='mad_limits'),
                     iqr = list(ok='ok_iqr', name='IQR', limits='iqr_limits'))
-  report <- rbind(report, data_frame(level='debug', row=NA, field=paste('Outliers', title), message=title, extra=list(info=outliers_info)))
+  report <- rbind(report, tibble(level='debug', row=NA, field=paste('Outliers', title), message=title, extra=list(info=outliers_info)))
   outliersnames <- setdiff(names(outliers_info), c('count', 'id'))
   for (n in outliersnames) { # spatial, sstemperature, ...
     outliersqc <- outliers_info[[n]]
@@ -278,7 +278,7 @@ report_outliers <- function(outliers_info, rownumbers = NULL, report = NULL, tit
           msg <- paste0('Value for ', n, ' is not within ', fields$name, ' limits [',
                         paste0(signif(outliersqc[[fields$limits]], 7), collapse=', '), ']')
         }
-        report <- rbind(report, data_frame(level='warning', row=rows, field=paste('Outliers', title), message=msg, extra=NA))
+        report <- rbind(report, tibble(level='warning', row=rows, field=paste('Outliers', title), message=msg, extra=NA))
       }
     }
   }
