@@ -52,7 +52,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #' @param shoremargin How far offshore (in meters) should a record be to have a
 #'   bathymetry greater than 0. If \code{NA} (default) then this test is
 #'   ignored.
-#' @param bathymetry Raster* object that you want to use to check the depth
+#' @param bathymetry SpatRaster ([terra] package) object that you want to use to check the depth
 #'   against. If \code{NULL} (default) then the bathymetry from the xylookup
 #'   service is used.
 #'
@@ -95,24 +95,23 @@ check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA,
   ymax <- 90
   if (is.null(bathymetry)) {
     lookupvalues <- lookup_xy(data, shoredistance = !is.na(shoremargin), grids = TRUE, areas = FALSE)
-  # } else if (inherits(bathymetry, "Raster")){
-  #   stopifnot(raster::nlayers(bathymetry) == 1 && !is.null("Only one bathymetry raster can be provided"))
-  #   if(!is.na(shoremargin)) {
-  #     lookupvalues <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE)
-  #   } else {
-  #     lookupvalues <- data.frame(row.names = seq_len(nrow(data)))
-  #   }
-  #   xy <- get_xy_clean_duplicates(data) # make sure to lookup no duplicated points and points outside
-  #   cells <- raster::cellFromXY(bathymetry, xy$uniquesp)
-  #   values <- raster::extract(bathymetry, cells)
-  #   lookupvalues[xy$isclean, "bathymetry"] <- values[xy$duplicated_lookup]
-  #   xmin <- raster::xmin(bathymetry)
-  #   ymin <- raster::ymin(bathymetry)
-  #   xmax <- raster::xmax(bathymetry)
-  #   ymax <- raster::ymax(bathymetry)
+  } else if (inherits(bathymetry, "SpatRaster")){
+    stopifnot(terra::nlyr(bathymetry) == 1 && !is.null("Only one bathymetry layer can be provided"))
+    if(!is.na(shoremargin)) {
+      lookupvalues <- lookup_xy(data, shoredistance = TRUE, grids = FALSE, areas = FALSE)
+    } else {
+      lookupvalues <- data.frame(row.names = seq_len(nrow(data)))
+    }
+    xy <- get_xy_clean_duplicates(data) # make sure to lookup no duplicated points and points outside
+    cells <- terra::cellFromXY(bathymetry, xy$uniquesp)
+    values <- terra::extract(bathymetry, cells)
+    lookupvalues[xy$isclean, "bathymetry"] <- values[xy$duplicated_lookup, 1]
+    xmin <- terra::xmin(bathymetry)
+    ymin <- terra::ymin(bathymetry)
+    xmax <- terra::xmax(bathymetry)
+    ymax <- terra::ymax(bathymetry)
   } else {
-    # stop("bathymetry should be a raster")
-    stop("Use of custom bathymetry currently not supported")
+    stop("bathymetry should be a SpatRaster")
   }
 
   depthcols <- c('minimumDepthInMeters', 'maximumDepthInMeters')

@@ -19,7 +19,7 @@ in the rasters (in meters).}
 bathymetry greater than 0. If \code{NA} (default) then this test is
 ignored.}
 
-\item{bathymetry}{Raster* object that you want to use to check the depth
+\item{bathymetry}{SpatRaster ([terra] package) object that you want to use to check the depth
 against. If \code{NULL} (default) then the bathymetry from the xylookup
 service is used.}
 }

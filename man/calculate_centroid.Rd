@@ -8,7 +8,7 @@ calculate_centroid(wkt)
 }
 \arguments{
 \item{wkt}{character vector One or more WKT strings with longitude/latitude
-coordinates (epsg=4326)}
+coordinates (EPSG=4326)}
 }
 \value{
 Data frame with centroid coordinates and radius in meter.
