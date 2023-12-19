@@ -37,7 +37,7 @@ check_onland <- function(data, land = NULL, report = FALSE, buffer = 0, offline 
     landpath <- file.path(cache_dir, 'land.gpkg')
     if(!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
     if (!file.exists(landpath)) {
-      utils::download.file("https://obis-resources.s3.amazonaws.com/land.gpkg", landpath)
+      utils::download.file("https://obis-resources.s3.amazonaws.com/land.gpkg", landpath, mode = "wb")
     }
     land <- sf::read_sf(landpath) %>% terra::vect()
   }
