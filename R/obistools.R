@@ -17,7 +17,6 @@
 #' @import tidyr
 #' @import data.tree
 #' @import digest
-#' @import terra
 #' @importFrom stats complete.cases
 #' @importFrom stats na.omit
 NULL

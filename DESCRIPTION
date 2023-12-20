@@ -1,6 +1,5 @@
 Package: obistools
 Title: Data Enhancement and Quality Control of Marine Species Observations
-Description: Prepare data sets for submission to the Ocean Biogeographical Information System (<https://obis.org>). It can also be used for checking the quality of a set of marine species distribution records.
 Version: 0.0.11
 Date: 2023-12-07
 Authors@R: c(
@@ -8,12 +7,13 @@ Authors@R: c(
     person("Samuel", "Bosch", , "mail@samuelbosch.com", role = "aut"),
     person("Ward", "Appeltans", role = "ctb"),
     person(, "OBIS", , "support@iobis.org", role = "cph")
-    )
+  )
+Description: Prepare data sets for submission to the Ocean Biogeographical
+    Information System (<https://obis.org>). It can also be used for
+    checking the quality of a set of marine species distribution records.
+License: MIT + file LICENSE
 Depends:
     R (>= 3.2.2)
-License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
 Imports:
     cowplot,
     data.tree,
@@ -22,19 +22,21 @@ Imports:
     ggplot2,
     httr,
     jsonlite,
+    knitr,
     leaflet,
+    maps,
+    rappdirs,
     rmarkdown,
     sf,
     stringr,
+    terra,
     tidyr,
     worrms,
-    xml2,
-    rappdirs,
-    maps,
-    knitr,
-    terra
+    xml2
 Suggests:
-    testthat,
     finch,
-    grid
+    grid,
+    testthat
+Encoding: UTF-8
+LazyData: true
 RoxygenNote: 7.2.3
