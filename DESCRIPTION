@@ -1,12 +1,13 @@
 Package: obistools
 Title: Data Enhancement and Quality Control of Marine Species Observations
-Version: 0.0.11
-Date: 2023-12-07
+Version: 0.0.12
+Date: 2023-12-21
 Authors@R: c(
     person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = c("cre", "aut")),
     person("Samuel", "Bosch", , "mail@samuelbosch.com", role = "aut"),
+    person("Silas", "Principe", , "s.principe@unesco.org", role = "aut"),
     person("Ward", "Appeltans", role = "ctb"),
-    person(, "OBIS", , "support@iobis.org", role = "cph")
+    person(, "OBIS", , "helpdesk@obis.org", role = "cph")
   )
 Description: Prepare data sets for submission to the Ocean Biogeographical
     Information System (<https://obis.org>). It can also be used for
