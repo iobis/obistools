@@ -21,8 +21,7 @@
 #' ok <- check_onland(abra, report = FALSE, buffer = 100)
 #' print(nrow(ok))
 #' }
-#' @seealso \code{\link{check_depth}} \code{\link{check_outliers_dataset}}
-#'   \code{\link{check_outliers_species}} \code{\link{lookup_xy}}
+#' @seealso \code{\link{check_depth}} \code{\link{lookup_xy}}
 #' @export
 check_onland <- function(data, land = NULL, report = FALSE, buffer = 0, offline = FALSE) {
   errors <- check_lonlat(data, report)

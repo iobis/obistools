@@ -73,8 +73,7 @@ check_depth_column <- function(result, data, column, lookupvalues, depthmargin, 
 #' print(r)
 #' plot_map_leaflet(abra[r$row,], popup = "id")
 #' }
-#' @seealso \code{\link{check_onland}} \code{\link{check_outliers_dataset}}
-#'   \code{\link{check_outliers_species}} \code{\link{lookup_xy}}
+#' @seealso \code{\link{check_onland}} \code{\link{lookup_xy}}
 #' @export
 check_depth <- function(data, report = FALSE, depthmargin = 0, shoremargin = NA, bathymetry = NULL) {
   errors <- check_lonlat(data, report)
