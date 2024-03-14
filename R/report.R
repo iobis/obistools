@@ -52,8 +52,6 @@ report <- function(data, qc = NULL, file = "report.html", dir = NULL, view = TRU
       check_eventdate(data),
       check_onland(data, report = TRUE),
       check_depth(data, report = TRUE)
-      # check_outliers_dataset(data, report = TRUE),
-      # check_outliers_species(data, report = TRUE, topn = topnspecies)
     )
     qc <- distinct(qc)
   }

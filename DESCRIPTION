@@ -1,7 +1,7 @@
 Package: obistools
 Title: Data Enhancement and Quality Control of Marine Species Observations
-Version: 0.0.12
-Date: 2023-12-21
+Version: 0.1.0
+Date: 2024-03-14
 Authors@R: c(
     person("Pieter", "Provoost", , "pieterprovoost@gmail.com", role = c("cre", "aut")),
     person("Samuel", "Bosch", , "mail@samuelbosch.com", role = "aut"),

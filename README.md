@@ -11,7 +11,6 @@
 [Identify points on a map](#identify-points-on-a-map)  
 [Check points on land](#check-points-on-land)  
 [Check depth](#check-depth)  
-[Check outliers](#check-outliers)  
 [Check eventID and parentEventID](#check-eventid-and-parenteventid)  
 [Check eventID in an extension](#check-eventid-in-an-extension)  
 [Flatten event records](#flatten-event-records)  
@@ -19,7 +18,6 @@
 [Calculate centroid and radius for WKT geometries](#calculate-centroid-and-radius-for-wkt-geometries)  
 [Map column names to Darwin Core terms](#map-column-names-to-darwin-core-terms)  
 [Check eventDate](#check-eventdate)  
-[Dataset structure](#dataset-structure)    
 [Data quality report](#data-quality-report)  
 [Lookup XY](#lookup-xy)  
 
@@ -199,53 +197,6 @@ field level  row                                                                
 5 minimumDepthInMeters error 1249   Depth value (68.3) is greater than the value found in the bathymetry raster (depth=8.0, margin=50)
 6 minimumDepthInMeters error 1250   Depth value (72.9) is greater than the value found in the bathymetry raster (depth=5.0, margin=50)
 ```
-
-## Check outliers (TEMPORARILY NOT AVAILABLE)
-
-`check_outliers_species` and `check_outliers_dataset` use the qc-service web service to identify which records are statistical outliers. For species outlier checks are performed for both environmental data (bathymetry, sea surface salinity and sea surface temperature) as well as spatially. Outliers are identified as all points that deviate more then six times the median absolute deviation (MAD) or three times the interquartile range (IQR) from the median. The `check_outliers_species` requires that the scientificNameID is filled in. When the species is already a known species in OBIS then the median, MAD and IQR from the known records are used for comparing the new species records. For datasets, only the spatial outliers are identified. Spatial outliers are detected based on the distance to the geographical centroid of all unique coordinates. The list in the extra field of the debug level output in the report provides all relevant statistics on which the outlier analysis is based. The `report` also gives an overview of these outliers. Outliers can be plotted with `plot_outliers(report)`
-
-```R
-report <- check_outliers_species(abra, report=T)
-head(report)
-```
-
-```
-# A tibble: 6 x 5
-  level     row field                   message                                               extra     
-  <chr>   <int> <chr>                   <chr>                                                 <list>    
-1 debug      NA Outliers Taxon [141433] Taxon [141433]                                        <list [6]>
-2 warning     2 Outliers Taxon [141433] bathymetry [61.4] is not within MAD limits [-56, 40]  <lgl [1]> 
-3 warning     3 Outliers Taxon [141433] bathymetry [122.2] is not within MAD limits [-56, 40] <lgl [1]> 
-4 warning     5 Outliers Taxon [141433] bathymetry [51] is not within MAD limits [-56, 40]    <lgl [1]> 
-5 warning     9 Outliers Taxon [141433] bathymetry [66] is not within MAD limits [-56, 40]    <lgl [1]> 
-6 warning    11 Outliers Taxon [141433] bathymetry [179.2] is not within MAD limits [-56, 40] <lgl [1]> 
-```
-
-```R
-report <- check_outliers_dataset(abra, report=T)
-head(report)
-```
-
-```
-# A tibble: 6 x 5
-  level     row field            message                                                         extra     
-  <chr>   <int> <chr>            <chr>                                                           <list>    
-1 debug      NA Outliers Dataset Dataset                                                         <list [2]>
-2 warning  2057 Outliers Dataset spatial [2341877] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
-3 warning  2058 Outliers Dataset spatial [2344195] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
-4 warning  2059 Outliers Dataset spatial [2344021] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
-5 warning  2060 Outliers Dataset spatial [2361854] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
-6 warning  2061 Outliers Dataset spatial [2384709] is not within MAD limits [210972.4, 818968.6] <lgl [1]> 
-```
-
-```R
-report <- check_outliers_species(abra, report=TRUE)
-plot_outliers(report)
-```
-
-![https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_environmental.png](https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_environmental.png)
-
-![https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_spatial.png](https://raw.githubusercontent.com/iobis/obistools/master/images/plot_outliers_spatial.png)
 
 ## Check eventID and parentEventID
 
@@ -448,32 +399,6 @@ check_eventdate(data)
 3 error  16 eventDate                 eventDate  does not seem to be a valid date
 4 error  17 eventDate               eventDate NA does not seem to be a valid date
 ```
-
-## Dataset structure
-
-`treeStucture()` generates a simplified event/occurrence tree showing the relationships between the different types (based on `type` and `measurementType`) of events and occurrences. Each node in the simplified tree is given a name based on the `eventID` or `occurrenceID` of one of the events of occurrences of that node type. 
-
-Note that an `eventID` column is required in the measurements table.
-
-```R
-# Get sample data (use a test dataset from IPT if finch is installed)
-if(requireNamespace("finch")) {
-   archive <- finch::dwca_read("http://ipt.iobis.org/obis-env/archive.do?r=nsbs&v=1.6", read = TRUE)
-} else {
-   archive <- obistools::hyperbenthos
-}
-
-event <- archive$data$event.txt
-occurrence <- archive$data$occurrence.txt
-emof <- archive$data$extendedmeasurementorfact.txt
-emof$eventID <- emof$id
-
-# Create tree structure
-tree <- treeStructure(event, occurrence, emof)
-exportTree(tree, "tree.html")
-```
-
-![https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png](https://raw.githubusercontent.com/iobis/obistools/master/images/treestructure.png)
 
 ## Data quality report
 
