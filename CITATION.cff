@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: If you use this work, please cite it as below.
+title: OBIS Tools package
+type: software
+abstract: Tools for data enhancement and quality control
+url: https://github.com/iobis/obistools
+license: MIT
+authors:
+  - given-names: Pieter
+    family-names: Provoost
+    orcid: "https://orcid.org/0000-0002-4236-0384"
+  - given-names: Samuel
+    family-names: Bosch
+  - given-names: Ward
+    family-names: Appeltans
+    orcid: "https://orcid.org/0000-0002-3237-4547"
+  - family-names: silasprincipe
+    orcid: "https://orcid.org/0000-0002-8059-6304"
+  - name: Intergovernmental Oceanographic Commission of UNESCO
+    alias: IOC-UNESCO
+    website: "https://obis.org"
+date-released: 2025-07-25
