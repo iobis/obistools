@@ -6,3 +6,4 @@ images
 ^LICENSE\.md
 ^cran-comments\.md$
 ^docs$
+^\.zenodo\.json$
